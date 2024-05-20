@@ -141,6 +141,8 @@ export const menuItems = [
   { label: 'Chemical Division', id: 'chemical', url: '/chemical-Division/pharmaceutical', childMenu: true },
   { label: 'International Trade', id: 'trade', url: '/international-trade', childMenu: false },
   { label: 'Contact Us', id: 'contact', url: '/contact-us', childMenu: false },
+  { label: 'Shop Now', id: 'shop', url: '/shop-now', childMenu: false },
+  {  icon: 'your-icon-name', id: 'login', url: '/login', childMenu: false },
 ];
 
 export const childMenuData: any = {

@@ -7,7 +7,8 @@ import AccentLogo from "@Images/logo/AccentLogo.png";
 import CloseIcon from "@Images/logo/Close_round.svg";
 import ExpandIcon from "@Images/logo/Expand_down.svg";
 import Menu from "@Images/svgs/menu.svg";
-import AccentMenu from "@Images/logo/accent-menu.png"
+import AccentMenu from "@Images/logo/accent-menu.png";
+import UserIcon from "@Images/svgs/user_3.png";
 
 import { menuItems, childMenuData } from "../../Data/home";
 
@@ -179,8 +180,22 @@ const Header: React.FC = () => {
             Become a partner
           </button>
         </Link>
+        <Link href={"/login"}>
+          <button
+            className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${
+              showChildMenu ? "child-visible" : ""
+            } rounded-sm text-center `}
+          >
+            Login
+          </button>
+        </Link>
         <button className="lg:hidden p-2" onClick={handleToggleMobileMenu}>
-          <Image src={showChildMenu || isScrolled ? AccentMenu : Menu} alt="menu" width={28} height={28} />
+          <Image
+            src={showChildMenu || isScrolled ? AccentMenu : Menu}
+            alt="menu"
+            width={28}
+            height={28}
+          />
         </button>
       </div>
       {showChildMenu && (
@@ -240,13 +255,13 @@ const Header: React.FC = () => {
         <div className="lg:hidden flex flex-col fixed top-0 left-0 w-[80%] h-screen bg-darkColor  p-4 z-20 ">
           <div className="flex justify-between mb-4">
             <Link href="/">
-            <Image
-              src={AccentLogo}
-              alt="Tendoni Logo"
-              className="lg:w-[150px] lg:h-auto md:w-[110px] w-[90px] h-auto"
-              width="150"
-              height="100"
-            />
+              <Image
+                src={AccentLogo}
+                alt="Tendoni Logo"
+                className="lg:w-[150px] lg:h-auto md:w-[110px] w-[90px] h-auto"
+                width="150"
+                height="100"
+              />
             </Link>
             <Image
               src={CloseIcon}
@@ -281,12 +296,12 @@ const Header: React.FC = () => {
                 renderChildMenu(childMenuData[menuItem.id], menuItem.id)}
             </>
           ))}
-           <Link href={"/become-a-partner"}>
-          <button
-            className={`mt-2 lg:hidden px-2 py-1 border-2 border-[#A67A44] bg-[#A67A44] hover:bg-[#A67A44] hover:text-white rounded-sm text-center text-white w-36 text-xs font-bold`}
-          >
-            BECOME PARTNER
-          </button>
+          <Link href={"/become-a-partner"}>
+            <button
+              className={`mt-2 lg:hidden px-2 py-1 border-2 border-[#A67A44] bg-[#A67A44] hover:bg-[#A67A44] hover:text-white rounded-sm text-center text-white w-36 text-xs font-bold`}
+            >
+              BECOME PARTNER
+            </button>
           </Link>
         </div>
       )}
