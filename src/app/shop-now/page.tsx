@@ -56,7 +56,7 @@ const Shop = () => {
                 <div
                   key={index}
                   className="w-full my-4 sm:w-1/2 md:w-1/3 lg:w-1/4 p-0 sm:p-4 lg:p-4 flex-shrink-0"
-                  style={{ display: "flex", justifyContent: "center" , gap:4 }}
+                  style={{ display: "flex", justifyContent: "center", gap: 4 }}
                 >
                   <div
                     className="item web branding"
