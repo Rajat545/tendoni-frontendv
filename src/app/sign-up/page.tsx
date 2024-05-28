@@ -2,15 +2,21 @@
 import Image from "next/image";
 import Handshake from "../../../public/images/svgs/Handshake.jpg";
 import Link from "next/link";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useRouter } from 'next/navigation';
 import { Result } from "postcss";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { CartContext } from "@/Context/CartContext";
+
 const Login = () => {
 
   const [name, setName]= useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('')
+
+  // const {email,setEmail,number,SetNumber,name,setName,password,setPassword}= useContext(CartContext)
   const router = useRouter();
   
 
@@ -26,16 +32,19 @@ const Login = () => {
         'Accept': 'application/json'
       }
     })
-    console.log("result", result)
+    console.log("results", result)
     let data = await result.json();
     console.log("data",data);
+  
+    toast.success(" Account Create Successfully!");
     // localStorage.setItem("user-info",JSON.stringify(result));
-    // router.push("/add");
+    router.push("/login");
    
   }
   return (
     <section className="overflow-hidden pt-24 md:pt-16 lg:pt-16 px-6 md:px-24 lg:px-24 bg-gray-50 sm:grid sm:grid-cols-2 sm:items-center min-h-screen">
       <div className="container">
+        <ToastContainer />
         <div className="mx-auto max-w-xl text-left ltr:sm:text-left rtl:sm:text-right">
           <h2 className="text-2xl font-bold text-gray-900 md:text-3xl">
            Sign Up

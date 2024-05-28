@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import DarkLogo from "@Images/logo/DarkLogo.png";
@@ -9,20 +9,42 @@ import ExpandIcon from "@Images/logo/Expand_down.svg";
 import Menu from "@Images/svgs/menu.svg";
 import AccentMenu from "@Images/logo/accent-menu.png";
 import UserIcon from "@Images/svgs/user_3.png";
-
+import './style.css'
 import { menuItems, childMenuData } from "../../Data/home";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from 'next/navigation';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { CartContext } from "@/Context/CartContext";
 
 const Header: React.FC = () => {
+  const router = useRouter();
   const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
   const [isScrolled, setIsScrolled] = useState(false);
   const [showChildMenu, setShowChildMenu] = useState(false);
   const [childMenuItems, setChildMenuItems] = useState<any[]>([]);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [expandedChildMenu, setExpandedChildMenu] = useState<string | null>(
-    null
-  );
+  const [openProfile, setOpenProfile] = useState(false);
+  const [expandedChildMenu, setExpandedChildMenu] = useState<string | null>(null);
+  const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const headerRef = useRef<HTMLDivElement>(null);
+  const {setShowCartPopup} = useContext(CartContext)
+  
+  useEffect(() => {
+    // Check login status on mount
+    const userToken = localStorage.getItem("user-token");
+  
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("user-token"); // Example: remove user token from local storage
+
+    // Redirect to the login page
+    toast.success("Successfully logged out!");
+    setIsLoggedIn(false); // Update login status
+    router.push("/login"); // Use useRouter to navigate to the login page
+  };
 
   const handleExpandIconClick = (menuItem: any) => {
     if (expandedChildMenu === menuItem.id) {
@@ -31,6 +53,7 @@ const Header: React.FC = () => {
       setExpandedChildMenu(menuItem.id);
     }
   };
+
   const handleToggleMobileMenu = () => {
     setShowMobileMenu((prev) => !prev);
   };
@@ -56,6 +79,9 @@ const Header: React.FC = () => {
       return `${rect}px`;
     }
     return "480px";
+  };
+  const handleCartIconClick = () => {
+    setShowCartPopup(true);
   };
 
   useEffect(() => {
@@ -86,13 +112,12 @@ const Header: React.FC = () => {
     return null;
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => { }, []);
 
   const renderChildMenu = (childItems: any[], parentId: string) => {
     if (childItems && childItems.length > 0 && expandedChildMenu === parentId) {
       return (
         <div className="child-menu">
-          {/* <hr className="w-full h-px mt-0 mb-2 bg-gray-200 border-0 dark:bg-gray-700 lg:hidden opacity-30"/> */}
           {childItems.map((childItem, index) => (
             <ul key={index} className="pl-8 pr-4 list-disc mb-2">
               <li className="text-sm text-[#A67A44] font-semibold mb-1">
@@ -131,16 +156,15 @@ const Header: React.FC = () => {
     };
   }, []);
 
-  // ${showChildMenu ? 'active-child-visible' : '[background:linear-gradient(180deg,rgba(166,122,68,0.7),rgba(166,122,68,0.02))]'}
   return (
     <header
       id="header"
-      className={`w-full z-10 fixed transition-all header ${
-        isScrolled || showChildMenu
+      className={`w-full z-10 fixed transition-all header ${isScrolled || showChildMenu
           ? "header-scrolled"
           : "[background:linear-gradient(180deg,rgba(166,122,68,0.7),rgba(166,122,68,0.02))]"
-      } `}
+        } `}
     >
+      <ToastContainer />
       <div
         className={`flex flex-row items-center justify-between container mx-auto lg:px-4 px-6 `}
       >
@@ -158,13 +182,11 @@ const Header: React.FC = () => {
             <Link
               href={menuItem.url}
               key={menuItem.id}
-              className={`nav-item ${
-                activeNavItem === menuItem.id ? "active" : ""
-              } ${showChildMenu ? "child-visible" : ""} ${
-                showChildMenu && activeNavItem === menuItem.id
+              className={`nav-item ${activeNavItem === menuItem.id ? "active" : ""
+                } ${showChildMenu ? "child-visible" : ""} ${showChildMenu && activeNavItem === menuItem.id
                   ? "active-child-visible"
                   : ""
-              }`}
+                }`}
               onMouseEnter={() => handleNavItemHover(menuItem)}
             >
               {menuItem.label}
@@ -173,22 +195,48 @@ const Header: React.FC = () => {
         </nav>
         <Link href={"/become-a-partner"}>
           <button
-            className={`hidden lg:flex px-4 py-1 items-center border-2 pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald border-[#A67A44] hover:bg-[#A67A44] hover:text-black ${
-              showChildMenu ? "child-visible" : ""
-            } rounded-sm text-center `}
+            className={`hidden lg:flex px-4 py-1 items-center border-2 pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald border-[#A67A44] hover:bg-[#A67A44] hover:text-black ${showChildMenu ? "child-visible" : ""
+              } rounded-sm text-center `}
           >
             Become a partner
           </button>
+          
         </Link>
-        <Link href={"/login"}>
-          <button
-            className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${
-              showChildMenu ? "child-visible" : ""
-            } rounded-sm text-center `}
-          >
-            Login
-          </button>
-        </Link>
+        
+            <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{color: '#a67a44'}}/>
+          
+        {isLoggedIn && (
+          <Link href={"/"}>
+            <button
+              className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                } rounded-sm text-center `}
+                style={{marginTop: '5px'}}
+              onMouseOver={() => setOpenProfile((prev) => !prev)}
+            >
+              User
+            </button>
+          </Link>
+        )}
+        {openProfile && (
+          <div className="flex flex-col dropDownProfile">
+            <ul className="flex flex-col gap-4">
+              <div style={{ marginLeft: '20px' }}>
+                <Link href={''}
+                  className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                    } rounded-sm text-center `}>
+                  My Profile
+                </Link>
+                <Link href={'/login'}
+                  onClick={handleLogout}
+                  className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                    } rounded-sm text-center `}>
+                  Logout
+                </Link>
+              </div>
+            </ul>
+          </div>
+        )}
+        
         <button className="lg:hidden p-2" onClick={handleToggleMobileMenu}>
           <Image
             src={showChildMenu || isScrolled ? AccentMenu : Menu}
@@ -201,9 +249,8 @@ const Header: React.FC = () => {
       {showChildMenu && (
         <>
           <div
-            className={`top-0 left-0 w-full h-auto bg-darkColor justify-start text-white z-20 px-24 py-12 opacity-0 transition-opacity transform translate-y-2 origin-top ${
-              showChildMenu ? "slide-in" : "slide-out"
-            }`}
+            className={`top-0 left-0 w-full h-auto bg-darkColor justify-start text-white z-20 px-24 py-12 opacity-0 transition-opacity transform translate-y-2 origin-top ${showChildMenu ? "slide-in" : "slide-out"
+              }`}
             onMouseLeave={handleMouseLeave}
             style={{
               position: "relative",
@@ -272,16 +319,14 @@ const Header: React.FC = () => {
             />
           </div>
           {menuItems.map((menuItem) => (
-            <>
+            <div key={menuItem.id}>
               <div
                 className="nav-item-container flex justify-between"
-                key={menuItem.id}
               >
                 <Link
                   href={menuItem.url}
-                  className={`nav-item ${
-                    activeNavItem === menuItem.id ? "active" : ""
-                  } text-sm text-[#A67A44] font-semibold mb-2`}
+                  className={`nav-item ${activeNavItem === menuItem.id ? "active" : ""
+                    } text-sm text-[#A67A44] font-semibold mb-2`}
                   onClick={
                     menuItem.childMenu
                       ? () => handleExpandIconClick(menuItem)
@@ -294,7 +339,7 @@ const Header: React.FC = () => {
               </div>
               {menuItem.childMenu &&
                 renderChildMenu(childMenuData[menuItem.id], menuItem.id)}
-            </>
+            </div>
           ))}
           <Link href={"/become-a-partner"}>
             <button
@@ -303,6 +348,7 @@ const Header: React.FC = () => {
               BECOME PARTNER
             </button>
           </Link>
+         
         </div>
       )}
     </header>

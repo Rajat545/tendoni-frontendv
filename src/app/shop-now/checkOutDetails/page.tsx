@@ -1,14 +1,39 @@
 "use client";
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import "./style.css";
-import LivaIcon from "@Images/svgs/liva.svg";
-import RupayIcon from "@Images/svgs/rupay.svg";
-import visaIcon from "@Images/svgs/visa.svg";
 import TurmericPowder from "@Images/ProductImages/turmericpowder.png";
+import { CartContext } from "@/Context/CartContext";
 
 const Shop = () => {
+  const [checkOut, setCheckOut] = useState([]);
+  const { cart } = useContext(CartContext);
+  const {count} = useContext(CartContext)
+  const [varient, setVariant] = useState([])
+
+  // Debugging log
+  console.log(cart, 'newData');
+
+  // Calculate the total sale price
+  const totalSalePrice = cart.reduce((total, item) => total + item.sale_price, 0);
+
+  useEffect(() => {
+    const varientData = cart.map((product) => product.Variant);
+    setCheckOut(varientData);
+    console.log(varientData, "check out varient data");
+  }, [cart]);
+  
+  useEffect(() => {
+    const productVarient = cart.map((product) => product.Variant);
+    setVariant(...productVarient);
+    console.log(productVarient,"productVarient")
+  }, [cart]);
+
+
+
+  console.log(checkOut, "checkouT list ");
+
   return (
     <>
       <div className="z-20">
@@ -16,7 +41,7 @@ const Shop = () => {
       </div>
 
       <section className="w-full bg-white">
-        <div className="py-6 md-py-8 lg-py-10">
+        <div className="py-6 md:py-8 lg:py-10">
           <div className="row">
             <div className="col-75">
               <div className="container_checkOut">
@@ -94,65 +119,70 @@ const Shop = () => {
                 <h4 className="font-medium">
                   Products{" "}
                   <span className="price" style={{ color: "black" }}>
-                    <b>4</b>
+                    <b>{cart.length}</b>
                   </span>
                 </h4>
                 <br />
-                <div className="flex items-center justify-between">
-                  <Image
-                    style={{ width: "8%" }}
-                    src={TurmericPowder}
-                    alt="img"
-                  />
-                  <div>
-                    <p>Product Name</p>
-                    <p>100gm</p>
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        border: "1px solid #ccc",
-                        height: "fit-content",
-                        position: "relative",
-                        top: "15px",
-                        width: "100%",
-                      }}
-                    ></div>
-                    <p style={{ color: "#ccc" }}>Rs. 490.0</p>
-                    <span className="price">Rs. 400.0</span>
-                  </div>
-                </div>
+                {cart && cart.length > 0 ? (
+                  cart.map((item, index) => (
+                    <div key={index} className="flex items-center justify-between">
+                      <Image
+                        style={{ width: "8%" }}
+                        src={item.ProductImage}
+                        alt="img"
+                      />
+                      <div style={{display: 'flex'}}>
+                        <p>{item.productName} : {item.quantity} x {item.variant.Value}</p>
+                        <p></p>
+                      </div>
+                      <div>
+                        <div
+                          style={{
+                            height: "fit-content",
+                            position: "relative",
+                            top: "15px",
+                            width: "100%",
+                          }}
+                        ></div>
+                        <p style={{ textDecoration: "line-through" }}>Rs. {item.price}</p>
+                        <span className="price">Rs. {item.sale_price}</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p>No products in cart</p>
+                )}
                 <br />
                 <hr />
                 <br />
                 <div className="flex item-center justify-between">
-                      <div>
-                        <p>Sub Total</p>
-                      </div>
-                      <div>
-                        <p>Rs. 400.0</p>
-                      </div>
+                  <div>
+                    <p>Sub Total</p>
+                  </div>
+                  <div>
+                    <p>Rs. {totalSalePrice}</p>
+                  </div>
                 </div>
                 <div className="flex item-center justify-between">
-                      <div>
-                        <p>Shipping</p>
-                      </div>
-                      <div>
-                        <p>Enter shipping address</p>
-                      </div>
+                  <div>
+                    <p>Shipping</p>
+                  </div>
+                  <div>
+                    <p>Enter shipping address</p>
+                  </div>
                 </div>
                 <div className="flex item-center justify-between">
-                      <div>
-                        <p>Estimated Taxes</p>
-                      </div>
-                      <div>
-                        <p>Rs. 6.00</p>
-                      </div>
+                  <div>
+                    <p>Estimated Taxes</p>
+                  </div>
+                  <div>
+                    <p>Rs. 6.00</p>
+                  </div>
                 </div>
                 <p className="font-medium">
                   Total{" "}
                   <span className="price" style={{ color: "black" }}>
-                    <b>Rs. 406.0</b>
+                    <b>Rs. {totalSalePrice + 6.00}</b>
                   </span>
                 </p>
               </div>

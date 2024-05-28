@@ -3,7 +3,8 @@ import { Oswald, Merriweather, Poppins } from 'next/font/google'
 import './globals.css'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-
+import  { CartProvider } from '../Context/CartContext'
+import { ToastContainer, toast } from 'react-toastify';
 
 export const merriweather = Merriweather({
   weight :["300", "400", "700", "900"], 
@@ -31,10 +32,14 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${merriweather.variable} ${oswald.variable} min-h-screen scroll-smooth overflow-x-hidden`}>
-        <Header />
-        {children}
-        <Footer />
+      <body className={`${poppins.variable} ${merriweather.variable} ${oswald.variable} min-h-screen scroll-smooth`}>
+      <CartProvider>
+        <ToastContainer/>
+          <Header />
+          {children}
+          <Footer />
+        </CartProvider>
+
       </body>
     </html>
   )

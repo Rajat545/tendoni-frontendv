@@ -1,77 +1,125 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import { useRouter } from "next/navigation";
+import { CartContext } from "@/Context/CartContext";
+import { ToastContainer } from "react-toastify";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Header from "@/components/Header";
 
 const Shop = () => {
   const router = useRouter();
-  const [count, setCount] = useState(1);
   const [showPopup, setShowPopup] = useState(false);
-  const [data, setData] = useState([]);
-  const [cart, setCart] = useState([]);
+  const [selectedVariants, setSelectedVariants] = useState({});
 
-  // ------  QUANTITY---------
-
-  const quantities = ["Select Quantity", "500gm", "200gm", "100gm", "50gm"];
+  const { data, setCart, cart, setProductId, variant,showCartPopup,setShowCartPopup } = useContext(CartContext);
+  console.log(variant, "quantity ");
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        let response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getAllSpicesProduct');
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        let result = await response.json();
-        setData(result.data);  // Use result.data instead of result
-        console.log("result", result.data);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
+    const productVariants = cart.reduce((acc, product) => {
+      acc[product.productId] = product.variant?.valueId || "1kg";
+      return acc;
+    }, {});
+    setSelectedVariants(productVariants);
+    console.log(productVariants, "product Variants");
+  }, [cart]);
 
-    fetchData();
-  }, []);
 
-  const incrementCount = () => {
-    setCount(count + 1); // Increment count by 1
+  const incrementCount = (productId) => {
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.productId === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      )
+    );
   };
 
-  const decrementCount = () => {
-    if (count > 1) {
-      setCount(count - 1); // Decrement count by 1, but keep it minimum 1
-    }
+
+  const decrementCount = (productId) => {
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.productId === productId
+          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
+          : item
+      )
+    );
   };
+
 
   const closePopup = () => {
     setShowPopup(false);
-    // Allow scrolling on the background page when the popup is closed
     document.body.style.overflow = "auto";
-    // Restore the header display
     document.querySelector("header").style.display = "block";
   };
 
   const openPopup = () => {
     setShowPopup(true);
-    // Prevent scrolling on the background page
     document.body.style.overflow = "hidden";
-    // Hide the header
     document.querySelector("header").style.display = "none";
   };
 
   const addToCart = (item) => {
-    setCart([...cart, { ...item, quantity: count }]);
-    console.log("Cart updated:", [...cart, { ...item, quantity: count }]);
+    const existingItemIndex = cart.findIndex((cartItem) => cartItem.productId === item.productId);
+
+    if (existingItemIndex !== -1) {
+      const updatedCart = [...cart];
+      updatedCart[existingItemIndex].quantity += 1;
+      setCart(updatedCart);
+    } else {
+      const defaultVariant = {
+        valueId: "1kg", // Assuming the variant's ID for 1kg is "1kg"
+        Value: "1kg",
+        amount: item.price,
+        saleAmount: item.sale_price,
+      };
+
+      setCart((prevCart) => [
+        ...prevCart,
+        { ...item, quantity: 1, variant: defaultVariant },
+      ]);
+    }
+
+    toast.success("Added to cart successfully!");
   };
+
   const productById = (id) => {
-    console.log("click")
-    const result = data.find((item) => item.id === id);
-    console.log("ID", result)
-  }
+    setProductId(id);
+    router.push('/shop-now/ProductDetails');
+  };
+
+  const deleteById = (productId) => {
+    const deleteData = cart.filter((item) => item.productId !== productId);
+    setCart(deleteData);
+    toast.error("Removed from cart");
+  };
+
+  const handleVariantChange = (productId, value) => {
+    const selectedVariant = variant.find(v => v.valueId === value);
+
+    const newCart = cart.map(item => {
+      if (item.productId === productId) {
+        item.variant = selectedVariant;
+      }
+      return item;
+    });
+    setCart(newCart);
+    setSelectedVariants(prevSelected => ({ ...prevSelected, [productId]: value }));
+  };
+
+  const calculateTotalPrice = () => {
+    return cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
+  };
+
+  console.log(cart, "cart");
 
   return (
     <>
+      <Header/>
       <div className="z-20">
+        <ToastContainer />
         <Image
           src={Grand}
           alt=""
@@ -82,9 +130,9 @@ const Shop = () => {
         <section className="w-full bg-white">
           <div className="py-6 md:py-8 lg:py-10">
             <div className="lg:flex justify-center md:mx-4 gap-2 flex-wrap">
-              {data?.map((item, index) => (
+              {data?.map((item) => (
                 <div
-                  key={index}
+                  key={item.productId}
                   className="w-full my-4 sm:w-1/2 md:w-1/3 lg:w-1/4 p-0 sm:p-4 lg:p-4 flex-shrink-0"
                   style={{ display: "flex", justifyContent: "center", gap: 4 }}
                 >
@@ -107,12 +155,11 @@ const Shop = () => {
                       }}
                     >
                       <Image
-                        src={item?.imgSrc}
+                        src={item?.ProductImage}
                         className="lazyload img-fluid fixed-image-main"
                         alt="Images"
                         width={200}
                         height={200}
-                        onClick={() => productById(item.id)}
                       />
                     </div>
                     <div
@@ -124,28 +171,26 @@ const Shop = () => {
                       {Math.floor(item.discount)}% Off
                     </div>
                     <div>
-                      <a href="/shop-now/ProductDetails">
-                        <h4 style={{ textAlign: "center" }}>{item.productName}</h4>
-                        <div style={{ display: "flex", gap: "20px" }}>
-                          <div>
-                            <div
-                              style={{
-                                border: "1px solid rgb(0 0 0 / 64%)",
-                                height: "fit-content",
-                                position: "relative",
-                                top: "15px",
-                                width: "100%",
-                              }}
-                            ></div>
-                            <h4 style={{ color: "rgb(0 0 0 / 64%)" }}>
-                              Price: {item.sale_price}
-                            </h4>
-                          </div>
-                          <div>
-                            <h4 style={{ marginBottom: "20px" }}>Price: {item.price}</h4>
-                          </div>
+                      <h4 style={{ textAlign: "center" }} onClick={() => productById(item.productId)}>{item.productName}</h4>
+                      <div style={{ display: "flex", gap: "20px" }}>
+                        <div>
+                          <div
+                            style={{
+                              border: "1px solid rgb(0 0 0 / 64%)",
+                              height: "fit-content",
+                              position: "relative",
+                              top: "15px",
+                              width: "100%",
+                            }}
+                          ></div>
+                          <h4 style={{ color: "rgb(0 0 0 / 64%)" }}>
+                            Price: {item.price}
+                          </h4>
                         </div>
-                      </a>
+                        <div>
+                          <h4 style={{ marginBottom: "20px" }}>Price: {item.sale_price}</h4>
+                        </div>
+                      </div>
                     </div>
                     <div style={{ textAlign: "center", marginTop: "8px" }}>
                       <button
@@ -164,13 +209,14 @@ const Shop = () => {
             </div>
           </div>
         </section>
-        {showPopup && (
+
+        {showPopup && cart.length > 0 && (
           <div
             className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
             onClick={closePopup}
           >
             <div
-              style={{ width: "50%" }}
+              style={{ width: "50%", overflow: 'auto' }}
               className="bg-white p-8 max-w-md h-screen fixed right-0"
               onClick={(e) => e.stopPropagation()}
             >
@@ -182,7 +228,7 @@ const Shop = () => {
                 }}
               >
                 <div>
-                  <h2 className="text-xl font-semibold">Your Cart {cart.length}</h2>
+                  <h2 className="text-xl font-semibold">Your Cart ({cart.length})</h2>
                 </div>
                 <div>
                   <button
@@ -209,116 +255,115 @@ const Shop = () => {
                 </div>
               </div>
 
-              {/* ----Cart---- */}
-              {cart?.map((item, index) => (
-                <div
-                  key={index}
-                  className="mt-5"
-                  style={{ display: "flex", alignItems: "center", gap: "24%" }}
-                >
-                  <img
-                    className="lg:w-1/6 imgWidth"
-                    src="/images/ProductImages/turmericpowder.png"
-                    alt=""
-                  />
-                  <div>
-                    <a href="">
-                      <p>{item.productName}</p>
-                    </a>
+              {cart.map((item, index) => (
+                <div key={item.productId} style={{ maxHeight: "400px" }}>
+                  <div
+                    className="mt-5"
+                    style={{ display: "flex", alignItems: "center", gap: "24%" }}
+                  >
+                    <img
+                      className="lg:w-1/6 imgWidth"
+                      src="/images/ProductImages/turmericpowder.png"
+                      alt="image"
+                    />
+                    <div style={{ width: '84px' }}>
+                      <a href="">
+                        <p>{item.productName}</p>
+                      </a>
+                      <div
+                        style={{
+                          height: "fit-content",
+                          position: "relative",
+                          top: "15px",
+                          width: "60%",
+                        }}
+                      ></div>
+                      <p style={{ textDecoration: 'line-through' }}>Rs. {item.variant?.amount}</p>
+                      <p className="mt-3" style={{ width: '150px' }}>Quantity: {item.quantity} x {item.variant?.Value}</p> {/* Display selected variant value */}
+                    </div>
+                    <div>
+                      {item.variant?.saleAmount !== 0 && (
+                        <p style={{ marginTop: "-25px" }}>Rs. {item.variant?.saleAmount}</p>
+                      )}
+                    </div>
+                  </div>
+
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    padding: '5px'
+                  }}></div>
+
+                  <div
+                    className="mt-3"
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <ul className="p-0 m-0 leading-6 border-0 border-gray-300">
+                      <div>
+                        <h3>Available Quantity</h3>
+                      </div>
+                      <select
+                        name="quantity"
+                        id="quantity"
+                        style={{
+                          border: "1px solid black",
+                          padding: "5px",
+                          marginBottom: "24px",
+                          borderRadius: "5px",
+                          marginRight: '6px'
+                        }}
+                        value={selectedVariants[item.productId] || ""}
+                        onChange={(e) => handleVariantChange(item.productId, e.target.value)}
+                      >
+                       
+                        {variant?.map((variant) => (
+                          <option key={variant.variantId} value={variant.valueId}>
+                            {variant.Value}
+                          </option>
+                        ))}
+                      </select>
+                    </ul>
                     <div
                       style={{
-                        border: "1px solid #ccc",
-                        height: "fit-content",
-                        position: "relative",
-                        top: "15px",
-                        width: "60%",
+                        display: "flex",
+                        gap: "20px",
+                        alignItems: "center",
+                        border: "1px solid black",
+                        width: "30%",
+                        justifyContent: "center",
+                        padding: "6px",
+                        borderRadius: "5px",
                       }}
-                    ></div>
-                    <p style={{ color: "#ccc" }}>Rs. {item.sale_price}</p>
-                    <p className="mt-3">Quantity: {item.quantity}</p>
-                    <ul className="p-0 m-0 leading-6 border-0 border-gray-300">
-        <div>
-          <h3>Available Quantity</h3>
-        </div>
-        <select
-          name="quantity"
-          id="quantity"
-          style={{
-            border: "1px solid black",
-            padding: "5px",
-            width: "40%",
-            marginBottom: "10px",
-            borderRadius: "5px",
-          }}
-          // Add value and onChange to manage selected quantity
-          value={item.quantity}
-          onChange={(e) => {
-            const newCart = [...cart];
-            newCart[index].quantity = e.target.value;
-            setCart(newCart);
-          }}
-        >
-          {quantities.map((quantity, index) => (
-            <option key={index} value={quantity}>
-              {quantity}
-            </option>
-          ))}
-        </select>
-      </ul>
+                    >
+                      <div>
+                        <button onClick={() => decrementCount(item.productId)}>
+                          <h1>-</h1>
+                        </button>
+                      </div>
+                      <div>{item.quantity}</div>
+                      <div>
+                        <button onClick={() => incrementCount(item.productId)}>
+                          <h1>+</h1>
+                        </button>
+                      </div>
+                    </div>
+                    <div>
+                      <button
+                        style={{ marginLeft: "10px", color: "red" }}
+                        onClick={() => deleteById(item.productId)}
+                      >
+                        <h1>Remove</h1>
+                      </button>
+                    </div>
                   </div>
-                  <div>
-                    <p style={{ color: "#ccc" }}>Rs. {item.sale_price * item.quantity}</p>
-                  </div>
-                  <div>
-                    
-                  </div>
-
-
                 </div>
-
               ))}
 
-              <div
-                className="mt-3"
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    gap: "20px",
-                    alignItems: "center",
-                    border: "1px solid black",
-                    width: "30%",
-                    justifyContent: "center",
-                    padding: "6px",
-                    borderRadius: "5px",
-                  }}
-                >
-                  <div>
-                    <button onClick={decrementCount}>
-                      <h1>-</h1>
-                    </button>
-                  </div>
-                  <div>{count}</div>
-                  <div>
-                    <button onClick={incrementCount}>
-                      <h1>+</h1>
-                    </button>
-                  </div>
-                </div>
-                <div>
-                  <button
-                    onClick={decrementCount}
-                    style={{ marginLeft: "10px", color: "red" }}
-                  >
-                    <h1>Delete</h1>
-                  </button>
-                </div>
-              </div>
               <div
                 className="mt-5"
                 style={{
@@ -333,7 +378,7 @@ const Shop = () => {
                   <p>Estimate Total</p>
                 </div>
                 <div>
-                  <p>Rs: {cart.reduce((total, item) => total + item.sale_price * item.quantity, 0)}</p>
+                  <p>Rs: {calculateTotalPrice()}</p>
                 </div>
               </div>
               <div
