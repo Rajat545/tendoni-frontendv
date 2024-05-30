@@ -4,7 +4,9 @@ import './globals.css'
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import  { CartProvider } from '../Context/CartContext'
+import  { AuthProvider } from '../Context/AuthContext'
 import { ToastContainer, toast } from 'react-toastify';
+import myProfile from '@/app/my-profile/page'
 
 export const merriweather = Merriweather({
   weight :["300", "400", "700", "900"], 
@@ -34,10 +36,12 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
     <html lang="en">
       <body className={`${poppins.variable} ${merriweather.variable} ${oswald.variable} min-h-screen scroll-smooth`}>
       <CartProvider>
+        <AuthProvider>
         <ToastContainer/>
           <Header />
           {children}
           <Footer />
+          </AuthProvider>
         </CartProvider>
 
       </body>

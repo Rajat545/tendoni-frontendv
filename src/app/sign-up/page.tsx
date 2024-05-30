@@ -11,36 +11,36 @@ import { CartContext } from "@/Context/CartContext";
 
 const Login = () => {
 
-  const [name, setName]= useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [number, setNumber] = useState('')
+  // const [name, setName]= useState('');
+  // const [password, setPassword] = useState('');
+  // const [email, setEmail] = useState('');
+  // const [number, setNumber] = useState('')
 
-  // const {email,setEmail,number,SetNumber,name,setName,password,setPassword}= useContext(CartContext)
-  const router = useRouter();
+  const {email,setEmail,number,setNumber,name,setName,password,setPassword,signUp}= useContext(CartContext)
+  // const router = useRouter();
   
 
-  async function signUp(e){
-    e.preventDefault()
-    let item = {email,password,name,number}
-    console.log(item);
-   let result = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/signup',{
-      method: 'POST',
-      body:JSON.stringify(item),
-      headers:{
-        "Content-Type":'application/json',
-        'Accept': 'application/json'
-      }
-    })
-    console.log("results", result)
-    let data = await result.json();
-    console.log("data",data);
+  // async function signUp(e){
+  //   e.preventDefault()
+  //   let item = {email,password,name,number}
+  //   console.log(item);
+  //  let result = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/signup',{
+  //     method: 'POST',
+  //     body:JSON.stringify(item),
+  //     headers:{
+  //       "Content-Type":'application/json',
+  //       'Accept': 'application/json'
+  //     }
+  //   })
+  //   console.log("results", result)
+  //   let data = await result.json();
+  //   console.log("data",data);
   
-    toast.success(" Account Create Successfully!");
-    // localStorage.setItem("user-info",JSON.stringify(result));
-    router.push("/login");
+  //   toast.success(" Account Create Successfully!");
+  //   // localStorage.setItem("user-info",JSON.stringify(result));
+  //   router.push("/login");
    
-  }
+  // }
   return (
     <section className="overflow-hidden pt-24 md:pt-16 lg:pt-16 px-6 md:px-24 lg:px-24 bg-gray-50 sm:grid sm:grid-cols-2 sm:items-center min-h-screen">
       <div className="container">

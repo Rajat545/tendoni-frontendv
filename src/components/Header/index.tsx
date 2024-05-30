@@ -29,7 +29,7 @@ const Header: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(true);
 
   const headerRef = useRef<HTMLDivElement>(null);
-  const {setShowCartPopup} = useContext(CartContext)
+  const {setShowCartPopup, cart} = useContext(CartContext)
   
   useEffect(() => {
     // Check login status on mount
@@ -203,7 +203,10 @@ const Header: React.FC = () => {
           
         </Link>
         
+            <div>
+            <p style={{marginLeft: '7px', marginBottom: '-10px'}}>{cart.length > 0 ? cart.length : null}</p>
             <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{color: '#a67a44'}}/>
+            </div>
           
         {isLoggedIn && (
           <Link href={"/"}>
@@ -217,14 +220,22 @@ const Header: React.FC = () => {
             </button>
           </Link>
         )}
-        {openProfile && (
+        {
+          localStorage.getItem('user-info') ? 
+          <>
+          {openProfile && (
           <div className="flex flex-col dropDownProfile">
             <ul className="flex flex-col gap-4">
               <div style={{ marginLeft: '20px' }}>
-                <Link href={''}
+                <Link href={'/my-order'}
                   className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
                     } rounded-sm text-center `}>
                   My Profile
+                </Link>
+                <Link href={'/my-profile'}
+                  className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                    } rounded-sm text-center `}>
+                  My Order
                 </Link>
                 <Link href={'/login'}
                   onClick={handleLogout}
@@ -236,6 +247,10 @@ const Header: React.FC = () => {
             </ul>
           </div>
         )}
+          </>
+          :
+          <Link href={'./sign-up'}>Sign up</Link>
+        }
         
         <button className="lg:hidden p-2" onClick={handleToggleMobileMenu}>
           <Image

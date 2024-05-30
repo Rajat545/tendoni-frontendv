@@ -28,6 +28,7 @@ const ProductDetails = () => {
   const quantityData = productDetails.length > 0 ? productDetails[0].Variant : [];
 
   const variantPrice = quantity.saleAmount;
+  const variantValue = quantity.Value
   
   const incrementCount = () => {
     setCount(count + 1);
@@ -89,7 +90,7 @@ const ProductDetails = () => {
     console.log(selectedVariant, "selected variant");
   };
   const calculateTotalPrice = () => {
-    return cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
+    return cart.reduce((total, item) => total + variantPrice * item.quantity, 0);
   };
 
   return (
@@ -227,7 +228,7 @@ const ProductDetails = () => {
                           value={quantity.valueId}
                           onChange={handleVariantChange}
                         >
-                          <option value="">Select Quantity</option>
+                      
                           {quantityData?.map((variant) => (
                             <option key={variant.valueId} value={variant.valueId}>
                               {variant.Value}
@@ -299,7 +300,7 @@ const ProductDetails = () => {
             ))}
           </div>
         </section>
-        {showPopup && (
+        {showPopup && cart.length > 0 && (
           <div
             className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
             onClick={closePopup}
@@ -367,7 +368,7 @@ const ProductDetails = () => {
                       }}
                     ></div>
                     <p style={{textDecoration: 'line-through'}}> Rs{item.price}</p>
-                    <p className="mt-3" style={{width: '150px'}}>Quantity: ({item.quantity}) {item.variant.Value}</p>
+                    <p className="mt-3" style={{width: '150px'}}>Quantity: ({item.quantity}) {variantValue}</p>
                     
                   </div>
                   <div>
@@ -422,7 +423,7 @@ const ProductDetails = () => {
                     onClick={decrementCount}
                     style={{ marginLeft: "10px", color: "red" }}
                   >
-                    <h1   onClick={() => deleteById(productId)}>Remove</h1>
+                    <h1   onClick={() => deleteById2(productId)}>Remove</h1>
                   </button>
                 </div>
               </div>

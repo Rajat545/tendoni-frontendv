@@ -17,6 +17,10 @@ const Shop = () => {
 
   // Calculate the total sale price
   const totalSalePrice = cart.reduce((total, item) => total + item.sale_price, 0);
+  const quantityValue = cart.map((product)=> product.Variant)
+  console.log(quantityValue)
+  
+
 
   useEffect(() => {
     const varientData = cart.map((product) => product.Variant);
@@ -144,7 +148,7 @@ const Shop = () => {
                             width: "100%",
                           }}
                         ></div>
-                        <p style={{ textDecoration: "line-through" }}>Rs. {item.price}</p>
+                        <p style={{ textDecoration: "line-through" }}>Rs. {quantityValue.saleAmount}</p>
                         <span className="price">Rs. {item.sale_price}</span>
                       </div>
                     </div>

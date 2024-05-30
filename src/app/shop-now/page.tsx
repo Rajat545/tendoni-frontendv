@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { CartContext } from "@/Context/CartContext";
 import { ToastContainer } from "react-toastify";
 import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+// import 'react-toastify/dist/ReactToastify.css';
 import Header from "@/components/Header";
 
 const Shop = () => {
@@ -51,12 +51,14 @@ const Shop = () => {
 
   const closePopup = () => {
     setShowPopup(false);
+    setShowCartPopup(false);
     document.body.style.overflow = "auto";
     document.querySelector("header").style.display = "block";
   };
 
   const openPopup = () => {
     setShowPopup(true);
+    setShowCartPopup(true);
     document.body.style.overflow = "hidden";
     document.querySelector("header").style.display = "none";
   };
@@ -119,7 +121,7 @@ const Shop = () => {
     <>
       <Header/>
       <div className="z-20">
-        <ToastContainer />
+        {/* <ToastContainer /> */}
         <Image
           src={Grand}
           alt=""
@@ -210,13 +212,13 @@ const Shop = () => {
           </div>
         </section>
 
-        {showPopup && cart.length > 0 && (
+        {showCartPopup && cart.length > 0 &&  (
           <div
             className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
             onClick={closePopup}
           >
             <div
-              style={{ width: "50%", overflow: 'auto' }}
+              style={{ width: "50%", overflow: 'auto',marginTop: '140px' }}
               className="bg-white p-8 max-w-md h-screen fixed right-0"
               onClick={(e) => e.stopPropagation()}
             >
@@ -261,9 +263,9 @@ const Shop = () => {
                     className="mt-5"
                     style={{ display: "flex", alignItems: "center", gap: "24%" }}
                   >
-                    <img
+                    <Image
                       className="lg:w-1/6 imgWidth"
-                      src="/images/ProductImages/turmericpowder.png"
+                      src={item?.ProductImage}
                       alt="image"
                     />
                     <div style={{ width: '84px' }}>
