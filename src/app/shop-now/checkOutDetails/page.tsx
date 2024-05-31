@@ -6,37 +6,22 @@ import "./style.css";
 import TurmericPowder from "@Images/ProductImages/turmericpowder.png";
 import { CartContext } from "@/Context/CartContext";
 
+
 const Shop = () => {
-  const [checkOut, setCheckOut] = useState([]);
   const { cart } = useContext(CartContext);
-  const {count} = useContext(CartContext)
-  const [varient, setVariant] = useState([])
 
   // Debugging log
   console.log(cart, 'newData');
 
   // Calculate the total sale price
-  const totalSalePrice = cart.reduce((total, item) => total + item.sale_price, 0);
-  const quantityValue = cart.map((product)=> product.Variant)
-  console.log(quantityValue)
+  const totalSalePrice = cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
   
-
-
   useEffect(() => {
-    const varientData = cart.map((product) => product.Variant);
-    setCheckOut(varientData);
+    const varientData = cart.map((product) => product.variant);
     console.log(varientData, "check out varient data");
   }, [cart]);
   
-  useEffect(() => {
-    const productVarient = cart.map((product) => product.Variant);
-    setVariant(...productVarient);
-    console.log(productVarient,"productVarient")
-  }, [cart]);
-
-
-
-  console.log(checkOut, "checkouT list ");
+  console.log(cart, "checkout list ");
 
   return (
     <>
@@ -137,7 +122,6 @@ const Shop = () => {
                       />
                       <div style={{display: 'flex'}}>
                         <p>{item.productName} : {item.quantity} x {item.variant.Value}</p>
-                        <p></p>
                       </div>
                       <div>
                         <div
@@ -148,8 +132,8 @@ const Shop = () => {
                             width: "100%",
                           }}
                         ></div>
-                        <p style={{ textDecoration: "line-through" }}>Rs. {quantityValue.saleAmount}</p>
-                        <span className="price">Rs. {item.sale_price}</span>
+                        <p style={{ textDecoration: "line-through" }}>Rs. {item.variant.amount}</p>
+                        <span className="price">Rs. {item.variant.saleAmount}</span>
                       </div>
                     </div>
                   ))

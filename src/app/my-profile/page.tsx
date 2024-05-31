@@ -8,15 +8,16 @@ const MyProfile = () => {
     const { cart } = useContext(CartContext);
     console.log(cart, "my order details");
 
-    
+
     const totalSalePrice = cart?.reduce((total, item) => total + item.sale_price, 0) || 0;
+    // const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
 
     return (
         <div className="container px-1 px-md-4 py-5 mx-auto">
             <div className="card">
                 <div className="row d-flex justify-content-between px-3 top">
                     <div className="d-flex">
-                        <h1 style={{ fontSize: 'x-large' }}>Hy<span className="text-primary font-weight-bold"> Yash !</span></h1>
+                        <h1 style={{ fontSize: 'x-large' }}>Hy<span className="text-primary font-weight-bold"> Yash</span></h1>
                         <h5>ORDER No<span className="text-primary font-weight-bold">#Y34XDHR</span></h5>
                     </div>
                     <div className="d-flex flex-column text-sm-right">
@@ -65,33 +66,31 @@ const MyProfile = () => {
                 <div className='order-details'>
                     <h1 style={{ fontSize: 'x-large' }}>Order Details</h1>
                     <hr />
-                    {cart && cart.length > 0 ? (
-                        cart.map((item, index) => (
-                            <div key={index} className="flex items-center justify-between">
+                    
+                            <div className="flex items-center justify-between">
                                 <Image
                                     style={{ width: "8%" }}
-                                    src={item.ProductImage}
+                                    src={''}
                                     alt="Product"
                                     width={50}
                                     height={50}
                                 />
                                 <div style={{ display: 'flex' }}>
-                                    <p>{item.productName} : {item.quantity} x {item.variant.Value}</p>
+                                    <p>Turmeric: 2 x 1Kg</p>
                                 </div>
                                 <div>
-                                    <p style={{ textDecoration: "line-through" }}>Rs. {item.price}</p>
-                                    <span className="price">Rs. {item.sale_price}</span>
+                                    <p style={{ textDecoration: "line-through" }}>Rs. 600</p>
+                                    <span className="price">Rs. 300</span>
                                 </div>
                             </div>
-                        ))
-                    ) : (
+                
                         <p>Looks like you haven't placed an order.</p>
-                    )}
+                  
                 </div>
                 <div className='order-total'>
                     <h1 style={{ fontSize: 'x-large' }}>Order Total</h1>
                     <hr />
-                    {cart && cart.length > 0 ? (
+                  
                         <>
                             <div className="flex items-center justify-between">
                                 <p>Sub Total</p>
@@ -110,9 +109,9 @@ const MyProfile = () => {
                                 <p><b>Rs. {totalSalePrice + 6.00}</b></p>
                             </div>
                         </>
-                    ) : (
+                   
                         <p>No order items.</p>
-                    )}
+           
                 </div>
             </div>
         </div>

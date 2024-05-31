@@ -9,6 +9,7 @@ import { CartContext } from "@/Context/CartContext";
 import { ToastContainer } from "react-toastify";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { isAuth } from "@/Context/AuthContext";
 
 const ProductDetails = () => {
   const router = useRouter();
@@ -19,7 +20,6 @@ const ProductDetails = () => {
 
   const productDetails = data.filter((item) => item.productId === productId);
   console.log(productDetails, "product details");
-    const [total , setTotal]= useState('')
   console.log("variant", variant);
 
   console.log(data, 'data')
@@ -29,16 +29,21 @@ const ProductDetails = () => {
 
   const variantPrice = quantity.saleAmount;
   const variantValue = quantity.Value
-  
-  const incrementCount = () => {
-    setCount(count + 1);
+
+  const incrementCount = (productId) => {
+    const updatedCart = cart.map((item) =>
+      item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
+    );
+    setCart(updatedCart);
   };
 
-  const decrementCount = () => {
-    if (count > 1) {
-      setCount(count - 1);
-    }
+  const decrementCount = (productId) => {
+    const updatedCart = cart.map((item) =>
+      item.productId === productId && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+    );
+    setCart(updatedCart);
   };
+
 
   const openPopup = () => {
     setShowPopup(true);
@@ -92,6 +97,17 @@ const ProductDetails = () => {
   const calculateTotalPrice = () => {
     return cart.reduce((total, item) => total + variantPrice * item.quantity, 0);
   };
+
+  const isAuthnticate = isAuth()
+
+  const handleCheckOut = () => {
+    
+    if (isAuthnticate){
+      router.push("/shop-now/checkOutDetails")
+    }else{
+      router.push("/login")
+    }
+  }
 
   return (
     <>
@@ -452,7 +468,7 @@ const ProductDetails = () => {
                   <button
                     style={{ padding: "10px 100px" }}
                     className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => router.push("/shop-now/checkOutDetails")}
+                    onClick={handleCheckOut}
                   >
                     Check Out
                   </button>

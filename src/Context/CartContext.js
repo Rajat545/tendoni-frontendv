@@ -83,6 +83,9 @@ export function CartProvider({ children }) {
 
   const isProductInCart = (product) => cart.findIndex(({ productId }) => productId === product?.productId);
 
+ 
+
+
   return (
     <CartContext.Provider
       value={{

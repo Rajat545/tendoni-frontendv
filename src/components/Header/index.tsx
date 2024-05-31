@@ -16,6 +16,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from 'next/navigation';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { CartContext } from "@/Context/CartContext";
+import { isAuth } from "@/Context/AuthContext";
 
 const Header: React.FC = () => {
   const router = useRouter();
@@ -26,23 +27,20 @@ const Header: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [expandedChildMenu, setExpandedChildMenu] = useState<string | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState(true);
+
+  
 
   const headerRef = useRef<HTMLDivElement>(null);
   const {setShowCartPopup, cart} = useContext(CartContext)
   
-  useEffect(() => {
-    // Check login status on mount
-    const userToken = localStorage.getItem("user-token");
-  
-  }, []);
+
 
   const handleLogout = () => {
-    localStorage.removeItem("user-token"); // Example: remove user token from local storage
-
-    // Redirect to the login page
+   
     toast.success("Successfully logged out!");
-    setIsLoggedIn(false); // Update login status
+    localStorage.removeItem("user-info");
+    localStorage.removeItem("access-token");
+//  
     router.push("/login"); // Use useRouter to navigate to the login page
   };
 
@@ -155,6 +153,16 @@ const Header: React.FC = () => {
       window.removeEventListener("scroll", headerScrolled);
     };
   }, []);
+  const isAuthnticate = isAuth()
+
+  const handleCheckOut = () => {
+    
+    if (isAuthnticate){
+      router.push("/my-order")
+    }else{
+      router.push("/login")
+    }
+  }
 
   return (
     <header
@@ -208,50 +216,58 @@ const Header: React.FC = () => {
             <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{color: '#a67a44'}}/>
             </div>
           
-        {isLoggedIn && (
-          <Link href={"/"}>
+    
+{/*         
+            // {isAuthnticate ? ( */}
+          <>
             <button
               className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
                 } rounded-sm text-center `}
-                style={{marginTop: '5px'}}
+              style={{ marginTop: '5px' }}
               onMouseOver={() => setOpenProfile((prev) => !prev)}
             >
-              User
+             {isAuthnticate ? "User" : ''}
             </button>
-          </Link>
-        )}
-        {
-          localStorage.getItem('user-info') ? 
-          <>
-          {openProfile && (
-          <div className="flex flex-col dropDownProfile">
-            <ul className="flex flex-col gap-4">
-              <div style={{ marginLeft: '20px' }}>
-                <Link href={'/my-order'}
-                  className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
-                    } rounded-sm text-center `}>
-                  My Profile
-                </Link>
-                <Link href={'/my-profile'}
-                  className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
-                    } rounded-sm text-center `}>
-                  My Order
-                </Link>
-                <Link href={'/login'}
-                  onClick={handleLogout}
-                  className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
-                    } rounded-sm text-center `}>
-                  Logout
-                </Link>
+            <Link href={'/login'}
+              className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                } rounded-sm text-center `}
+              style={{ marginTop: '5px' }}
+              
+            >
+             {!isAuthnticate ? "Login" : ''}
+            </Link>
+            
+            {openProfile && (
+              <div className="flex flex-col dropDownProfile">
+                <ul className="flex flex-col gap-4">
+                  <div style={{ marginLeft: '20px' }}>
+                    <button
+                      onClick={handleCheckOut}
+                      className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                        } rounded-sm text-center `}>
+                      My Profile
+                    </button>
+                    <button
+                      onClick={handleLogout}
+                      className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                        } rounded-sm text-center `}>
+                      Logout
+                    </button>
+                  </div>
+                </ul>
               </div>
-            </ul>
-          </div>
-        )}
+            )}
           </>
-          :
-          <Link href={'./sign-up'}>Sign up</Link>
-        }
-        
+        {/* ) : (
+          <button
+            className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald rounded-sm text-center cursor-not-allowed opacity-50`}
+            style={{ marginTop: '5px' }}
+            disabled
+          >
+            User
+          </button>
+        )} */}
+
         <button className="lg:hidden p-2" onClick={handleToggleMobileMenu}>
           <Image
             src={showChildMenu || isScrolled ? AccentMenu : Menu}

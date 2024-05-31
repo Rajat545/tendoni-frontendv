@@ -4,7 +4,10 @@ import { useRouter } from 'next/navigation';
 import { toast } from 'react-toastify';
 
 export const AuthContext = createContext();
-
+let getToken;
+export const setToken = (token) => {
+  getToken = token;
+};
 export function AuthProvider({ children }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState('');
@@ -16,6 +19,7 @@ export function AuthProvider({ children }) {
 
 
   async function handleSubmit(e) {
+
     e.preventDefault();
     console.log("Form submitted with:", email, password);
 
@@ -38,14 +42,13 @@ export function AuthProvider({ children }) {
       const data = await response.json();
 
       if (!data.error) {
-    
+
 
 
         localStorage.setItem("user-info", JSON.stringify(data));
 
         localStorage.setItem("access-token", JSON.stringify(data?.access_token));
-        console.log(data, "accress-token")
-
+        setToken(data?.access_token);
         toast.success("Successfully logged in!");
         router.push("/");
       } else {
@@ -57,7 +60,10 @@ export function AuthProvider({ children }) {
     }
   }
 
+
+
   return (
+
     <AuthContext.Provider
       value={{
         email,
@@ -67,11 +73,18 @@ export function AuthProvider({ children }) {
         userInfo,
         setUserInfo,
         handleSubmit,
-
-
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
+
+
+export const isAuth = () => {
+  if (typeof window !== "undefined") {
+    const accessToken = localStorage.getItem("access-token");
+
+    return getToken || accessToken ? true : false;
+  }
+};

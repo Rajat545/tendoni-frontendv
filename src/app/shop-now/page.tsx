@@ -4,18 +4,16 @@ import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import { useRouter } from "next/navigation";
 import { CartContext } from "@/Context/CartContext";
-import { ToastContainer } from "react-toastify";
 import { toast } from 'react-toastify';
-// import 'react-toastify/dist/ReactToastify.css';
 import Header from "@/components/Header";
+import { isAuth } from "@/Context/AuthContext";
 
 const Shop = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState({});
 
-  const { data, setCart, cart, setProductId, variant,showCartPopup,setShowCartPopup } = useContext(CartContext);
-  console.log(variant, "quantity ");
+  const { data, setCart, cart, setProductId, variant, showCartPopup, setShowCartPopup } = useContext(CartContext);
 
   useEffect(() => {
     const productVariants = cart.reduce((acc, product) => {
@@ -23,9 +21,7 @@ const Shop = () => {
       return acc;
     }, {});
     setSelectedVariants(productVariants);
-    console.log(productVariants, "product Variants");
   }, [cart]);
-
 
   const incrementCount = (productId) => {
     setCart(prevCart =>
@@ -37,7 +33,6 @@ const Shop = () => {
     );
   };
 
-
   const decrementCount = (productId) => {
     setCart(prevCart =>
       prevCart.map(item =>
@@ -47,7 +42,6 @@ const Shop = () => {
       )
     );
   };
-
 
   const closePopup = () => {
     setShowPopup(false);
@@ -114,14 +108,21 @@ const Shop = () => {
   const calculateTotalPrice = () => {
     return cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
   };
+  const isAuthnticate = isAuth()
 
-  console.log(cart, "cart");
+  const handleCheckOut = () => {
+    
+    if (isAuthnticate){
+      router.push("/shop-now/checkOutDetails")
+    }else{
+      router.push("/login")
+    }
+  }
 
   return (
     <>
-      <Header/>
+      <Header />
       <div className="z-20">
-        {/* <ToastContainer /> */}
         <Image
           src={Grand}
           alt=""
@@ -151,11 +152,7 @@ const Shop = () => {
                       overflow: "hidden",
                     }}
                   >
-                    <div
-                      style={{
-                        marginBottom: "8px",
-                      }}
-                    >
+                    <div style={{ marginBottom: "8px" }}>
                       <Image
                         src={item?.ProductImage}
                         className="lazyload img-fluid fixed-image-main"
@@ -166,9 +163,7 @@ const Shop = () => {
                     </div>
                     <div
                       className="absolute top-[-6px] right-[-6px] bg-yellow-500 text-white px-2 py-1 m-2 rounded"
-                      style={{
-                        fontSize: "12px",
-                      }}
+                      style={{ fontSize: "12px" }}
                     >
                       {Math.floor(item.discount)}% Off
                     </div>
@@ -212,16 +207,17 @@ const Shop = () => {
           </div>
         </section>
 
-        {showCartPopup && cart.length > 0 &&  (
+        {showCartPopup && cart.length > 0 && (
           <div
             className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
             onClick={closePopup}
           >
             <div
-              style={{ width: "50%", overflow: 'auto',marginTop: '140px' }}
+              style={{ width: "50%", overflow: 'auto', marginTop: '140px' }}
               className="bg-white p-8 max-w-md h-screen fixed right-0"
               onClick={(e) => e.stopPropagation()}
-            >
+           
+>
               <div
                 style={{
                   display: "flex",
@@ -281,7 +277,7 @@ const Shop = () => {
                         }}
                       ></div>
                       <p style={{ textDecoration: 'line-through' }}>Rs. {item.variant?.amount}</p>
-                      <p className="mt-3" style={{ width: '150px' }}>Quantity: {item.quantity} x {item.variant?.Value}</p> {/* Display selected variant value */}
+                      <p className="mt-3" style={{ width: '150px' }}>Quantity: {item.quantity} x {item.variant?.Value}</p>
                     </div>
                     <div>
                       {item.variant?.saleAmount !== 0 && (
@@ -322,7 +318,6 @@ const Shop = () => {
                         value={selectedVariants[item.productId] || ""}
                         onChange={(e) => handleVariantChange(item.productId, e.target.value)}
                       >
-                       
                         {variant?.map((variant) => (
                           <option key={variant.variantId} value={variant.valueId}>
                             {variant.Value}
@@ -391,7 +386,9 @@ const Shop = () => {
                   <button
                     style={{ padding: "10px 100px" }}
                     className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => router.push("/shop-now/checkOutDetails")}
+                    onClick={
+                      handleCheckOut
+                      }
                   >
                     Check Out
                   </button>

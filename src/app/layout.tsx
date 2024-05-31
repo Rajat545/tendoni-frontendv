@@ -34,7 +34,7 @@ export const metadata: Metadata = {
 export default function RootLayout({children}: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${poppins.variable} ${merriweather.variable} ${oswald.variable} min-h-screen scroll-smooth`}>
+      <body  style={{overflow: 'scroll'}}className={`${poppins.variable} ${merriweather.variable} ${oswald.variable} min-h-screen scroll-smooth`}>
       <CartProvider>
         <AuthProvider>
         <ToastContainer/>
