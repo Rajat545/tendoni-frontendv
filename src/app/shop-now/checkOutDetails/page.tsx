@@ -22,6 +22,12 @@ const Shop = () => {
   }, [cart]);
   
   console.log(cart, "checkout list ");
+    const [radioOptions, setRadioOptions] = useState("Razorpay");
+
+  const handleRadioChange = (e) => {
+    console.log(e.target.value);
+    setRadioOptions(e.target.value);
+  };
 
   return (
     <>
@@ -99,7 +105,6 @@ const Shop = () => {
                     <input type="checkbox" name="sameadr" /> Shipping address
                     same as billing
                   </label>
-                  <input type="button" value="Buy Now" className="btn" />
                 </form>
               </div>
             </div>
@@ -173,6 +178,91 @@ const Shop = () => {
                     <b>Rs. {totalSalePrice + 6.00}</b>
                   </span>
                 </p>
+              </div>
+              <div className="container_checkOut" style={{marginTop: '50px'}}>
+                <h4 className="font-medium">
+                Shipping method{" "}
+                <div className="mainContainer">
+        <div className="user-list"></div>
+        <div className="card">
+      
+          <div className="inputWithIcon">
+         
+          </div>
+          <div className="flex">
+          
+          </div>
+
+
+          <div className="payments-container">
+          
+            <div className="payments-wrapper">
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    value="Razorpay"
+                    checked={radioOptions === "Razorpay"}
+                    onChange={handleRadioChange}
+                  />
+                Online
+                </label>
+              </div>
+
+              <div className="upi-images">
+               
+              </div>
+            </div>
+
+   
+            <div className="payments-wrapper">
+             
+              <div className="upi-images">
+                {/* <img
+                  src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/dcdfe7e1d5626b0a1dda.svg"
+                  alt="upi"
+                />
+                <img
+                  src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/0169695890db3db16bfe.svg"
+                  alt="upi"
+                />
+                <img
+                  src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/5e3b05b68f3d31b87e84.svg"
+                  alt="upi"
+                />
+                <img
+                  src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/fe904f1307590b94f8e6.svg"
+                  alt="upi"
+                /> */}
+            
+              </div>
+           
+            </div>
+         
+
+            <div className="payments-wrapper">
+              <div>
+                <label>
+                  <input
+                    type="radio"
+                    value="CashOnDelivery"
+                    checked={radioOptions === "CashOnDelivery"}
+                    onChange={handleRadioChange}
+                  />
+                  Cash on Delivery
+                </label>
+              </div>
+            </div>
+
+      
+          </div>
+         
+         
+          <button id="pay-btn">Pay now</button>
+        </div>
+        <div className="user-list"></div>
+      </div>
+                </h4>
               </div>
             </div>
           </div>

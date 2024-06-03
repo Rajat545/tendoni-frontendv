@@ -67,6 +67,7 @@ const Login = () => {
                  <button
                 type="submit"
                 onClick={handleSendOTP}
+                style={{marginLeft: '12px'}}
                 className="group relative w-full flex justify-center py-2 px-4 border text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
               >
                 Send OTP

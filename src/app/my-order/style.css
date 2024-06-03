@@ -55,6 +55,7 @@ body {
  
 h6 {
     font-size: 17px;
+    margin-Left: '3px'
 }
 
 .card .card-block p {
@@ -128,6 +129,22 @@ p {
     margin: 0 10px 0 0;
     -webkit-transition: all 0.3s ease-in-out;
     transition: all 0.3s ease-in-out;
+}
+.row{
+    display: 'flex';
+     gap: '180px'
+}
+.m-b-10.f-w-600{
+    margin-left: '3px'
+}
+.col-six{
+    display: flex;
+}
+.name{
+    margin-left: '3px';
+}
+.text-muted{
+    margin-left: '3px';
 }
 
 

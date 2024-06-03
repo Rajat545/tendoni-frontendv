@@ -6,6 +6,11 @@
 html{
   scroll-behavior: smooth;
 }
+
+
+body{
+  overflow: scroll !important;
+}
 .nav-item {
     position: relative;
     padding-bottom: 4px;

@@ -6,6 +6,7 @@ import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import '@/app/my-order/style.css';
 import Link from 'next/link';
 import { isAuth } from '@/Context/AuthContext';
+import './style.css'
 
 const MyOrder = () => {
     const isAuthnticate = isAuth()
@@ -30,18 +31,18 @@ const MyOrder = () => {
                                             <h1 className="m-b-20 p-b-5 b-b-default f-w-600">User Information</h1>
                                             <EditNoteIcon style={{ marginLeft: '90%' }} />
                                         </div>
-                                        <div className="row">
-                                            <div className="col-sm-6">
-                                                <h1 className="m-b-10 f-w-600">Name</h1>
-                                                <h6 className="text-muted f-w-400">'N/A'</h6>
+                                        <div className="row" style={{display: 'flex', gap: '180px'}}>
+                                            <div className="col-six" >
+                                                <h1 className="name">Name :</h1>
+                                                <h6 className="text-muted" style={{marginLeft: '3px'}}>Yash shrivastava</h6>
                                             </div>
-                                            <div className="col-sm-6">
-                                                <h1 className="m-b-10 f-w-600">Email</h1>
-                                                <h6 className="text-muted f-w-400">'N/A'</h6>
+                                            <div className="col-six" >
+                                                <h1 className="name" >Email :</h1>
+                                                <h6 className="text-muted"style={{marginLeft: '3px'}} >Yashshrivastava@gmail.com</h6>
                                             </div>
-                                            <div className="col-sm-6">
-                                                <h1 className="m-b-10 f-w-600">Phone</h1>
-                                                <h6 className="text-muted f-w-400">'N/A'</h6>
+                                            <div className="col-six">
+                                                <h1 className="name">Phone :</h1>
+                                                <h6 className="text-muted" style={{marginLeft: '3px'}}>8888888888</h6>
                                             </div>
 
 

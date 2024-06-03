@@ -13,7 +13,7 @@ const Shop = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState({});
 
-  const { data, setCart, cart, setProductId, variant, showCartPopup, setShowCartPopup } = useContext(CartContext);
+  const { data, setCart, cart,count,setCount, setProductId, variant, showCartPopup, setShowCartPopup } = useContext(CartContext);
 
   useEffect(() => {
     const productVariants = cart.reduce((acc, product) => {
@@ -213,7 +213,7 @@ const Shop = () => {
             onClick={closePopup}
           >
             <div
-              style={{ width: "50%", overflow: 'auto', marginTop: '140px' }}
+              style={{ width: "50%", overflow: 'scroll', marginTop: '140px' }}
               className="bg-white p-8 max-w-md h-screen fixed right-0"
               onClick={(e) => e.stopPropagation()}
            
@@ -277,7 +277,7 @@ const Shop = () => {
                         }}
                       ></div>
                       <p style={{ textDecoration: 'line-through' }}>Rs. {item.variant?.amount}</p>
-                      <p className="mt-3" style={{ width: '150px' }}>Quantity: {item.quantity} x {item.variant?.Value}</p>
+                      <p className="mt-3" style={{ width: '150px' }}>Quantity ({item.quantity})  {item.variant?.Value}</p>
                     </div>
                     <div>
                       {item.variant?.saleAmount !== 0 && (

@@ -41,7 +41,7 @@ const Header: React.FC = () => {
     localStorage.removeItem("user-info");
     localStorage.removeItem("access-token");
 //  
-    router.push("/login"); // Use useRouter to navigate to the login page
+    // router.push("/login"); 
   };
 
   const handleExpandIconClick = (menuItem: any) => {
@@ -211,8 +211,8 @@ const Header: React.FC = () => {
           
         </Link>
         
-            <div>
-            <p style={{marginLeft: '7px', marginBottom: '-10px'}}>{cart.length > 0 ? cart.length : null}</p>
+            <div className='addToCart'>
+            <h1  className="cart" style={{ marginBottom: '-5px', marginLeft: '5px' , backgroundColor: 'red'}}> {cart.length >  0 ? cart.length : null}</h1>
             <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{color: '#a67a44'}}/>
             </div>
           
@@ -231,7 +231,7 @@ const Header: React.FC = () => {
             <Link href={'/login'}
               className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
                 } rounded-sm text-center `}
-              style={{ marginTop: '5px' }}
+              style={{ marginTop: '-2px' }}
               
             >
              {!isAuthnticate ? "Login" : ''}
@@ -247,26 +247,19 @@ const Header: React.FC = () => {
                         } rounded-sm text-center `}>
                       My Profile
                     </button>
-                    <button
+                    <Link
+                    href={'./login'}
                       onClick={handleLogout}
                       className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
                         } rounded-sm text-center `}>
                       Logout
-                    </button>
+                    </Link>
                   </div>
                 </ul>
               </div>
             )}
           </>
-        {/* ) : (
-          <button
-            className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald rounded-sm text-center cursor-not-allowed opacity-50`}
-            style={{ marginTop: '5px' }}
-            disabled
-          >
-            User
-          </button>
-        )} */}
+    
 
         <button className="lg:hidden p-2" onClick={handleToggleMobileMenu}>
           <Image

@@ -50,7 +50,7 @@ export function AuthProvider({ children }) {
         localStorage.setItem("access-token", JSON.stringify(data?.access_token));
         setToken(data?.access_token);
         toast.success("Successfully logged in!");
-        router.push("/");
+        router.push("/shop-now");
       } else {
         toast.error(data.message || "Login failed! Please check your credentials and try again.");
       }

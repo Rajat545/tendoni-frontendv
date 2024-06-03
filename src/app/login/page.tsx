@@ -6,12 +6,15 @@ import { useRouter } from 'next/navigation';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { AuthContext } from "@/Context/AuthContext";
+import Header from "@/components/Header";
 
 const Login = () => {
   const router = useRouter();
   const { email, setEmail, password, setPassword, handleSubmit } = useContext(AuthContext);
 
   return (
+    <>
+    <Header/>
     <section className="overflow-hidden pt-24 md:pt-16 lg:pt-16 px-6 md:px-24 lg:px-24 bg-gray-50 sm:grid sm:grid-cols-2 sm:items-center min-h-screen">
       <div className="container">
         <ToastContainer />
@@ -107,6 +110,7 @@ const Login = () => {
         className="h-full py-8 w-full object-cover sm:h-[calc(100%_-_2rem)] sm:self-end sm:rounded-ss-[30px] md:h-[calc(100%_-_4rem)] md:rounded-ss-[60px]"
       />
     </section>
+    </>
   );
 };
 

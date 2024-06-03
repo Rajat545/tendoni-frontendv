@@ -18,6 +18,7 @@ export function CartProvider({ children }) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
+  const [singleProduct, setSingleProduct]= useState({})
   
   const router = useRouter();
 
@@ -83,6 +84,54 @@ export function CartProvider({ children }) {
 
   const isProductInCart = (product) => cart.findIndex(({ productId }) => productId === product?.productId);
 
+
+  // ------------------ProductById------------
+
+  const getSingleProduct = async () => {
+    try{
+      const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getAllSpicesProduct');
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const singleProduct = await response.json();
+      setSingleProduct(singleProduct.data)
+      console.log(singleProduct,"singleProduct data")
+
+
+    } catch(error){
+                 console.error('Error fetching data:', error);
+    }
+  }
+  
+//  --------------------------------------------- add to cart api -----------------------
+
+  const yashID = async (item) => {
+    try {
+      const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', {
+        method: 'POST',
+        body: JSON.stringify({ productId: product.productId, quantity: 1 }), // Adjust payload as needed
+        headers: {
+          "Content-Type": 'application/json',
+          'Accept': 'application/json'
+        }
+      });
+
+      const data = await response.json();
+      // console.log("addToCart response", data);
+      console.log("hitA ---------------pI ")
+
+      if (!data.error) {
+        console.log((prevCart) => [...prevCart, { ...product, quantity: 1 }]);
+        toast.success("Product added to cart successfully!");
+      } else {
+        toast.error(data.message || "Failed to add product to cart! Please try again.");
+      }
+    } catch (error) {
+      console.error("Add to Cart error:", error);
+      toast.error("Failed to add product to cart! Please try again.");
+    }
+  };
+
  
 
 
@@ -114,6 +163,9 @@ export function CartProvider({ children }) {
         password,
         setPassword,
         signUp,
+        getSingleProduct,
+        yashID
+        
       }}
     >
       {children}

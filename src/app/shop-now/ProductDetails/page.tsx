@@ -29,21 +29,25 @@ const ProductDetails = () => {
 
   const variantPrice = quantity.saleAmount;
   const variantValue = quantity.Value
-
   const incrementCount = (productId) => {
-    const updatedCart = cart.map((item) =>
-      item.productId === productId ? { ...item, quantity: item.quantity + 1 } : item
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.productId === productId
+          ? { ...item, count: variant.quantity + 1 }
+          : item
+      )
     );
-    setCart(updatedCart);
   };
 
   const decrementCount = (productId) => {
-    const updatedCart = cart.map((item) =>
-      item.productId === productId && item.quantity > 1 ? { ...item, quantity: item.quantity - 1 } : item
+    setCart(prevCart =>
+      prevCart.map(item =>
+        item.productId === productId
+          ? { ...item, count: Math.max(1, item.quantity - 1) }
+          : item
+      )
     );
-    setCart(updatedCart);
   };
-
 
   const openPopup = () => {
     setShowPopup(true);
@@ -264,13 +268,13 @@ const ProductDetails = () => {
                           }}
                         >
                           <div>
-                            <button onClick={decrementCount}>
+                            <button onClick={()=>decrementCount(variant.productId)}>
                               <h1>-</h1>
                             </button>
                           </div>
                           <div>{count}</div>
                           <div>
-                            <button onClick={incrementCount}>
+                            <button onClick={()=>incrementCount(variant.productId)}>
                               <h1>+</h1>
                             </button>
                           </div>
@@ -401,7 +405,8 @@ const ProductDetails = () => {
                     
                   </div>
                 </div>
-              ))}
+            ))}
+            
               <div
                 className="mt-3"
                 style={{
@@ -409,7 +414,7 @@ const ProductDetails = () => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-              >
+                >
                 <div
                   style={{
                     display: "flex",
