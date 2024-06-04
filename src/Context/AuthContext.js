@@ -43,8 +43,6 @@ export function AuthProvider({ children }) {
 
       if (!data.error) {
 
-
-
         localStorage.setItem("user-info", JSON.stringify(data));
 
         localStorage.setItem("access-token", JSON.stringify(data?.access_token));

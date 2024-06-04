@@ -28,19 +28,19 @@ const Header: React.FC = () => {
   const [openProfile, setOpenProfile] = useState(false);
   const [expandedChildMenu, setExpandedChildMenu] = useState<string | null>(null);
 
-  
+
 
   const headerRef = useRef<HTMLDivElement>(null);
-  const {setShowCartPopup, cart} = useContext(CartContext)
-  
+  const { setShowCartPopup, cart } = useContext(CartContext)
+
 
 
   const handleLogout = () => {
-   
+
     toast.success("Successfully logged out!");
     localStorage.removeItem("user-info");
     localStorage.removeItem("access-token");
-//  
+    //  
     // router.push("/login"); 
   };
 
@@ -156,10 +156,10 @@ const Header: React.FC = () => {
   const isAuthnticate = isAuth()
 
   const handleCheckOut = () => {
-    
-    if (isAuthnticate){
+
+    if (isAuthnticate) {
       router.push("/my-order")
-    }else{
+    } else {
       router.push("/login")
     }
   }
@@ -168,8 +168,8 @@ const Header: React.FC = () => {
     <header
       id="header"
       className={`w-full z-10 fixed transition-all header ${isScrolled || showChildMenu
-          ? "header-scrolled"
-          : "[background:linear-gradient(180deg,rgba(166,122,68,0.7),rgba(166,122,68,0.02))]"
+        ? "header-scrolled"
+        : "[background:linear-gradient(180deg,rgba(166,122,68,0.7),rgba(166,122,68,0.02))]"
         } `}
     >
       <ToastContainer />
@@ -208,58 +208,58 @@ const Header: React.FC = () => {
           >
             Become a partner
           </button>
-          
+
         </Link>
-        
-            <div className='addToCart'>
-            <h1  className="cart" style={{ marginBottom: '-5px', marginLeft: '5px' , backgroundColor: 'red'}}> {cart.length >  0 ? cart.length : null}</h1>
-            <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{color: '#a67a44'}}/>
-            </div>
-          
-    
-{/*         
-            // {isAuthnticate ? ( */}
-          <>
-            <button
-              className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
-                } rounded-sm text-center `}
-              style={{ marginTop: '5px' }}
-              onMouseOver={() => setOpenProfile((prev) => !prev)}
-            >
-             {isAuthnticate ? "User" : ''}
-            </button>
-            <Link href={'/login'}
-              className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
-                } rounded-sm text-center `}
-              style={{ marginTop: '-2px' }}
-              
-            >
-             {!isAuthnticate ? "Login" : ''}
-            </Link>
-            
-            {openProfile && (
-              <div className="flex flex-col dropDownProfile">
-                <ul className="flex flex-col gap-4">
-                  <div style={{ marginLeft: '20px' }}>
-                    <button
-                      onClick={handleCheckOut}
-                      className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
-                        } rounded-sm text-center `}>
-                      My Profile
-                    </button>
-                    <Link
+
+        <div >
+          <div className='addToCart'>
+          <h1 className="cart" style={{ marginBottom: '-5px', marginLeft: '5px', backgroundColor: '#a67a44' }}> {cart.length > 0 ? cart.length : null}</h1>
+          <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{ color: '#a67a44' }} />
+          </div>
+        </div>
+
+
+        <>
+          <button
+            className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+              } rounded-sm text-center `}
+            style={{ marginTop: '5px' }}
+            onMouseOver={() => setOpenProfile((prev) => !prev)}
+          >
+            {isAuthnticate ? "User" : ''}
+          </button>
+          <Link href={'/login'}
+            className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+              } rounded-sm text-center `}
+            style={{ marginTop: '-2px' }}
+
+          >
+            {!isAuthnticate ? "Login" : ''}
+          </Link>
+
+          {openProfile && (
+            <div className="flex flex-col dropDownProfile">
+              <ul className="flex flex-col gap-4">
+                <div style={{ marginLeft: '20px' }}>
+                  <button
+                    onClick={handleCheckOut}
+                    className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                      } rounded-sm text-center `}>
+                    My Profile
+                  </button>
+                  <Link
                     href={'./login'}
-                      onClick={handleLogout}
-                      className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
-                        } rounded-sm text-center `}>
-                      Logout
-                    </Link>
-                  </div>
-                </ul>
-              </div>
-            )}
-          </>
-    
+                    onClick={handleLogout}
+                    className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+                      } rounded-sm text-center `}>
+                    Logout
+                  </Link>
+                </div>
+              </ul>
+            </div>
+          )}
+        </>
+
 
         <button className="lg:hidden p-2" onClick={handleToggleMobileMenu}>
           <Image
@@ -372,7 +372,7 @@ const Header: React.FC = () => {
               BECOME PARTNER
             </button>
           </Link>
-         
+
         </div>
       )}
     </header>

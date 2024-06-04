@@ -5,32 +5,88 @@ import Grand from "@Images/slider/spices.jpeg";
 import "./style.css";
 import TurmericPowder from "@Images/ProductImages/turmericpowder.png";
 import { CartContext } from "@/Context/CartContext";
+import Header from "@/components/Header";
 
 
 const Shop = () => {
   const { cart } = useContext(CartContext);
+
+
+  function loadScript(src) {
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = src;
+      script.onload = () => {
+        resolve(true);
+      };
+      script.onerror = () => {
+        resolve(false);
+      };
+      document.body.appendChild(script);
+    });
+  }
 
   // Debugging log
   console.log(cart, 'newData');
 
   // Calculate the total sale price
   const totalSalePrice = cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
-  
+
   useEffect(() => {
     const varientData = cart.map((product) => product.variant);
     console.log(varientData, "check out varient data");
   }, [cart]);
-  
+
   console.log(cart, "checkout list ");
-    const [radioOptions, setRadioOptions] = useState("Razorpay");
+  const [radioOptions, setRadioOptions] = useState("Razorpay");
 
   const handleRadioChange = (e) => {
     console.log(e.target.value);
     setRadioOptions(e.target.value);
   };
 
+
+  const handleOnlinePay = async () => {
+
+    try {
+      const res = await loadScript("https://checkout.razorpay.com/v1/checkout.js");
+      if (!res) {
+        alert("Razorpay SDK failed to load. Are you online?");
+        return;
+      }
+      // TID0RJRXpC55fChzTTreJXpB
+      const options = {
+        key: "rzp_test_fuOkanrFo8Ztyd",
+        amount: '5000',
+        currency: 'INR',
+        name: "Tendoni",
+        description: "Test Transaction",
+        image: "/logo.png",
+        order_id: 'order_OIdp0EQmFOLWQK',
+
+        prefill: {
+          name: "Soumya Dey",
+          email: "SoumyaDey@example.com",
+          contact: "9999999999",
+        },
+        notes: {
+          address: "Soumya Dey Corporate Office",
+        },
+        theme: {
+          color: "#acaf4c",
+        },
+      }
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
   return (
     <>
+    <Header/>
       <div className="z-20">
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
@@ -125,7 +181,7 @@ const Shop = () => {
                         src={item.ProductImage}
                         alt="img"
                       />
-                      <div style={{display: 'flex'}}>
+                      <div style={{ display: 'flex' }}>
                         <p>{item.productName} : {item.quantity} x {item.variant.Value}</p>
                       </div>
                       <div>
@@ -179,46 +235,46 @@ const Shop = () => {
                   </span>
                 </p>
               </div>
-              <div className="container_checkOut" style={{marginTop: '50px'}}>
+              <div className="container_checkOut" style={{ marginTop: '50px' }}>
                 <h4 className="font-medium">
-                Shipping method{" "}
-                <div className="mainContainer">
-        <div className="user-list"></div>
-        <div className="card">
-      
-          <div className="inputWithIcon">
-         
-          </div>
-          <div className="flex">
-          
-          </div>
+                  Shipping method{" "}
+                  <div className="mainContainer">
+                    <div className="user-list"></div>
+                    <div className="card">
+
+                      <div className="inputWithIcon">
+
+                      </div>
+                      <div className="flex">
+
+                      </div>
 
 
-          <div className="payments-container">
-          
-            <div className="payments-wrapper">
-              <div>
-                <label>
-                  <input
-                    type="radio"
-                    value="Razorpay"
-                    checked={radioOptions === "Razorpay"}
-                    onChange={handleRadioChange}
-                  />
-                Online
-                </label>
-              </div>
+                      <div className="payments-container">
 
-              <div className="upi-images">
-               
-              </div>
-            </div>
+                        <div className="payments-wrapper">
+                          <div>
+                            <label>
+                              <input
+                                type="radio"
+                                value="Razorpay"
+                                checked={radioOptions === "Razorpay"}
+                                onChange={handleRadioChange}
+                              />
+                              Online
+                            </label>
+                          </div>
 
-   
-            <div className="payments-wrapper">
-             
-              <div className="upi-images">
-                {/* <img
+                          <div className="upi-images">
+
+                          </div>
+                        </div>
+
+
+                        <div className="payments-wrapper">
+
+                          <div className="upi-images">
+                            {/* <img
                   src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/dcdfe7e1d5626b0a1dda.svg"
                   alt="upi"
                 />
@@ -234,34 +290,34 @@ const Shop = () => {
                   src="https://cdn.shopify.com/shopifycloud/checkout-web/assets/fe904f1307590b94f8e6.svg"
                   alt="upi"
                 /> */}
-            
-              </div>
-           
-            </div>
-         
 
-            <div className="payments-wrapper">
-              <div>
-                <label>
-                  <input
-                    type="radio"
-                    value="CashOnDelivery"
-                    checked={radioOptions === "CashOnDelivery"}
-                    onChange={handleRadioChange}
-                  />
-                  Cash on Delivery
-                </label>
-              </div>
-            </div>
+                          </div>
 
-      
-          </div>
-         
-         
-          <button id="pay-btn">Pay now</button>
-        </div>
-        <div className="user-list"></div>
-      </div>
+                        </div>
+
+
+                        <div className="payments-wrapper">
+                          <div>
+                            <label>
+                              <input
+                                type="radio"
+                                value="CashOnDelivery"
+                                checked={radioOptions === "CashOnDelivery"}
+                                onChange={handleRadioChange}
+                              />
+                              Cash on Delivery
+                            </label>
+                          </div>
+                        </div>
+
+
+                      </div>
+
+
+                      <button id="pay-btn" onClick={handleOnlinePay}>Pay now</button>
+                    </div>
+                    <div className="user-list"></div>
+                  </div>
                 </h4>
               </div>
             </div>

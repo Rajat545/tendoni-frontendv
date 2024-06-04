@@ -27,14 +27,15 @@
     width: 20px;
     font-weight: 400;
     /* border: 1px solid #fff; */
-    font-size: 14px;
+    font-size: 10px;
+    text-align: center;
     margin-left: 3px;
     height: 20px;
 }
  .cart{
     margin-bottom: -5px;
     margin-left: 5px;
-    background-color: red;
+    background-color: #a67a44;
     border-radius: 10px;
     margin-top: -12px;
 }
