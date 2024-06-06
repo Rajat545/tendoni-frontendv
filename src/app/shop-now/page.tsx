@@ -13,7 +13,18 @@ const Shop = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState({});
 
-  const { data, setCart, cart,count,setCount, setProductId, variant, showCartPopup, setShowCartPopup } = useContext(CartContext);
+  const { data,
+    setCart,
+    cart,
+    count,
+    setCount,
+    setProductId,
+    variant,
+    showCartPopup,
+    setShowCartPopup,
+   
+
+  } = useContext(CartContext);
 
   useEffect(() => {
     const productVariants = cart.reduce((acc, product) => {
@@ -57,7 +68,7 @@ const Shop = () => {
     document.querySelector("header").style.display = "none";
   };
 
-  const addToCart = (item) => {
+  const addToCartItem = (item) => {
     const existingItemIndex = cart.findIndex((cartItem) => cartItem.productId === item.productId);
 
     if (existingItemIndex !== -1) {
@@ -108,14 +119,65 @@ const Shop = () => {
   const calculateTotalPrice = () => {
     return cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
   };
+
+
   const isAuthnticate = isAuth()
 
-  const handleCheckOut = () => {
+  const handleCheckOut = async () => {
+    const isAuthnticate = isAuth();
+  
+    if (!isAuthnticate) {
+      router.push("/login");
+      return;
+    }
+    try {
+ 
+      const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+      const {customerId,access_token, name} = userData.data;
+      console.log(access_token)
     
-    if (isAuthnticate){
-      router.push("/shop-now/checkOutDetails")
-    }else{
-      router.push("/login")
+   
+      const apiRequests = [];
+    
+     
+      cart.forEach((item) => {
+        const requestOptions = {
+          method: 'POST',
+          headers: {
+            "Content-Type": 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${access_token}`
+          },
+          body: JSON.stringify({ productId: item.productId, quantity: item.quantity })
+        };
+    
+        
+        apiRequests.push(
+          fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions)
+            .then(response => response.json())
+            .then(data => {
+              console.log(data,"new data")
+              if (data.error) {
+                toast.success('Product added to cart successfully!');
+              } else {
+                toast.error('Failed to add product  to cart! Please try again.')
+              }
+            })
+            .catch(error => {
+              console.error('Error adding product to cart:', error);
+              toast.error('Failed to add product to cart! Please try again.');
+            })
+        );
+      });
+    
+
+      await Promise.all(apiRequests);
+    
+
+      setCart([]);
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast.error("Failed to complete checkout! Please try again.");
     }
   }
 
@@ -192,7 +254,7 @@ const Shop = () => {
                     <div style={{ textAlign: "center", marginTop: "8px" }}>
                       <button
                         onClick={() => {
-                          addToCart(item);
+                          addToCartItem(item);
                           openPopup();
                         }}
                         className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -216,8 +278,8 @@ const Shop = () => {
               style={{ width: "50%", overflow: 'scroll', marginTop: '140px' }}
               className="bg-white p-8 max-w-md h-screen fixed right-0"
               onClick={(e) => e.stopPropagation()}
-           
->
+
+            >
               <div
                 style={{
                   display: "flex",
@@ -388,7 +450,9 @@ const Shop = () => {
                     className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={
                       handleCheckOut
-                      }
+                     
+                      
+                    }
                   >
                     Check Out
                   </button>
