@@ -8,6 +8,7 @@ import { toast } from 'react-toastify';
 import Header from "@/components/Header";
 import { isAuth } from "@/Context/AuthContext";
 
+
 const Shop = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
@@ -22,7 +23,7 @@ const Shop = () => {
     variant,
     showCartPopup,
     setShowCartPopup,
-   
+
 
   } = useContext(CartContext);
 
@@ -34,6 +35,53 @@ const Shop = () => {
     setSelectedVariants(productVariants);
   }, [cart]);
 
+//   const incrementCount = async (productId) => {
+//     // try {
+//     //   const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+//     //   if (!userData.data) {
+//     //     throw new Error("User data not found");
+//     //   }
+//     //   const { customerId, access_token } = userData.data;
+//     //   console.log(customerId, 'id')
+
+
+    
+//     try {
+  
+      
+    
+//         // Make the API call to increment the quantity
+//         const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addCartQantity', {
+//             method: 'POST',
+//             headers: {
+//                 'Content-Type': 'application/json'
+//             },
+//             body: JSON.stringify({ productId })
+//         });
+
+//         // Log the response status and text
+//         const responseText = await response.text();
+//         console.log('Response status:', response.status);
+//         if (!response.ok) {
+        
+//             setCart(prevCart =>
+//                 prevCart.map(item =>
+//                     item.productId === productId
+//                         ? { ...item, quantity: item.quantity + 1 }
+//                         : item
+//                 )
+//             );
+//         } else {
+       
+//             console.error('Failed to update cart quantity:', responseText);
+//             //
+//         }
+//     } catch (error) {
+//         console.error('An error occurred:', error);
+//         // Optionally, you can show an error message to the user here
+//     }
+// };
+  
   const incrementCount = (productId) => {
     setCart(prevCart =>
       prevCart.map(item =>
@@ -43,7 +91,6 @@ const Shop = () => {
       )
     );
   };
-
   const decrementCount = (productId) => {
     setCart(prevCart =>
       prevCart.map(item =>
@@ -77,10 +124,11 @@ const Shop = () => {
       setCart(updatedCart);
     } else {
       const defaultVariant = {
-        valueId: "1kg", // Assuming the variant's ID for 1kg is "1kg"
-        Value: "1kg",
+        valueId: item.valueId, // Assuming the variant's ID for 1kg is "1kg"
+        Value: item.value,
         amount: item.price,
         saleAmount: item.sale_price,
+        variantId: item.varientId
       };
 
       setCart((prevCart) => [
@@ -103,7 +151,8 @@ const Shop = () => {
     toast.error("Removed from cart");
   };
 
-  const handleVariantChange = (productId, value) => {
+  const handleVariantChange = (item, value, variantId) => {
+    const { productId } = item
     const selectedVariant = variant.find(v => v.valueId === value);
 
     const newCart = cart.map(item => {
@@ -120,66 +169,196 @@ const Shop = () => {
     return cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
   };
 
+  // const handleCheckOut = async () => {
+  //   const isAuthnticate = isAuth(); // Move this inside the function to ensure it reflects the current state
 
-  const isAuthnticate = isAuth()
+
+  //   if (!isAuthnticate) {
+  //     router.push("/login");
+  //     return;
+  //   }
+
+  //   try {
+  //     const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+  //     if (!userData.data) {
+  //       throw new Error("User data not found");
+  //     }
+
+  //     const { customerId, access_token, name } = userData.data;
+
+
+  //     const apiRequests = cart.map((item) => {
+  //       const payload = {
+  //         productId: item.productId,
+  //         quantity: item.quantity,
+  //         variantId: item.variant.variantId,
+  //         valueId: item.variant.valueId,
+  //       }
+  //       cart.push(payload);
+  //       console.log(cart,'carts')
+  //       const requestOptions = {
+  //         method: 'POST',
+  //         headers: {
+  //           "Content-Type": 'application/json',
+  //           'Accept': 'application/json',
+  //           'Authorization': `${access_token}`
+  //         },
+  //         body: JSON.stringify({
+  //           customerId,
+  //           items: cart,
+  //         })
+
+  //       };
+
+
+  //       return fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions)
+  //         .then(response => response.json())
+  //         .then(data => {
+  //           if (data.success) {
+  //             toast.success('Product added to cart successfully!');
+  //           } else {
+  //             toast.error('Failed to add product to cart! Please try again.');
+  //           }
+  //         })
+  //         .catch(error => {
+  //           console.error('Error adding product to cart:', error);
+  //           toast.error('Failed to add product to cart! Please try again.');
+  //         });
+  //     });
+
+  //     await Promise.all(apiRequests);
+
+  //     setCart([]);
+  //   } catch (error) {
+  //     console.error("Checkout error:", error);
+  //     toast.error("Failed to complete checkout! Please try again.");
+  //   }
+  // }
+
+
+
+  // const isAuthnticate = isAuth()
+
+  // const handleCheckOut = async () => {
+
+  //   // const isAuthnticate = isAuth();
+
+  //   if (!isAuthnticate) {
+  //     router.push("/login");
+  //     return;
+  //   }
+  //   try {
+
+  //     const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+  //     const {customerId,access_token, name} = userData.data;
+  //     console.log(access_token)
+
+
+  //     const apiRequests = [];
+
+
+  //     cart.forEach((item) => {
+  //       const requestOptions = {
+  //         method: 'POST',
+  //         headers: {
+  //           "Content-Type": 'application/json',
+  //           'Accept': 'application/json',
+  //           'Authorization': `Bearer ${access_token}`
+  //         },
+  //         body: JSON.stringify({ productId: item.productId, quantity: item.quantity })
+  //       };
+
+
+  //       apiRequests.push(
+  //         fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions)
+  //           .then(response => response.json())
+  //           .then(data => {
+  //             console.log(data,"new data")
+  //             if (data.error) {
+  //               toast.success('Product added to cart successfully!');
+  //             } else {
+  //               toast.error('Failed to add product  to cart! Please try again.')
+  //             }
+  //           })
+  //           .catch(error => {
+  //             console.error('Error adding product to cart:', error);
+  //             toast.error('Failed to add product to cart! Please try again.');
+  //           })
+  //       );
+  //     });
+
+
+  //     await Promise.all(apiRequests);
+
+
+  //     setCart([]);
+  //   } catch (error) {
+  //     console.error("Checkout error:", error);
+  //     toast.error("Failed to complete checkout! Please try again.");
+  //   }
+  // }
+
 
   const handleCheckOut = async () => {
-    const isAuthnticate = isAuth();
-  
+    const isAuthnticate = isAuth(); // Move this inside the function to ensure it reflects the current state
+
     if (!isAuthnticate) {
       router.push("/login");
       return;
     }
-    try {
- 
-      const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
-      const {customerId,access_token, name} = userData.data;
-      console.log(access_token)
-    
-   
-      const apiRequests = [];
-    
-     
-      cart.forEach((item) => {
-        const requestOptions = {
-          method: 'POST',
-          headers: {
-            "Content-Type": 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `Bearer ${access_token}`
-          },
-          body: JSON.stringify({ productId: item.productId, quantity: item.quantity })
-        };
-    
-        
-        apiRequests.push(
-          fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions)
-            .then(response => response.json())
-            .then(data => {
-              console.log(data,"new data")
-              if (data.error) {
-                toast.success('Product added to cart successfully!');
-              } else {
-                toast.error('Failed to add product  to cart! Please try again.')
-              }
-            })
-            .catch(error => {
-              console.error('Error adding product to cart:', error);
-              toast.error('Failed to add product to cart! Please try again.');
-            })
-        );
-      });
-    
 
-      await Promise.all(apiRequests);
-    
+    try {
+      const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+      if (!userData.data) {
+        throw new Error("User data not found");
+      }
+
+      const { customerId, access_token } = userData.data;
+
+      // Create the payload with the structure you want
+      const items = cart.map((item) => ({
+       
+        productId: item.productId,
+        productName: item.productName,
+        variantId: item.variant.variantId,
+        valueId: item.variant.valueId,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
+      const payload = {
+        customerId,
+        items,
+      };
+
+      console.log(payload, 'payload');
+
+      const requestOptions = {
+        method: 'POST',
+        headers: {
+          "Content-Type": 'application/json',
+          'Accept': 'application/json',
+          'Authorization': `${access_token}`,
+        },
+        body: JSON.stringify(payload),
+      };
+
+      // Make the API request
+      const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions);
+      const data = await response.json();
+      if (response.status == 200 && data.message === 'Items added to cart successfully') {
+        toast.success('Product added to cart successfully!');
+        router.push("/shop-now/checkOutDetails")
+      } else {
+        toast.error('Failed to add product to cart! Please try again.');
+      }
 
       setCart([]);
     } catch (error) {
       console.error("Checkout error:", error);
       toast.error("Failed to complete checkout! Please try again.");
     }
-  }
+  };
 
   return (
     <>
@@ -378,7 +557,7 @@ const Shop = () => {
                           marginRight: '6px'
                         }}
                         value={selectedVariants[item.productId] || ""}
-                        onChange={(e) => handleVariantChange(item.productId, e.target.value)}
+                        onChange={(e) => handleVariantChange(item, e.target.value)}
                       >
                         {variant?.map((variant) => (
                           <option key={variant.variantId} value={variant.valueId}>
@@ -450,8 +629,6 @@ const Shop = () => {
                     className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={
                       handleCheckOut
-                     
-                      
                     }
                   >
                     Check Out
@@ -467,3 +644,5 @@ const Shop = () => {
 };
 
 export default Shop;
+
+

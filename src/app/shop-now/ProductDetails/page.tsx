@@ -11,6 +11,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { isAuth } from "@/Context/AuthContext";
 
+
+
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
@@ -74,6 +76,7 @@ const ProductDetails = () => {
       const updatedCart = [...cart];
       updatedCart[existingItemIndex].quantity += 1;
       setCart(updatedCart);
+  
     } else {
       const defaultVariant = {
         valueId: "1kg",
@@ -104,14 +107,57 @@ const ProductDetails = () => {
 
   const isAuthnticate = isAuth()
 
-  const handleCheckOut = () => {
+  // const handleCheckOut = () => {
     
-    if (isAuthnticate){
-      router.push("/shop-now/checkOutDetails")
-    }else{
-      router.push("/login")
+  //   if (isAuthnticate){
+  //     router.push("/shop-now/checkOutDetails")
+  //   }else{
+  //     router.push("/login")
+  //   }
+  // }
+
+
+
+
+// const {productId} = productDetails
+const fetchProductById = async (productId) => {
+  try {
+    const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getSingleProductById/${productId}`;
+    console.log(`Fetching product with URL: ${url}`);
+    
+    const response = await fetch(url);
+    console.log(`Response status: ${response.status}`);
+    
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
     }
+
+    const product = await response.json();
+    console.log(product, "API response");
+    return product.data;
+  } catch (error) {
+    console.error('Error fetching data:', error);
+    return null;
   }
+};
+const handleCheckOut = async () => {
+  try {
+    const productDetailsPromises = cart.map(item => fetchProductById(item.productId));
+    cart.map(item => console.log("Fetching details for productId:", item.productId));
+    const productsDetails = await Promise.all(productDetailsPromises);
+    console.log(productsDetails, "Fetched product details");
+    if (isAuthnticate) {
+      // router.push("/shop-now/checkOutDetails");
+    } else {
+      router.push("/login");
+    }
+  } catch (error) {
+    console.error('Error fetching data:', error);
+  }
+};
+
+
 
   return (
     <>

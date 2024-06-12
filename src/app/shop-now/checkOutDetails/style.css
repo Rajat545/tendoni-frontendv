@@ -105,6 +105,35 @@ span.price {
 
 
 
+.userAddress{
+width: 35%;
+}
+
+
+.address-list {
+  border: 1px solid #a9a9a9;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
+  font-weight: 400;
+  line-height: 1;
+  margin: 3rem 0rem;
+  padding: 1rem;
+  width: 17rem;
+}
+.address-head {
+  display: flex;
+  justify-content: center;
+}
+input {
+  border: 1px solid #a9a9a9;
+  border-radius: 5px;
+  font-size: inherit;
+  outline: none;
+  padding: .5rem;
+}
+
+
+
+
 
 
 .header {
@@ -159,6 +188,10 @@ span.price {
     width: 69%;
     margin: 0 auto;
   }
+  .col-6{
+    width: 81%;
+    margin-left: 21px;
+  }
   
   .input {
     height: 40px;
@@ -172,10 +205,58 @@ span.price {
     margin-top: 12px;
     border-radius: 7px;
   }
+  .address-box{
+    display: flex;
+    gap: 39px;
+  }
+  .delete-icon{
+      float: inline-end;
+      margin: -16px;
+  }
+  .column {
+    float: left;
+    width: 33.33%;
+    padding: 10px;
+    
+  }
+  .row::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
   
   @media (min-width: 576px) {
     .headline {
       height: 10vh;
     }
   }
+
+  .modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    right: auto;
+    bottom: auto;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    max-width: 500px;
+
+    width: 100%;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    z-index: 1001; /* Ensure it's above other content */
+  }
+  
+  .modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1000; /* Ensure it's above other content */
+  }
+  
   

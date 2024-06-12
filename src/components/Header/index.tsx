@@ -214,7 +214,7 @@ const Header: React.FC = () => {
         <div >
           <div className='addToCart'>
           <h1 className="cart" style={{ marginBottom: '-5px', marginLeft: '5px', backgroundColor: '#a67a44' }}> {cart.length > 0 ? cart.length : null}</h1>
-          <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{ color: '#a67a44' }} />
+          <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{ color: '#a67a44', cursor: 'pointer' }} />
           </div>
         </div>
 

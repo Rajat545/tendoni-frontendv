@@ -12,6 +12,7 @@ export function AuthProvider({ children }) {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState('');
   const [userInfo, setUserInfo] = useState(null);
+  const [selectedAddress, setSelectedAddress] = useState(null);
 
   const router = useRouter();
 
@@ -40,12 +41,13 @@ export function AuthProvider({ children }) {
       }
 
       const data = await response.json();
-
+      
       if (!data.error) {
-
+        
+        // localStorage.setItem("token", JSON.stringify(data?.access_token));
         localStorage.setItem("user-info", JSON.stringify(data));
 
-        localStorage.setItem("access-token", JSON.stringify(data?.access_token));
+        localStorage.setItem("access-token", JSON.stringify(data?.data?.access_token));
         setToken(data?.access_token);
         toast.success("Successfully logged in!");
         router.push("/shop-now");
@@ -58,6 +60,60 @@ export function AuthProvider({ children }) {
     }
   }
 
+  const handleAddressSelect = (address) => {
+    setSelectedAddress(address);
+  };
+
+  const handleOrderSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+      if (!userData.data) {
+        throw new Error("User data not found");
+      }
+      const { customerId, access_token } = userData.data;
+  
+      if (!selectedAddress) {
+        toast.error("Please select an address.");
+        return;
+      }
+  
+      const orderData = {
+        customerId,
+        addressId: selectedAddress.addressId,
+        paymentMethod: radioOptions,
+        items: cartData.map((item) => ({
+          productId: item.productId,
+          quantity: item.quantity,
+        })),
+        totalAmount: totalSalePrice,
+      };
+  
+      const response = await fetch(
+        "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `${access_token}`,
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      toast.success("Order placed successfully!");
+      setCartData([]);
+    } catch (error) {
+      console.error("Error placing order:", error);
+      toast.error("Error placing order.");
+    }
+  };
 
 
   return (
@@ -71,6 +127,8 @@ export function AuthProvider({ children }) {
         userInfo,
         setUserInfo,
         handleSubmit,
+        handleAddressSelect,
+        handleOrderSubmit
       }}
     >
       {children}

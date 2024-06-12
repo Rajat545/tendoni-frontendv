@@ -104,37 +104,6 @@ export function CartProvider({ children }) {
     }
   }
   
-//  --------------------------------------------- add to cart api -----------------------
-
-// const addToCart = async (item) => {
-//    const token = localStorage.getItem('token')
-//   try {
-//     const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', {
-//       method: 'POST',
-//       body: JSON.stringify({ productId: item.productId, quantity: 1  }), // Adjust payload as needed
-//       headers: {
-//         "Content-Type": 'application/json',
-//         'Accept': 'application/json',
-//         'Authorization': `Bearer ${token}`
-//       }
-//     });
-
-//     const data = await response.json();
-    
-//     console.log(" the data you are trying to  add is successfully added to the cart");
-//     setCart((prevCart) => [...prevCart, { ...item, quantity: 1 }]);
-
-//     if (!data.error) {
-//       setCart((prevCart) => [...prevCart, { ...product, quantity: 1 }]);
-//       toast.success("Product added to cart successfully!");
-//     } else {
-//       toast.error(data.message || "Failed to add product to cart! Please try again.");
-//     }
-//   } catch (error) {
-//     console.error("Add to Cart error:", error);
-//     toast.error("Failed to add product to cart! Please try again.");
-//   }
-// };
 
  
 
