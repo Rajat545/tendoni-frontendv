@@ -7,6 +7,7 @@ import { CartContext } from "@/Context/CartContext";
 import { toast } from 'react-toastify';
 import Header from "@/components/Header";
 import { isAuth } from "@/Context/AuthContext";
+import garamMasala from '@Images/ProductImages/garammasala.png';
 
 
 const Shop = () => {
@@ -35,53 +36,7 @@ const Shop = () => {
     setSelectedVariants(productVariants);
   }, [cart]);
 
-//   const incrementCount = async (productId) => {
-//     // try {
-//     //   const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
-//     //   if (!userData.data) {
-//     //     throw new Error("User data not found");
-//     //   }
-//     //   const { customerId, access_token } = userData.data;
-//     //   console.log(customerId, 'id')
 
-
-    
-//     try {
-  
-      
-    
-//         // Make the API call to increment the quantity
-//         const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addCartQantity', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json'
-//             },
-//             body: JSON.stringify({ productId })
-//         });
-
-//         // Log the response status and text
-//         const responseText = await response.text();
-//         console.log('Response status:', response.status);
-//         if (!response.ok) {
-        
-//             setCart(prevCart =>
-//                 prevCart.map(item =>
-//                     item.productId === productId
-//                         ? { ...item, quantity: item.quantity + 1 }
-//                         : item
-//                 )
-//             );
-//         } else {
-       
-//             console.error('Failed to update cart quantity:', responseText);
-//             //
-//         }
-//     } catch (error) {
-//         console.error('An error occurred:', error);
-//         // Optionally, you can show an error message to the user here
-//     }
-// };
-  
   const incrementCount = (productId) => {
     setCart(prevCart =>
       prevCart.map(item =>
@@ -331,7 +286,7 @@ const Shop = () => {
         items,
       };
 
-      console.log(payload, 'payload');
+      
 
       const requestOptions = {
         method: 'POST',
@@ -355,7 +310,7 @@ const Shop = () => {
 
       setCart([]);
     } catch (error) {
-      console.error("Checkout error:", error);
+  
       toast.error("Failed to complete checkout! Please try again.");
     }
   };
@@ -395,7 +350,7 @@ const Shop = () => {
                   >
                     <div style={{ marginBottom: "8px" }}>
                       <Image
-                        src={item?.ProductImage}
+                          src={item?.ProductImage || garamMasala}
                         className="lazyload img-fluid fixed-image-main"
                         alt="Images"
                         width={200}
@@ -502,7 +457,7 @@ const Shop = () => {
                   >
                     <Image
                       className="lg:w-1/6 imgWidth"
-                      src={item?.ProductImage}
+                      src={item?.ProductImage || garamMasala}
                       alt="image"
                     />
                     <div style={{ width: '84px' }}>

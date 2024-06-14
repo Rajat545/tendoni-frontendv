@@ -23,6 +23,6 @@
       "@Images/*":["./public/images/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/Context/CartContext.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/Context/CartContext.js", "src/app/my-order/page.jsx", "src/app/shop-now/checkOutDetails/page.jsx"],
   "exclude": ["node_modules"]
 }

@@ -6,6 +6,8 @@ import Footer from '@/components/Footer';
 import  { CartProvider } from '../Context/CartContext'
 import  { AuthProvider } from '../Context/AuthContext'
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import myProfile from '@/app/my-profile/page'
 
 export const merriweather = Merriweather({

@@ -11,7 +11,8 @@ import axios from 'axios';
 import { AuthContext } from "@/Context/AuthContext";
 import OrderSuccessFull from "../OrderSuccessFull/page";
 import Modal from 'react-modal';
-
+import garamMasala from '@Images/ProductImages/garammasala.png';
+import 'react-toastify/dist/ReactToastify.css';
 // Modal.setAppElement('#__next');
 
 
@@ -24,9 +25,8 @@ const Shop = () => {
   const [radioOptions, setRadioOptions] = useState("Razorpay");
   const [newAddress, setNewAddress] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState([]);
-  const [address, setAddress] = useState<any>({})
+  const [address, setAddress] = useState('')
   const [formData, setFormData] = useState({
-
     addressLine1: address ? address?.addressLine1 : '',
     pincode: address ? address?.pincode : '',
     city: address ? address?.city : '',
@@ -34,12 +34,13 @@ const Shop = () => {
     country: address ? address?.country : '',
     landmark: address ? address?.landmark : '',
     zipcode: address ? address?.zipcode : '',
-    customerId: '',
-    name: '',
-    number: ''
+    name: address ? address?.name : '',
+    number: address ? address?.number : '',
+    addressId: address ? address?.addressId : '',
   });
   const [message, setMessage] = useState('');
 
+  console.log("address", address)
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
     if (userData.data) {
@@ -48,6 +49,12 @@ const Shop = () => {
   }, []);
   // const { handleAddressSelect, handleOrderSubmit} = useContext(AuthContext)
 
+  const handleAddressSelect = (item) => {
+    console.log('item', item)
+    setFormData({
+      ...item,
+    })
+  }
 
 
   useEffect(() => {
@@ -65,7 +72,7 @@ const Shop = () => {
         throw new Error("User data not found");
       }
       const { access_token, addressId } = userData.data;
-      console.log(addressId, 'iddd')
+      console.log(addressId, 'addressID')
 
       const response = await fetch("https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getAddressByAddressId", {
         method: 'POST',
@@ -99,7 +106,7 @@ const Shop = () => {
         throw new Error("User data not found");
       }
       const { access_token } = userData.data;
-      console.log(customerId, 'idiii');
+
 
       const response = await fetch("https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getCustomerDataById", {
         method: 'POST',
@@ -115,9 +122,14 @@ const Shop = () => {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
       const data = await response.json();
-      console.log("Customer data fetched successfully:", data.data);
-      setCustomerData(data.data.address);
-      setAddressData(data.data.address)
+      console.log("Customer data fetched successfully:", data.data?.address);
+      if (Array.isArray(data.data?.address)) {
+        setCustomerData(data.data?.address);
+      } else {
+        throw new Error("Invalid customer data format received");
+      }
+      setAddressData(data.data);
+
     } catch (error) {
       console.error("Error fetching customer data:", error);
     }
@@ -232,8 +244,6 @@ const Shop = () => {
       setMessage('Address saved successfully!');
       setAddress(data, 'create address')
       toast.success("Address saved successfully!");
-
-
       const newAddress = {
         addressId: data.addressId,
         name: formData.name,
@@ -247,12 +257,10 @@ const Shop = () => {
         pincode: formData.pincode,
       };
 
-      setCustomerData((prevCustomerData) => [...prevCustomerData, newAddress]);
-
+      setCustomerData((prevCustomerData) => ([...prevCustomerData, newAddress]))
       setFormData({
-        customerId: '',
+        ...formData,
         name: '',
-        // phone: '',
         addressLine1: '',
         pincode: '',
         city: '',
@@ -260,7 +268,7 @@ const Shop = () => {
         country: '',
         landmark: '',
         number: '',
-        zipcode: ''
+        zipcode: '',
       });
     } catch (error) {
       setMessage('Error saving address.');
@@ -319,6 +327,7 @@ const Shop = () => {
   //   }
   // };
 
+  console.log('first', formData)
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
@@ -329,14 +338,23 @@ const Shop = () => {
       }
       const { customerId, access_token } = userData.data;
 
-      if (!selectedAddress) {
+      // Check if formData is null or any required fields are empty
+      if (!formData || Object.keys(formData).length === 0) {
         toast.error("Please select an address.");
+        return;
+      }
+      const requiredFields = ['addressLine1', 'pincode', 'city', 'state', 'country', 'name', 'number', 'zipcode', 'landmark'];
+      const emptyFields = requiredFields.filter(field => !formData[field]);
+
+      console.log(emptyFields, 'empty')
+      if (emptyFields.length > 0) {
+        toast.error("Please fill out all required fields.");
         return;
       }
 
       const orderData = {
         customerId,
-        addressId: selectedAddress.addressId,
+        addressId: formData?.addressId,
         paymentMethod: radioOptions,
         items: cartData.map((item) => ({
           productId: item.productId,
@@ -344,7 +362,6 @@ const Shop = () => {
         })),
         totalAmount: totalSalePrice,
       };
-
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
         {
@@ -357,14 +374,13 @@ const Shop = () => {
           body: JSON.stringify(orderData),
         }
       );
-
+      const data = await response.json();
       if (!response.ok) {
+        toast.error("Error placing order.");
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
-      const data = await response.json();
       toast.success("Order placed successfully!");
-      setPopUp(true)
+      setPopUp(true);
       setCartData([]);
     } catch (error) {
       console.error("Error placing order:", error);
@@ -374,6 +390,19 @@ const Shop = () => {
 
 
   const handleOnlinePay = async () => {
+    if (!formData || Object.keys(formData).length === 0) {
+      toast.error("Please select an address.");
+      return;
+    }
+    const requiredFields = ['addressLine1', 'pincode', 'city', 'state', 'country', 'name', 'number', 'zipcode', 'landmark'];
+    const emptyFields = requiredFields.filter(field => !formData[field]);
+
+    console.log(emptyFields, 'empty')
+    if (emptyFields.length > 0) {
+      toast.error("Please fill out all required fields.");
+      return;
+    }
+
     function loadScript(src) {
       return new Promise((resolve) => {
         const script = document.createElement("script");
@@ -397,19 +426,19 @@ const Shop = () => {
 
       const options = {
         key: "rzp_test_fuOkanrFo8Ztyd",
-        amount: '5000',
+        amount: `${totalSalePrice}`,
         currency: 'INR',
-        name: "Tendoni",
-        description: "Test Transaction",
+        name: `${formData?.name}`,
+        description: " Transaction",
         image: "/logo.png",
         order_id: 'order_OIdp0EQmFOLWQK',
         prefill: {
-          name: "Soumya Dey",
-          email: "SoumyaDey@example.com",
-          contact: "9999999999",
+          name: `${formData?.name}`,
+          email: `${customerData.email}`,
+          contact: `${formData.number}`,
         },
         notes: {
-          address: "Soumya Dey Corporate Office",
+          address: `${formData.addressLine1}`,
         },
         theme: {
           color: "#acaf4c",
@@ -434,6 +463,7 @@ const Shop = () => {
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
+      name: address?.name || '',
       addressLine1: address?.addressLine1 || '',
       pincode: address?.pincode || '',
       city: address?.city || '',
@@ -441,12 +471,12 @@ const Shop = () => {
       country: address?.country || '',
       landmark: address?.landmark || '',
       zipcode: address?.zipcode || '',
-      name: address?.name || '',
       number: address?.number || ''
     }));
   }, [address]);
   console.log(customerData, "custumer data")
   console.log(cartData, 'Order Details')
+  console.log(address, 'address')
   return (
     <>
 
@@ -599,7 +629,9 @@ const Shop = () => {
 
                         <div>
                           <hr />
-                          <input type="radio" name="address" className="address-selector" onChange={() => handleAddressSelect(address)} />
+                          <input type="radio" name="address" className="address-selector" onChange={() => handleAddressSelect(item)
+
+                          } />
                           <span>{item.name} </span>
                           <p>{item.addressLine1}</p>
                           <p>{item.city} , {item.state}, {item.pincode}</p>
@@ -631,7 +663,7 @@ const Shop = () => {
                     <div key={index} className="flex items-center justify-between">
                       <Image
                         style={{ width: "8%" }}
-                        src={item.ProductImage}
+                        src={garamMasala}
                         alt={item.productName}
                         width={50}
                         height={50}
@@ -740,7 +772,7 @@ const Shop = () => {
 
                       ) : (
                         <form onSubmit={handleOrderSubmit}>
-                          <button onClick={() => setPopUp(true)} id="pay-btn" type="submit">Place Order</button>
+                          <button id="pay-btn" type="submit">Place Order</button>
                         </form>)}
                     </div>
                   </div>

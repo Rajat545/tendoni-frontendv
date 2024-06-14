@@ -10,16 +10,16 @@ import { ToastContainer } from "react-toastify";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { isAuth } from "@/Context/AuthContext";
-
+import garamMasala from '@Images/ProductImages/garammasala.png';
 
 
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
   const [originalHeaderDisplay, setOriginalHeaderDisplay] = useState("block");
-  const [quantity, setQuantity] = useState({ valueId: "", Value: "", saleAmount: 0 });
+  const [quantity, setQuantity] = useState({ valueId: "", Value: "", saleAmount: 900 });
   const { productId, data, cart, count, setCart, setCount, variant, setVariant } = useContext(CartContext);
-
+  
   const productDetails = data.filter((item) => item.productId === productId);
   console.log(productDetails, "product details");
   console.log("variant", variant);
@@ -32,24 +32,32 @@ const ProductDetails = () => {
   const variantPrice = quantity.saleAmount;
   const variantValue = quantity.Value
   const incrementCount = (productId) => {
+    console.log(productId, 'productId')
     setCart(prevCart =>
       prevCart.map(item =>
         item.productId === productId
-          ? { ...item, count: variant.quantity + 1 }
+          ? { ...item, quantity: item.quantity + 1 }
           : item
       )
     );
   };
-
+  
   const decrementCount = (productId) => {
+    console.log(productId, 'productId')
     setCart(prevCart =>
       prevCart.map(item =>
         item.productId === productId
-          ? { ...item, count: Math.max(1, item.quantity - 1) }
+          ? { ...item, quantity: Math.max(1, item.quantity - 1) }
           : item
       )
     );
   };
+  useEffect(() => {
+  const productInCart = cart.find(item => item.productId === productId);
+  if (productInCart) {
+    setCount(productInCart.quantity);
+  }
+}, [cart, productId]);
 
   const openPopup = () => {
     setShowPopup(true);
@@ -62,7 +70,7 @@ const ProductDetails = () => {
     document.body.style.overflow = "auto";
     document.querySelector("header").style.display = originalHeaderDisplay;
   };
-  
+
   const deleteById2 = (productId) => {
     const deleteData = cart.filter((item) => item.productId !== productId);
     setCart(deleteData);
@@ -76,7 +84,7 @@ const ProductDetails = () => {
       const updatedCart = [...cart];
       updatedCart[existingItemIndex].quantity += 1;
       setCart(updatedCart);
-  
+
     } else {
       const defaultVariant = {
         valueId: "1kg",
@@ -108,7 +116,7 @@ const ProductDetails = () => {
   const isAuthnticate = isAuth()
 
   // const handleCheckOut = () => {
-    
+
   //   if (isAuthnticate){
   //     router.push("/shop-now/checkOutDetails")
   //   }else{
@@ -119,43 +127,43 @@ const ProductDetails = () => {
 
 
 
-// const {productId} = productDetails
-const fetchProductById = async (productId) => {
-  try {
-    const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getSingleProductById/${productId}`;
-    console.log(`Fetching product with URL: ${url}`);
-    
-    const response = await fetch(url);
-    console.log(`Response status: ${response.status}`);
-    
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
-    }
+  // const {productId} = productDetails
+  const fetchProductById = async (productId) => {
+    try {
+      const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getSingleProductById/${productId}`;
+      console.log(`Fetching product with URL: ${url}`);
 
-    const product = await response.json();
-    console.log(product, "API response");
-    return product.data;
-  } catch (error) {
-    console.error('Error fetching data:', error);
-    return null;
-  }
-};
-const handleCheckOut = async () => {
-  try {
-    const productDetailsPromises = cart.map(item => fetchProductById(item.productId));
-    cart.map(item => console.log("Fetching details for productId:", item.productId));
-    const productsDetails = await Promise.all(productDetailsPromises);
-    console.log(productsDetails, "Fetched product details");
-    if (isAuthnticate) {
-      // router.push("/shop-now/checkOutDetails");
-    } else {
-      router.push("/login");
+      const response = await fetch(url);
+      console.log(`Response status: ${response.status}`);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+      }
+
+      const product = await response.json();
+      console.log(product, "API response");
+      return product.data;
+    } catch (error) {
+      console.error('Error fetching data:', error);
+      return null;
     }
-  } catch (error) {
-    console.error('Error fetching data:', error);
-  }
-};
+  };
+  const handleCheckOut = async () => {
+    try {
+      const productDetailsPromises = cart.map(item => fetchProductById(item.productId));
+      cart.map(item => console.log("Fetching details for productId:", item.productId));
+      const productsDetails = await Promise.all(productDetailsPromises);
+      console.log(productsDetails, "Fetched product details");
+      if (isAuthnticate) {
+        router.push("/shop-now/checkOutDetails");
+      } else {
+        router.push("/login");
+      }
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
 
 
 
@@ -189,9 +197,9 @@ const handleCheckOut = async () => {
                           }`}
                       >
                         <Image
-                          src={item.ProductImage}
+                          src={item.ProductImage || garamMasala}
                           alt="Image"
-                          style={{ height: "200px", width: "200px" }}
+                          // style={{ height: "200px", width: "200px" }}
                         />
                       </div>
                       <div style={{ marginTop: "20px", display: "flex" }}>
@@ -205,8 +213,8 @@ const handleCheckOut = async () => {
                             }`}
                         >
                           <Image
-                            src={item.ProductImage}
-                            style={{ height: "200px", width: "200px" }}
+                           src={item.ProductImage || garamMasala}
+                            // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                           />
@@ -221,8 +229,8 @@ const handleCheckOut = async () => {
                             }`}
                         >
                           <Image
-                            src={item.ProductImage}
-                            style={{ height: "200px", width: "200px" }}
+                            src={item.ProductImage || garamMasala}
+                            // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                           />
@@ -237,8 +245,8 @@ const handleCheckOut = async () => {
                             }`}
                         >
                           <Image
-                            src={item.ProductImage}
-                            style={{ height: "200px", width: "200px" }}
+                            src={item.ProductImage || garamMasala}
+                            // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                           />
@@ -253,8 +261,8 @@ const handleCheckOut = async () => {
                             }`}
                         >
                           <Image
-                            src={item.ProductImage}
-                            style={{ height: "200px", width: "200px" }}
+                            src={item.ProductImage || garamMasala}
+                            // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                           />
@@ -271,7 +279,7 @@ const handleCheckOut = async () => {
                       </h2>
                       <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                         <div>
-                          <h5>Rs: {variantPrice}</h5>
+                          <h5>Rs: {quantity.saleAmount}</h5>
                         </div>
                         <div>
                           <h5>Shipping Charge: Rs. 6.50</h5>
@@ -294,7 +302,7 @@ const handleCheckOut = async () => {
                           value={quantity.valueId}
                           onChange={handleVariantChange}
                         >
-                      
+
                           {quantityData?.map((variant) => (
                             <option key={variant.valueId} value={variant.valueId}>
                               {variant.Value}
@@ -314,13 +322,13 @@ const handleCheckOut = async () => {
                           }}
                         >
                           <div>
-                            <button onClick={()=>decrementCount(variant.productId)}>
+                            <button onClick={() => decrementCount(item.productId)}>
                               <h1>-</h1>
                             </button>
                           </div>
                           <div>{count}</div>
                           <div>
-                            <button onClick={()=>incrementCount(variant.productId)}>
+                            <button onClick={() => incrementCount(item.productId)}>
                               <h1>+</h1>
                             </button>
                           </div>
@@ -433,9 +441,9 @@ const handleCheckOut = async () => {
                         width: "60%",
                       }}
                     ></div>
-                    <p style={{textDecoration: 'line-through'}}> Rs{item.price}</p>
-                    <p className="mt-3" style={{width: '150px'}}>Quantity: ({item.quantity}) {variantValue}</p>
-                    
+                    <p style={{ textDecoration: 'line-through' }}> Rs{item.price}</p>
+                    <p className="mt-3" style={{ width: '150px' }}>Quantity: ({item.quantity}) {variantValue}</p>
+
                   </div>
                   <div>
                     <div
@@ -446,13 +454,13 @@ const handleCheckOut = async () => {
                         width: "60%",
                       }}
                     ></div>
-                    <p style={{marginLeft: '-42px'}}>Rs</p>
-                      <p style={{marginLeft: '-42px'}}>{variantPrice}</p>
-                    
+                    <p style={{ marginLeft: '-42px' }}>Rs</p>
+                    <p style={{ marginLeft: '-42px' }}>{variantPrice}</p>
+
                   </div>
                 </div>
-            ))}
-            
+              ))}
+
               <div
                 className="mt-3"
                 style={{
@@ -460,7 +468,7 @@ const handleCheckOut = async () => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
-                >
+              >
                 <div
                   style={{
                     display: "flex",
@@ -474,13 +482,13 @@ const handleCheckOut = async () => {
                   }}
                 >
                   <div>
-                    <button onClick={decrementCount}>
+                    <button onClick={() => decrementCount(productId)}>
                       <h1>-</h1>
                     </button>
                   </div>
                   <div>{count}</div>
                   <div>
-                    <button onClick={incrementCount}>
+                    <button onClick={() => decrementCount(productId)}>
                       <h1>+</h1>
                     </button>
                   </div>
@@ -490,7 +498,7 @@ const handleCheckOut = async () => {
                     onClick={decrementCount}
                     style={{ marginLeft: "10px", color: "red" }}
                   >
-                    <h1   onClick={() => deleteById2(productId)}>Remove</h1>
+                    <h1 onClick={() => deleteById2(productId)}>Remove</h1>
                   </button>
                 </div>
               </div>

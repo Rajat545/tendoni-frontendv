@@ -3,10 +3,10 @@ import { useContext } from 'react';
 import { CartContext } from '@/Context/CartContext';
 import Image from 'next/image';
 import '@/app/my-profile/style.css';
-
+import garamMasala from '@Images/ProductImages/garammasala.png';
 const MyProfile = () => {
     const { cart } = useContext(CartContext);
-    console.log(cart, "my order details");
+   
 
 
     const totalSalePrice = cart?.reduce((total, item) => total + item.sale_price, 0) || 0;
@@ -70,7 +70,7 @@ const MyProfile = () => {
                             <div className="flex items-center justify-between">
                                 <Image
                                     style={{ width: "8%" }}
-                                    src={''}
+                                    src={garamMasala}
                                     alt="Product"
                                     width={50}
                                     height={50}
@@ -84,7 +84,7 @@ const MyProfile = () => {
                                 </div>
                             </div>
                 
-                        <p>Looks like you haven't placed an order.</p>
+                        {/* <p>Looks like you haven't placed an order.</p> */}
                   
                 </div>
                 <div className='order-total'>

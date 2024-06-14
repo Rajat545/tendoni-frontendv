@@ -22,13 +22,10 @@ const Pharmaceutica = () => {
     setOpenAccordion2(openAccordion2 === index ? null : index);
   };
   function downloadBrochure() {
-    // Replace 'Tendonicatalogue.pdf' with the actual name of your PDF file.
+  
     const pdfFileName = "pdf";
 
-    // Create a relative path to the PDF file
-    // const pdfPath =  + "/" + pdfFileName;
-    console.log(pdfFileName, "pdfPath");
-    // Create an anchor element
+  
     const anchor = document.createElement("a");
     anchor.href = pdfFileName;
     anchor.download = pdfFileName;
