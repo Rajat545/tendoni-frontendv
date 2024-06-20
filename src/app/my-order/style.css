@@ -15,6 +15,7 @@ body {
     box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
     border: none;
     margin-bottom: 30px;
+    margin-left: 37px;
 }
 
 .m-r-0 {
@@ -28,20 +29,9 @@ body {
 .card-block {
     padding: 1.25rem;
 }
-.uer-info{
-    margin-top: 105px;
-}
-.header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
 
 .user-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 20px;
-    padding-top: 104px;
+    margin-top: 105px;
 }
 
 .info-item {
@@ -81,16 +71,20 @@ body {
 .old-price {
     text-decoration: line-through;
 }
-.flex-name{
+
+.flex-name {
     display: flex;
     gap: 8px;
 }
-.user-name{
+
+.user-name {
     margin-left: 3px;
 }
-.user-details{
+
+.user-details {
     display: flex;
-    gap: 180px;
+    flex-wrap: wrap;
+    gap: 251px;
     padding-bottom: 15px;
     margin-left: 16px;
 }
@@ -128,4 +122,53 @@ body {
         width: 100%;
         justify-content: flex-end;
     }
+
+    .user-info {
+        margin-top: 20px;
+        padding-top: 20px;
+    }
+
+    .user-details {
+        gap: 10px;
+        padding-bottom: 10px;
+        margin-left: 0;
+    }
 }
+
+@media only screen and (max-width: 375px) {
+    .user-info {
+        flex-direction: column;
+        padding-top: 10px;
+    }
+
+    .user-details {
+        gap: 10px;
+        padding-bottom: 10px;
+        margin-left: 0;
+    }
+
+    .order-item {
+        gap: 5px;
+        padding: 10px;
+    }
+
+    .order-info {
+        gap: 5px;
+    }
+
+    .order-image {
+        width: 40px;
+        height: 40px;
+    }
+}
+@media only screen and (max-width: 700px) {
+    .user-details {
+        flex-wrap: wrap;
+        gap: 0px;
+        padding-bottom: 0px;
+        margin-left: 0px;
+    }
+    
+    
+}
+

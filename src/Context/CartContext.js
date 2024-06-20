@@ -105,9 +105,6 @@ export function CartProvider({ children }) {
   }
   
 
- 
-
-
   return (
     <CartContext.Provider
       value={{
@@ -137,8 +134,7 @@ export function CartProvider({ children }) {
         setPassword,
         signUp,
         getSingleProduct,
-     
-     
+
         
       }}
     >

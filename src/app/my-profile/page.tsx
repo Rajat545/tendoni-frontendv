@@ -1,119 +1,102 @@
 "use client";
 import { useContext } from 'react';
-import { CartContext } from '@/Context/CartContext';
 import Image from 'next/image';
 import '@/app/my-profile/style.css';
 import garamMasala from '@Images/ProductImages/garammasala.png';
+import { AuthContext } from '@/Context/AuthContext';
+
 const MyProfile = () => {
-    const { cart } = useContext(CartContext);
-   
+    const { orderHistory } = useContext(AuthContext);
+    const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
 
+    const totalSalePrice = orderHistory?.reduce((total, order) => {
+        return total + order.products.reduce((orderTotal, item) => orderTotal + item.price * item.quantity, 0);
+    }, 0) || 0;
 
-    const totalSalePrice = cart?.reduce((total, item) => total + item.sale_price, 0) || 0;
-    // const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+    console.log(orderHistory, 'here is all order');
 
     return (
         <div className="container px-1 px-md-4 py-5 mx-auto">
             <div className="card">
-                <div className="row d-flex justify-content-between px-3 top">
+                <div className="row d-flex justify-content-between px-3 top pl-11">
                     <div className="d-flex">
-                        <h1 style={{ fontSize: 'x-large' }}>Hy<span className="text-primary font-weight-bold"> Yash</span></h1>
-                        <h5>ORDER No<span className="text-primary font-weight-bold">#Y34XDHR</span></h5>
+                        <h1 className="text-xl">Hy : <span className="text-primary font-weight-bold">{orderHistory?.[0]?.customerName || ''}</span></h1>
                     </div>
-                    <div className="d-flex flex-column text-sm-right">
-                        <p className="mb-0">Expected Arrival <span>01/12/19</span></p>
-                        <p><span className="font-weight-bold">Your order is out of delivery</span></p>
+                    <div className="d-flex">
+                        <h1>OrderID <span className="text-primary font-weight-bold">: {orderHistory?.[0]?.orderId || ''}</span></h1>
+                        <h5>Order Date <span className="text-primary font-weight-bold">: {orderHistory?.[0]?.orderDate ? new Date(orderHistory[0].orderDate).toLocaleDateString() : ''}</span></h5>
+                        <h5> Shipping Address <span className="text-primary font-weight-bold">: {orderHistory?.[0]?.shippingAddress?.addressLine1}</span></h5>
                     </div>
                 </div>
-                <div className="">
+                <div>
                     <div className="track">
-                        <ul id="progressbar" className="text-center">
-                            <li className="active"></li>
-                            <li className="active"></li>
-                            <li className="active"></li>
-                            <li className="active"></li>
+                        <ul id="progressbar" className="text-center flex justify-between">
+                            <li className="flex flex-col items-center">
+                                <p className="font-bold p-3">Order Confirmed</p>
+                            </li>
+                            <li className="flex flex-col items-center">
+                                <p className="font-bold p-3">Out of delivery</p>
+                            </li>
+                            <li className="flex flex-col items-center">
+                                <p className="font-bold p-3">Delivered</p>
+                            </li>
+                            <li className="flex flex-col items-center">
+
+                                <p className="font-bold p-3">Order Cancelled</p>
+                            </li>
                         </ul>
                     </div>
                 </div>
-                <div className="row justify-content-between top" style={{ display: 'flex', columnGap: '32vh' }}>
-                    <div className="row d-flex icon-content">
-                        <img className="icon" src="https://i.imgur.com/9nnc9Et.png" alt="Order Confirmed" />
-                        <div className="d-flex flex-column">
-                            <p className="font-weight-bold">Order<br />Confirmed</p>
-                        </div>
-                    </div>
-                    <div className="row d-flex icon-content">
-                        <img className="icon" src="https://i.imgur.com/u1AzR7w.png" alt="Out of delivery" />
-                        <div className="d-flex flex-column">
-                            <p className="font-weight-bold">Out of delivery</p>
-                        </div>
-                    </div>
-                    <div className="row d-flex icon-content">
-                        <img className="icon" src="https://i.imgur.com/TkPm63y.png" alt="Delivered" />
-                        <div className="d-flex flex-column">
-                            <p className="font-weight-bold">Delivered</p>
-                        </div>
-                    </div>
-                    <div className="row d-flex icon-content">
-                        <img className="icon" src="https://cdn4.iconfinder.com/data/icons/logistic-13/1024/order_cancel2-512.png" alt="Order Cancelled" />
-                        <div className="d-flex flex-column">
-                            <p className="font-weight-bold">Order<br />Cancelled</p>
-                        </div>
-                    </div>
-                </div>
             </div>
-            <div style={{ display: 'flex' }}>
-                <div className='order-details'>
-                    <h1 style={{ fontSize: 'x-large' }}>Order Details</h1>
-                    <hr />
-                    
-                            <div className="flex items-center justify-between">
-                                <Image
-                                    style={{ width: "8%" }}
-                                    src={garamMasala}
-                                    alt="Product"
-                                    width={50}
-                                    height={50}
-                                />
-                                <div style={{ display: 'flex' }}>
-                                    <p>Turmeric: 2 x 1Kg</p>
-                                </div>
-                                <div>
-                                    <p style={{ textDecoration: "line-through" }}>Rs. 600</p>
-                                    <span className="price">Rs. 300</span>
-                                </div>
-                            </div>
-                
-                        {/* <p>Looks like you haven't placed an order.</p> */}
-                  
-                </div>
-                <div className='order-total'>
-                    <h1 style={{ fontSize: 'x-large' }}>Order Total</h1>
-                    <hr />
-                  
-                        <>
-                            <div className="flex items-center justify-between">
+            <div className="flex">
+                {orderHistory.length === 0 ? (
+                    <div className='order-details bg-eceff1 w-60 rounded-lg p-4'>
+                        <h1 className='text-xl px-4 py-2'>Order Item</h1>
+                        <hr className="my-2" />
+                        <p>Looks like you haven't placed an order.</p>
+                    </div>
+                ) : (
+                    <>
+                        <div className='order-details bg-eceff1 w-60 rounded-lg p-4'>
+                            <h1 className="text-xl">Order Item</h1>
+                            <hr className="my-2" />
+                            {orderHistory.map(order => (
+                                order.products.map(item => (
+                                    <div key={item.productId} id='justify-contant' className="flex items-center justify-between p-4">
+                                        <Image
+                                            className="w-9"
+                                            src={garamMasala}
+                                            alt="Product"
+                                        />
+                                        <h1 className="ml-4">{item.ProductName}</h1>
+                                        <h1>{item.quantity} x {item.value}</h1>
+                                        <h1 className="price">Rs. {item.price}</h1>
+                                    </div>
+                                ))
+                            ))}
+                        </div>
+                        <div className='sub-total bg-eceff1 w-60 rounded-lg p-4 ml-64'id='price'>
+                            <div id='total' className="flex items-center justify-between mb-2">
                                 <p>Sub Total</p>
                                 <p>Rs. {totalSalePrice}</p>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <p>Shipping</p>
-                                <p>Enter shipping address</p>
+                            <div id='total2' className="flex items-center justify-between mb-2">
+                                <p>Discount</p>
+                                <p>20%</p>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <p>Estimated Taxes</p>
-                                <p>Rs. 6.00</p>
+                            <div id='total3' className="flex items-center justify-between mb-2">
+                                <p className="font-medium">Total Price</p>
+                                <p className="font-medium">{totalSalePrice}</p>
                             </div>
-                            <div className="flex items-center justify-between">
-                                <p className="font-medium">Total</p>
+                            <div id='total4' className="flex items-center justify-between">
+                                <p>Shipping charge</p>
                                 <p><b>Rs. {totalSalePrice + 6.00}</b></p>
                             </div>
-                        </>
-                   
-                        <p>No order items.</p>
-           
-                </div>
+                        </div>
+                    </>
+                )}
             </div>
+
         </div>
     );
 };

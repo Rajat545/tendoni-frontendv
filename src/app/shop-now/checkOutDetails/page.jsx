@@ -33,7 +33,7 @@ const Shop = () => {
     state: address ? address?.state : '',
     country: address ? address?.country : '',
     landmark: address ? address?.landmark : '',
-    zipcode: address ? address?.zipcode : '',
+    // zipcode: address ? address?.zipcode : '',
     name: address ? address?.name : '',
     number: address ? address?.number : '',
     addressId: address ? address?.addressId : '',
@@ -252,7 +252,7 @@ const Shop = () => {
         state: formData.state,
         country: formData.country,
         landmark: formData.landmark,
-        zipcode: formData.zipcode,
+        // zipcode: formData.zipcode,
         number: formData.number,
         pincode: formData.pincode,
       };
@@ -268,7 +268,7 @@ const Shop = () => {
         country: '',
         landmark: '',
         number: '',
-        zipcode: '',
+
       });
     } catch (error) {
       setMessage('Error saving address.');
@@ -343,7 +343,7 @@ const Shop = () => {
         toast.error("Please select an address.");
         return;
       }
-      const requiredFields = ['addressLine1', 'pincode', 'city', 'state', 'country', 'name', 'number', 'zipcode', 'landmark'];
+      const requiredFields = ['addressLine1', 'pincode', 'city', 'state', 'country', 'name', 'number', 'landmark'];
       const emptyFields = requiredFields.filter(field => !formData[field]);
 
       console.log(emptyFields, 'empty')
@@ -360,7 +360,7 @@ const Shop = () => {
           productId: item.productId,
           quantity: item.quantity,
         })),
-        totalAmount: totalSalePrice,
+        totalAmount: `${totalSalePrice}`,
       };
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
@@ -394,7 +394,7 @@ const Shop = () => {
       toast.error("Please select an address.");
       return;
     }
-    const requiredFields = ['addressLine1', 'pincode', 'city', 'state', 'country', 'name', 'number', 'zipcode', 'landmark'];
+    const requiredFields = ['addressLine1', 'pincode', 'city', 'state', 'country', 'name', 'number', 'landmark'];
     const emptyFields = requiredFields.filter(field => !formData[field]);
 
     console.log(emptyFields, 'empty')
@@ -470,7 +470,7 @@ const Shop = () => {
       state: address?.state || '',
       country: address?.country || '',
       landmark: address?.landmark || '',
-      zipcode: address?.zipcode || '',
+      // zipcode: address?.zipcode || '',
       number: address?.number || ''
     }));
   }, [address]);
@@ -489,14 +489,14 @@ const Shop = () => {
 
       <section className="w-full bg-white">
         <div className="py-6 md:py-8 lg:py-10">
-          <div className="row">
-            <div className="col-75">
+          <div className="row flex-wrap">
+            <div className="col-lg-8">
               <div className="container_checkOut" style={{ height: '100%' }}>
                 <form onSubmit={handleSubmit}>
                   <div className="row">
-                    <div className="col-6">
+                    <div className="col-md-6">
                       <div className="row">
-                        <div className="col-50">
+                        <div className="col-12">
                           <label htmlFor="name">Full Name</label>
                           <input
                             type="text"
@@ -508,7 +508,7 @@ const Shop = () => {
                             required
                           />
                         </div>
-                        <div className="col-50">
+                        <div className="col-12">
                           <label htmlFor="number">Phone</label>
                           <input
                             type="text"
@@ -534,7 +534,7 @@ const Shop = () => {
                         required
                       />
                       <div className="row">
-                        <div className="col-50">
+                        <div className="col-6">
                           <label htmlFor="pincode">Pincode</label>
                           <input
                             type="text"
@@ -546,7 +546,7 @@ const Shop = () => {
                             required
                           />
                         </div>
-                        <div className="col-50">
+                        <div className="col-6">
                           <label htmlFor="city">City</label>
                           <input
                             type="text"
@@ -560,7 +560,7 @@ const Shop = () => {
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-50">
+                        <div className="col-6">
                           <label htmlFor="state">State</label>
                           <input
                             type="text"
@@ -572,7 +572,7 @@ const Shop = () => {
                             required
                           />
                         </div>
-                        <div className="col-50">
+                        <div className="col-6">
                           <label htmlFor="country">Country</label>
                           <input
                             type="text"
@@ -586,7 +586,7 @@ const Shop = () => {
                         </div>
                       </div>
                       <div className="row">
-                        <div className="col-50">
+                        <div className="col-12">
                           <label htmlFor="landmark">Landmark</label>
                           <input
                             type="text"
@@ -594,18 +594,6 @@ const Shop = () => {
                             name="landmark"
                             placeholder="landmark"
                             value={formData.landmark}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="col-50">
-                          <label htmlFor="zipcode">Zipcode</label>
-                          <input
-                            type="text"
-                            id="zipcode"
-                            name="zipcode"
-                            placeholder="10001"
-                            value={formData.zipcode}
                             onChange={handleChange}
                             required
                           />
@@ -622,34 +610,26 @@ const Shop = () => {
                 <div className="address-box">
                   <div className="row">
                     {customerData?.map((item, index) => (
-                      <div className="address-list col-lg-12" key={index} style={{ marginRight: "20px" }}>
+                      <div className="address-list col-lg-12" key={index}>
                         <DeleteForeverIcon className="delete-icon" onClick={() => handleDelete(item)} />
                         <hr />
-                        <h3 className="address-head">New Address</h3>
-
+                        <h3 className="address-head">SHIPPING ADDRESS</h3>
                         <div>
                           <hr />
-                          <input type="radio" name="address" className="address-selector" onChange={() => handleAddressSelect(item)
-
-                          } />
+                          <input type="radio" name="address" className="address-selector" onChange={() => handleAddressSelect(item)} />
                           <span>{item.name} </span>
                           <p>{item.addressLine1}</p>
                           <p>{item.city} , {item.state}, {item.pincode}</p>
                           <p>{item.phone}</p>
                         </div>
-
                       </div>
                     ))}
                   </div>
-
                 </div>
-
-
               </div>
-
             </div>
 
-            <div className="col-25">
+            <div className="col-lg-4">
               <div className="container_checkOut">
                 <h4 className="font-medium">
                   Products{" "}
@@ -669,18 +649,9 @@ const Shop = () => {
                         height={50}
                       />
                       <div style={{ display: 'flex' }}>
-                        <p>{item.ProductName} : {item.quantity} x {item.value}</p>
+                        <p>{item.productName} : {item.quantity} x {item.value}</p>
                       </div>
                       <div>
-                        <div
-                          style={{
-                            height: "fit-content",
-                            position: "relative",
-                            top: "15px",
-                            width: "100%",
-                          }}
-                        ></div>
-                        {/* <p style={{ textDecoration: "line-through" }}>Rs. {item.variant.amount}</p> */}
                         <span className="price">Rs. {item.price}</span>
                       </div>
                     </div>
@@ -732,65 +703,55 @@ const Shop = () => {
                       <div className="flex"></div>
                       <div className="payments-container">
                         <div className="payments-wrapper">
-                          <div>
-                            <label>
-                              <input
-                                type="radio"
-                                value="Razorpay"
-                                name="paymentMethod"
-                                className="form-check-input"
-                                checked={radioOptions === "Razorpay"}
-                                onChange={handleRadioChange}
-                              />
-                              Online Payment
-                            </label>
-                          </div>
-                          <div className="upi-images"></div>
+                          <label>
+                            <input
+                              type="radio"
+                              value="Razorpay"
+                              name="paymentMethod"
+                              className="form-check-input"
+                              checked={radioOptions === "Razorpay"}
+                              onChange={handleRadioChange}
+                            />
+                            Online Payment
+                          </label>
                         </div>
                         <div className="payments-wrapper">
-                          <div className="upi-images">
-                            {/* Add your UPI images here if needed */}
-                          </div>
-                        </div>
-                        <div className="payments-wrapper">
-                          <div>
-                            <label>
-                              <input
-                                type="radio"
-                                value="COD"
-                                name="paymentMethod"
-                                checked={radioOptions === "COD"}
-                                onChange={handleRadioChange}
-                              />
-                              Cash on Delivery
-                            </label>
-                          </div>
+                          <label>
+                            <input
+                              type="radio"
+                              value="COD"
+                              name="paymentMethod"
+                              checked={radioOptions === "COD"}
+                              onChange={handleRadioChange}
+                            />
+                            Cash on Delivery
+                          </label>
                         </div>
                       </div>
                       {radioOptions === "Razorpay" ? (
                         <button id="pay-btn" onClick={handleOnlinePay}>Pay now</button>
-
                       ) : (
                         <form onSubmit={handleOrderSubmit}>
                           <button id="pay-btn" type="submit">Place Order</button>
-                        </form>)}
+                        </form>
+                      )}
                     </div>
                   </div>
                 </h4>
               </div>
-              <>
-                <Modal
-                  isOpen={popUp}
-                  onRequestClose={() => setPopUp(false)}
-                  contentLabel="Order Success"
-                  className="modal"
-                  overlayClassName="modal-overlay"
-                >
-                  <OrderSuccessFull />
-                </Modal>
-              </>
+              <Modal
+                isOpen={popUp}
+                onRequestClose={() => setPopUp(false)}
+                contentLabel="Order Success"
+                className="modal"
+                overlayClassName="modal-overlay"
+              >
+                <OrderSuccessFull />
+              </Modal>
             </div>
+
           </div>
+
         </div>
       </section>
     </>

@@ -24,7 +24,7 @@ export default function OrderSuccessFull() {
                         <h1>Order Successfull!</h1>
 
                         <p>Thank you so much for your order, We've sent the link to your inbox.</ p>
-                        <Link href='/' className="btn btn-primary">Back Home</Link>
+                        <Link href='/my-order' className="btn btn-primary">Go to Order History</Link>
                     </div>
                 </div>
             </div>

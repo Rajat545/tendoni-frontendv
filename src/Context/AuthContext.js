@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
   const [password, setPassword] = useState('');
   const [userInfo, setUserInfo] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
+  const [orderHistory, setOrderHistory] = useState([]);
 
   const router = useRouter();
 
@@ -86,7 +87,7 @@ export function AuthProvider({ children }) {
           productId: item.productId,
           quantity: item.quantity,
         })),
-        totalAmount: totalSalePrice,
+      totalAmount: `${totalSalePrice}`,
       };
   
       const response = await fetch(
@@ -115,6 +116,54 @@ export function AuthProvider({ children }) {
     }
   };
 
+  // ---------------OrderHistory API ---------
+
+  const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+  useEffect(() => {
+    const fetchOrderHistory = async () => {
+        if (!userData.data || !userData.data.customerId || !userData.data.access_token) {
+            console.error('User data or token missing');
+            router.push('/login');
+            return;
+        }
+
+        const { customerId, access_token } = userData.data;
+        console.log(customerId,"custumerID is here ")
+        console.log(access_token, 'access_token');
+
+        try {
+            const response = await fetch("https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderHistoryData", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'Authorization': `${access_token}`,
+                },
+                body: JSON.stringify({ customerId}),
+            });
+
+            if (!response.ok) {
+                if (response.status === 401) {
+                    console.error('Unauthorized Token, Please login again.');
+                    router.push('/login');
+                }
+                throw new Error('Network response was not ok');
+            }
+
+            const data = await response.json();
+            console.log(data, 'Fetched order history data'); // Log the entire response
+            setOrderHistory(data?.data || []);
+            console.log(data.data.products, 'Order History final');
+        } catch (error) {
+            console.error('Error fetching order history:', error);
+        }
+    };
+
+    if (userData?.data?.customerId) {
+        fetchOrderHistory();
+    }
+}, [userData?.data?.customerId, router]);
+
 
   return (
 
@@ -128,7 +177,9 @@ export function AuthProvider({ children }) {
         setUserInfo,
         handleSubmit,
         handleAddressSelect,
-        handleOrderSubmit
+        handleOrderSubmit,
+        orderHistory,
+        setOrderHistory
       }}
     >
       {children}
