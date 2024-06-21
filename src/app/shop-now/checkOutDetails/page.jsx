@@ -19,7 +19,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const Shop = () => {
   const [popUp, setPopUp] = useState(false);
   const [customerId, setCustomerId] = useState('');
-  const [cartData, setCartData] = useState([]);
+  const [cartData, setCartData] = useState('');
   const [customerData, setCustomerData] = useState([]);
   const { addressData, setAddressData } = useState([])
   const [radioOptions, setRadioOptions] = useState("Razorpay");
@@ -28,12 +28,12 @@ const Shop = () => {
   const [address, setAddress] = useState('')
   const [formData, setFormData] = useState({
     addressLine1: address ? address?.addressLine1 : '',
-    pincode: address ? address?.pincode : '',
+    pinCode: address ? address?.pinCode : '',
     city: address ? address?.city : '',
     state: address ? address?.state : '',
     country: address ? address?.country : '',
     landmark: address ? address?.landmark : '',
-    // zipcode: address ? address?.zipcode : '',
+    // zipCASHe: address ? address?.zipCASHe : '',
     name: address ? address?.name : '',
     number: address ? address?.number : '',
     addressId: address ? address?.addressId : '',
@@ -203,7 +203,7 @@ const Shop = () => {
 
 
 
-  const totalSalePrice = cartData.reduce((total, item) => total + (item.price * item.quantity), 0);
+  // const totalSalePrice = cartData?.reduce((total, item) => total + (item.price * item.quantity), 0);
 
   const handleRadioChange = (e) => {
     console.log(e.target.value);
@@ -278,90 +278,36 @@ const Shop = () => {
     }
   };
 
-
-  // const handleOrderSubmit = async () => {
-  //   try {
-  //     const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
-  //     if (!userData.data) {
-  //       throw new Error("User data not found");
-  //     }
-  //     const { customerId, access_token } = userData.data;
-
-  //     const orderData = {
-  //       customerId,
-  //       addressId: selectedAddress?.addressId,
-  //       paymentMethod: radioOptions,
-  //       items: cartData.map((item) => ({
-  //         productId: item.productId,
-  //         quantity: item.quantity,
-  //       })),
-  //       totalAmount: totalSalePrice,
-  //     };
-
-  //     const response = await fetch(
-  //       "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
-  //       {
-  //         method: "POST",
-  //         headers: {
-  //           "Content-Type": "application/json",
-  //           Accept: "application/json",
-  //           Authorization: `${access_token}`,
-  //         },
-  //         body: JSON.stringify(orderData),
-  //       }
-  //     );
-
-  //     if (!response.ok) {
-  //       throw new Error("Network response was not ok");
-  //     }
-
-  //     const data = await response.json();
-  //     console.log("Order submitted successfully:", data);
-  //     toast.success("Order submitted successfully!");
-
-  //     // Clear the cart and reset state if necessary
-  //     setCartData([]);
-  //   } catch (error) {
-  //     console.error("Error submitting order:", error);
-  //     toast.error("Error submitting order.");
-  //   }
-  // };
-
   console.log('first', formData)
+
 
   const handleOrderSubmit = async (e) => {
     e.preventDefault();
     try {
-      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
-      if (!userData.data) {
-        throw new Error("User data not found");
-      }
-      const { customerId, access_token } = userData.data;
-
-      // Check if formData is null or any required fields are empty
-      if (!formData || Object.keys(formData).length === 0) {
-        toast.error("Please select an address.");
-        return;
-      }
+      // Retrieve user data from localStorage
+      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");  
+      // Validate form data
       const requiredFields = ['addressLine1', 'pincode', 'city', 'state', 'country', 'name', 'number', 'landmark'];
-      const emptyFields = requiredFields.filter(field => !formData[field]);
-
-      console.log(emptyFields, 'empty')
-      if (emptyFields.length > 0) {
-        toast.error("Please fill out all required fields.");
-        return;
+      for (const field of requiredFields) {
+        if (!formData[field]) {
+          toast.error(`Please fill out ${field.replace(/([A-Z])/g, ' $1').toLowerCase()}.`);
+          return;
+        }
       }
-
+  
+      // Prepare order data
       const orderData = {
-        customerId,
-        addressId: formData?.addressId,
-        paymentMethod: radioOptions,
-        items: cartData.map((item) => ({
+        customerId: userData.data.customerId,
+        addressId: formData.addressId,
+        paymentMethod: radioOptions, // Assuming radioOptions is defined elsewhere
+        items: cartData.items.map(item => ({
           productId: item.productId,
           quantity: item.quantity,
         })),
-        totalAmount: `${totalSalePrice}`,
+        // totalAmount: cartData.reduce((total, item) => total + item.totalSalePrice, 0), // Calculate total amount
       };
+  
+      // Send order request
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
         {
@@ -369,25 +315,26 @@ const Shop = () => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-            Authorization: `${access_token}`,
+            Authorization: userData.data.access_token,
           },
           body: JSON.stringify(orderData),
         }
       );
+  
+    
+  
+      // Process successful order placement
       const data = await response.json();
-      if (!response.ok) {
-        toast.error("Error placing order.");
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
       toast.success("Order placed successfully!");
       setPopUp(true);
-      setCartData([]);
+      setCartData([]); // Clear cart after successful order
+  
     } catch (error) {
       console.error("Error placing order:", error);
       toast.error("Error placing order.");
     }
   };
-
+  
 
   const handleOnlinePay = async () => {
     if (!formData || Object.keys(formData).length === 0) {
@@ -426,7 +373,7 @@ const Shop = () => {
 
       const options = {
         key: "rzp_test_fuOkanrFo8Ztyd",
-        amount: `${totalSalePrice}`,
+        amount: '33333',
         currency: 'INR',
         name: `${formData?.name}`,
         description: " Transaction",
@@ -434,7 +381,7 @@ const Shop = () => {
         order_id: 'order_OIdp0EQmFOLWQK',
         prefill: {
           name: `${formData?.name}`,
-          email: `${customerData.email}`,
+          email: `${customerData[0].email}`,
           contact: `${formData.number}`,
         },
         notes: {
@@ -486,274 +433,287 @@ const Shop = () => {
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
 
-
       <section className="w-full bg-white">
-        <div className="py-6 md:py-8 lg:py-10">
-          <div className="row flex-wrap">
-            <div className="col-lg-8">
-              <div className="container_checkOut" style={{ height: '100%' }}>
-                <form onSubmit={handleSubmit}>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="row">
-                        <div className="col-12">
-                          <label htmlFor="name">Full Name</label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            placeholder="John M. Doe"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="col-12">
-                          <label htmlFor="number">Phone</label>
-                          <input
-                            type="text"
-                            id="number"
-                            name="number"
-                            placeholder="10-digit mobile number"
-                            value={formData.number}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <label htmlFor="addressLine1">
-                        <i className="fa fa-address-card-o"></i> Address
-                      </label>
-                      <input
-                        type="text"
-                        id="addressLine1"
-                        name="addressLine1"
-                        placeholder="542 W. 15th Street"
-                        value={formData.addressLine1}
-                        onChange={handleChange}
-                        required
-                      />
-                      <div className="row">
-                        <div className="col-6">
-                          <label htmlFor="pincode">Pincode</label>
-                          <input
-                            type="text"
-                            id="pincode"
-                            name="pincode"
-                            placeholder="Pincode"
-                            value={formData.pincode}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="city">City</label>
-                          <input
-                            type="text"
-                            id="city"
-                            name="city"
-                            placeholder="Enter your city"
-                            value={formData.city}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-6">
-                          <label htmlFor="state">State</label>
-                          <input
-                            type="text"
-                            id="state"
-                            name="state"
-                            placeholder="State"
-                            value={formData.state}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="col-6">
-                          <label htmlFor="country">Country</label>
-                          <input
-                            type="text"
-                            id="country"
-                            name="country"
-                            placeholder="India"
-                            value={formData.country}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="row">
-                        <div className="col-12">
-                          <label htmlFor="landmark">Landmark</label>
-                          <input
-                            type="text"
-                            id="landmark"
-                            name="landmark"
-                            placeholder="landmark"
-                            value={formData.landmark}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <label>
-                    <input type="checkbox" name="sameadr" /> Shipping address same as billing
-                  </label>
-                  <button type="submit" id="pay-btn">Create And Save Address</button>
-                </form>
+   
 
-                <div className="address-box">
-                  <div className="row">
-                    {customerData?.map((item, index) => (
-                      <div className="address-list col-lg-12" key={index}>
-                        <DeleteForeverIcon className="delete-icon" onClick={() => handleDelete(item)} />
-                        <hr />
-                        <h3 className="address-head">SHIPPING ADDRESS</h3>
-                        <div>
-                          <hr />
-                          <input type="radio" name="address" className="address-selector" onChange={() => handleAddressSelect(item)} />
-                          <span>{item.name} </span>
-                          <p>{item.addressLine1}</p>
-                          <p>{item.city} , {item.state}, {item.pincode}</p>
-                          <p>{item.phone}</p>
-                        </div>
-                      </div>
-                    ))}
+
+
+   <div className="py-6 md:py-8 lg:py-10">
+    <div className="flex m-0">
+      <div className="w-2/5">
+        <div className="container_checkOut" style={{ height: '100%' }}>
+          <form onSubmit={handleSubmit}>
+            <div className="">
+              <div className="col-md-6">
+                <div className="flex  gap-4">
+                  <div className="w-1/2">
+                    <label htmlFor="name">Full Name</label>
+                    <input
+                      type="text"
+                      id="name"
+                      name="name"
+                      placeholder="John M. Doe"
+                      value={formData.name}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label htmlFor="number">Phone</label>
+                    <input
+                      type="text"
+                      id="number"
+                      name="number"
+                      placeholder="10-digit mobile number"
+                      value={formData.number}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+                <label htmlFor="addressLine1">
+                  <i className="fa fa-address-card-o"></i> Address
+                </label>
+                <input
+                  type="text"
+                  id="addressLine1"
+                  name="addressLine1"
+                  placeholder="542 W. 15th Street"
+                  value={formData.addressLine1}
+                  onChange={handleChange}
+                  required
+                />
+                <div className="flex  gap-4">
+                  <div className="w-1/2">
+                    <label htmlFor="pincode">Pincode</label>
+                    <input
+                      type="text"
+                      id="pincode"
+                      name="pincode"
+                      placeholder="Pincode"
+                      value={formData.pincode}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label htmlFor="city">City</label>
+                    <input
+                      type="text"
+                      id="city"
+                      name="city"
+                      placeholder="Enter your city"
+                      value={formData.city}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="flex  gap-4">
+                  <div className="w-1/2">
+                    <label htmlFor="state">State</label>
+                    <input
+                      type="text"
+                      id="state"
+                      name="state"
+                      placeholder="State"
+                      value={formData.state}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label htmlFor="country">Country</label>
+                    <input
+                      type="text"
+                      id="country"
+                      name="country"
+                      placeholder="India"
+                      value={formData.country}
+                      onChange={handleChange}
+                      required
+                    />
+                  </div>
+                </div>
+                <div className="">
+                  <div className="col-12">
+                    <label htmlFor="landmark">Landmark</label>
+                    <input
+                      type="text"
+                      id="landmark"
+                      name="landmark"
+                      placeholder="landmark"
+                      value={formData.landmark}
+                      onChange={handleChange}
+                      required
+                    />
                   </div>
                 </div>
               </div>
             </div>
+            <label>
+              <input type="checkbox" name="sameadr" /> Shipping address same as billing
+            </label>
+            <button type="submit" id="pay-btn">Create And Save Address</button>
+          </form>
 
-            <div className="col-lg-4">
-              <div className="container_checkOut">
-                <h4 className="font-medium">
-                  Products{" "}
-                  <span className="price" style={{ color: "black" }}>
-                    <b>{cartData.length}</b>
-                  </span>
-                </h4>
-                <br />
-                {cartData && cartData.length > 0 ? (
-                  cartData.map((item, index) => (
-                    <div key={index} className="flex items-center justify-between">
-                      <Image
-                        style={{ width: "8%" }}
-                        src={garamMasala}
-                        alt={item.productName}
-                        width={50}
-                        height={50}
-                      />
-                      <div style={{ display: 'flex' }}>
-                        <p>{item.productName} : {item.quantity} x {item.value}</p>
-                      </div>
-                      <div>
-                        <span className="price">Rs. {item.price}</span>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p>No products in cart</p>
-                )}
-                <br />
-                <hr />
-                <br />
-                <div className="flex item-center justify-between">
+          <div className="address-box">
+            <div className="flex">
+              {customerData.map((item, index) => (
+                <div className="address-list col-lg-12" key={index}>
+                  <DeleteForeverIcon className="delete-icon" onClick={() => handleDelete(item)} />
+                  <hr />
+                  <h3 className="address-head">SHIPPING ADDRESS</h3>
                   <div>
-                    <p>Sub Total</p>
-                  </div>
-                  <div>
-                    <p>Rs. {totalSalePrice}</p>
+                    <hr />
+                    <input type="radio" name="address" className="address-selector" onChange={() => handleAddressSelect(item)} />
+                    <span>{item.name} </span>
+                    <p>{item.addressLine1}</p>
+                    <p>{item.city} , {item.state}, {item.pincode}</p>
+                    <p>{item.phone}</p>
                   </div>
                 </div>
-                <div className="flex item-center justify-between">
-                  <div>
-                    <p>Shipping</p>
-                  </div>
-                  <div>
-                    <p>Enter shipping address</p>
-                  </div>
-                </div>
-                <div className="flex item-center justify-between">
-                  <div>
-                    <p>Estimated Taxes</p>
-                  </div>
-                  <div>
-                    <p>Rs. 6.00</p>
-                  </div>
-                </div>
-                <p className="font-medium">
-                  Total{" "}
-                  <span className="price" style={{ color: "black" }}>
-                    <b>Rs. {totalSalePrice + 6.00}</b>
-                  </span>
-                </p>
-              </div>
-              <div className="container_checkOut" style={{ marginTop: '50px' }}>
-                <h4 className="font-medium">
-                  Shipping method{" "}
-                  <div className="mainContainer">
-                    <div className="user-list"></div>
-                    <div className="card">
-                      <div className="inputWithIcon"></div>
-                      <div className="flex"></div>
-                      <div className="payments-container">
-                        <div className="payments-wrapper">
-                          <label>
-                            <input
-                              type="radio"
-                              value="Razorpay"
-                              name="paymentMethod"
-                              className="form-check-input"
-                              checked={radioOptions === "Razorpay"}
-                              onChange={handleRadioChange}
-                            />
-                            Online Payment
-                          </label>
-                        </div>
-                        <div className="payments-wrapper">
-                          <label>
-                            <input
-                              type="radio"
-                              value="COD"
-                              name="paymentMethod"
-                              checked={radioOptions === "COD"}
-                              onChange={handleRadioChange}
-                            />
-                            Cash on Delivery
-                          </label>
-                        </div>
-                      </div>
-                      {radioOptions === "Razorpay" ? (
-                        <button id="pay-btn" onClick={handleOnlinePay}>Pay now</button>
-                      ) : (
-                        <form onSubmit={handleOrderSubmit}>
-                          <button id="pay-btn" type="submit">Place Order</button>
-                        </form>
-                      )}
-                    </div>
-                  </div>
-                </h4>
-              </div>
-              <Modal
-                isOpen={popUp}
-                onRequestClose={() => setPopUp(false)}
-                contentLabel="Order Success"
-                className="modal"
-                overlayClassName="modal-overlay"
-              >
-                <OrderSuccessFull />
-              </Modal>
+              ))}
             </div>
-
           </div>
-
         </div>
-      </section>
+      </div>
+
+      <div className="w-1/3  ml-[300px]">
+        <div className="container_checkOut">
+          <h4 className="font-medium">
+            Products{" "}
+            <span className="price" style={{ color: "black" }}>
+              <b>{cartData.length}</b>
+            </span>
+          </h4>
+          <br />
+          {cartData && cartData.items?.length > 0 ? (
+            cartData.items.map((item, index) => (
+              <div key={index} className="flex items-center justify-between">
+                <Image
+                  style={{ width: "8%" }}
+                  src={garamMasala}
+                  alt={item.productName}
+                  width={50}
+                  height={50}
+                />
+                <div style={{ display: 'flex' }}>
+                  <p>{item.ProductName} : {item.quantity} x {item.value}</p>
+                </div>
+                <div>
+                <p className="price">
+          <span style={{ textDecorationLine: 'line-through' }}>Rs. {item.maxPrice}</span> <span>Rs. {item.price}</span>
+        </p>
+                </div>
+              </div>
+            ))
+          ) : (
+            <p>No products in cart</p>
+          )}
+          <br />
+          <hr />
+          <br />
+          <div className="flex item-center justify-between">
+            <div>
+              <p>Total Price</p>
+            </div>
+            <div>
+              <p>Rs. {cartData.totalPrice}</p>
+            </div>
+            
+          </div>
+          <div className="flex item-center justify-between">
+            <div>
+              <p>Discount</p>
+            </div>
+            <div>
+              <p>{cartData.discount}</p>
+            </div>
+            
+          </div>
+          <div className="flex item-center justify-between">
+            <div>
+              <p>Sub Total</p>
+            </div>
+            <div>
+              <p>Rs. {cartData.totalSalePrice}</p>
+            </div>
+            
+          </div>
+          <div className="flex item-center justify-between">
+            <div>
+              <p>Shipping charge</p>
+            </div>
+            <div>
+              <p> + {cartData.deliveryCharge}</p>
+            </div>
+          </div>
+  
+          <p className="font-medium">
+            Grand Total{" "}
+            <span className="price" style={{ color: "black" }}>
+              <b>Rs. {cartData.totalSalePrice}</b>
+            </span>
+          </p>
+        </div>
+        <div className="container_checkOut" style={{ marginTop: '50px' }}>
+          <h4 className="font-medium">
+            Shipping method
+          </h4>
+          <div className="mainContainer">
+            <div className="card">
+              <div className="payments-container">
+                <div className="payments-wrapper">
+                  <label>
+                    <input
+                      type="radio"
+                      value="Razorpay"
+                      name="paymentMethod"
+                      className="form-check-input"
+                      checked={radioOptions === "Razorpay"}
+                      onChange={handleRadioChange}
+                    />
+                    Online Payment
+                  </label>
+                </div>
+                <div className="payments-wrapper">
+                  <label>
+                    <input
+                      type="radio"
+                      value="COD"
+                      name="paymentMethod"
+                      checked={radioOptions === "COD"}
+                      onChange={handleRadioChange}
+                    />
+                    Cash on Delivery
+                  </label>
+                </div>
+              </div>
+              {radioOptions === "Razorpay" ? (
+                <button id="pay-btn" onClick={handleOnlinePay}>Pay now</button>
+              ) : (
+                <form onSubmit={handleOrderSubmit}>
+                  <button id="pay-btn" type="submit">Place Order</button>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+        <Modal
+          isOpen={popUp}
+          onRequestClose={() => setPopUp(false)}
+          contentLabel="Order Success"
+          className="modal"
+          overlayClassName="modal-overlay"
+        >
+          <OrderSuccessFull />
+        </Modal>
+      </div>
+    </div>
+  </div> 
+</section>
+
     </>
 
   );

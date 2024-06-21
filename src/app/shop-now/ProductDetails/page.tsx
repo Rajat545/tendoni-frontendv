@@ -130,7 +130,7 @@ const ProductDetails = () => {
   // const {productId} = productDetails
   const fetchProductById = async (productId) => {
     try {
-      const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getSingleProductById/${productId}`;
+      const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getProductById/${productId}`;
       console.log(`Fetching product with URL: ${url}`);
 
       const response = await fetch(url);

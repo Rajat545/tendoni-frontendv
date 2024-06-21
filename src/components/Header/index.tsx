@@ -40,8 +40,7 @@ const Header: React.FC = () => {
     toast.success("Successfully logged out!");
     localStorage.removeItem("user-info");
     localStorage.removeItem("access-token");
-    //  
-    // router.push("/login"); 
+    router.push("/login"); 
   };
 
   const handleExpandIconClick = (menuItem: any) => {

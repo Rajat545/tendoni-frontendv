@@ -2,77 +2,78 @@
 import Image from 'next/image';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
-import '@/app/my-order/style.css';
+import '@/app/my-order/style.css'; // Ensure your global styles are imported correctly
 import Link from 'next/link';
 import { AuthContext, isAuth } from '@/Context/AuthContext';
-import './style.css';
+import './style.css'; // Local styles specific to MyOrder component
 import { useRouter } from 'next/navigation';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import garamMasala from '@Images/ProductImages/garammasala.png';
 
 const MyOrder = () => {
-    // const [orderHistory, setOrderHistory] = useState([]);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [itemPerPage] = useState(2);
     const router = useRouter();
     const isAuthenticated = isAuth();
-    const { orderHistory, setOrderHistory } = useContext(AuthContext)
+    const { orderHistory, setOrderHistory } = useContext(AuthContext);
 
-    const handleCheck = () => {
-        if (isAuthenticated) {
-            router.push("/my-profile");
-        } else {
-            router.push("/login");
+    const [currentPage, setCurrentPage] = useState(0);
+    const [itemPerPage] = useState(2);
+    const [modalIsOpen, setModalIsOpen] = useState(false);
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        number: ''
+    });
+
+    const openModal = () => {
+        setFormData({
+            name: userData?.data?.name || '',
+            email: userData?.data?.email || '',
+            number: userData?.data?.number || ''
+        });
+        setModalIsOpen(true);
+    };
+
+    const closeModal = () => {
+        setModalIsOpen(false);
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData((prevData) => ({ ...prevData, [name]: value }));
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/updateCustomerById', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+            const result = await response.json();
+            if (response.ok) {
+                // Update UI with new data
+                userData.data.name = formData.name;
+                userData.data.email = formData.email;
+                userData.data.number = formData.number;
+                closeModal();
+                // Apply CSS effect to highlight changes
+                document.querySelector('.user-details').classList.add('highlight');
+                setTimeout(() => {
+                    document.querySelector('.user-details').classList.remove('highlight');
+                }, 2000);
+            } else {
+                console.error(result);
+            }
+        } catch (error) {
+            console.error(error);
         }
     };
 
     const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
     console.log(userData.data, "UserData");
-
-    // useEffect(() => {
-    //     const fetchOrderHistory = async () => {
-    //         if (!userData.data || !userData.data.customerId || !userData.data.access_token) {
-    //             console.error('User data or token missing');
-    //             router.push('/login');
-    //             return;
-    //         }
-
-    //         const { customerId, access_token } = userData.data;
-    //         console.log(customerId,"custumerID is here ")
-    //         console.log(access_token, 'access_token');
-
-    //         try {
-    //             const response = await fetch("https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderHistoryData", {
-    //                 method: 'POST',
-    //                 headers: {
-    //                     'Content-Type': 'application/json',
-    //                     'Accept': 'application/json',
-    //                     'Authorization': `${access_token}`,
-    //                 },
-    //                 body: JSON.stringify({ customerId}),
-    //             });
-
-    //             if (!response.ok) {
-    //                 if (response.status === 401) {
-    //                     console.error('Unauthorized Token, Please login again.');
-    //                     router.push('/login');
-    //                 }
-    //                 throw new Error('Network response was not ok');
-    //             }
-
-    //             const data = await response.json();
-    //             console.log(data, 'Fetched order history data'); // Log the entire response
-    //             setOrderHistory(data?.data || []);
-    //             console.log(data.data.products, 'Order History final');
-    //         } catch (error) {
-    //             console.error('Error fetching order history:', error);
-    //         }
-    //     };
-
-    //     if (userData?.data?.customerId) {
-    //         fetchOrderHistory();
-    //     }
-    // }, [userData?.data?.customerId, router]);
 
     console.log(orderHistory, 'Order history details');
 
@@ -86,20 +87,28 @@ const MyOrder = () => {
 
     const handlePageChange = (selectedPage) => {
         setCurrentPage(selectedPage);
-    }
+    };
+
+    const handleCheck = () => {
+        if (isAuthenticated) {
+            router.push("/my-profile");
+        } else {
+            router.push("/login");
+        }
+    };
 
     return (
         <div className="page-content page-container" id="page-content">
             <div className="padding">
                 <div className="row container d-flex justify-content-center">
                     <div className="user-info">
-                        <div className="card user-card-full" >
+                        <div className="card user-card-full">
                             <div className="row m-l-0 m-r-0">
                                 <div className="col-sm-8">
                                     <div className="card-block">
                                         <div className="flex justify-between items-center">
                                             <h1 className="text-xl">User Information</h1>
-                                            <EditNoteIcon className="ml-auto" />
+                                            <button onClick={openModal} className="ml-auto"><EditNoteIcon /></button>
                                         </div>
                                         <div className="user-details mt-4">
                                             <div className="flex items-center mb-2">
@@ -116,7 +125,6 @@ const MyOrder = () => {
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -135,7 +143,6 @@ const MyOrder = () => {
                     ) : (
                         <div className="container border border-gray-300 rounded-lg">
                             <div className="class">
-
                                 <hr />
                                 {currentItems.map((order) => (
                                     order.products.map((item) => (
@@ -169,7 +176,6 @@ const MyOrder = () => {
                                         </div>
                                     ))
                                 ))}
-
                             </div>
                         </div>
                     )}
@@ -208,6 +214,52 @@ const MyOrder = () => {
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
                             </button>
+                        </div>
+                    )}
+
+                    {/* Modal for editing user information */}
+                    {modalIsOpen && (
+                        <div className="modal">
+                            <div className="modal-content">
+                                <span className="close" onClick={closeModal}>&times;</span>
+                                <form onSubmit={handleSubmit}>
+                                    <div className="form-group">
+                                        <label>Name:</label>
+                                        <input
+                                            type="text"
+                                            name="name"
+                                            value={formData.name}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Email:</label>
+                                        <input
+                                            type="email"
+                                           
+                                            name="email"
+                                            value={formData.email}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="form-group">
+                                        <label>Phone:</label>
+                                        <input
+                                            type="text"
+                                            name="number"
+                                            value={formData.number}
+                                            onChange={handleChange}
+                                            className="form-control"
+                                            required
+                                        />
+                                    </div>
+                                    <button type="submit" className="btn btn-primary">Save Changes</button>
+                                </form>
+                            </div>
                         </div>
                     )}
                 </div>

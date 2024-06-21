@@ -4,7 +4,7 @@ import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import { useRouter } from "next/navigation";
 import { CartContext } from "@/Context/CartContext";
-import { toast } from 'react-toastify';
+import { ToastContainer, toast } from 'react-toastify';
 import Header from "@/components/Header";
 import { isAuth } from "@/Context/AuthContext";
 import garamMasala from '@Images/ProductImages/garammasala.png';
@@ -278,12 +278,14 @@ const Shop = () => {
         variantId: item.variant.variantId,
         valueId: item.variant.valueId,
         quantity: item.quantity,
-        price: item.price,
+        price: item.variant.saleAmount,
+        maxPrice: item.variant.amount,
       }));
 
       const payload = {
         customerId,
         items,
+        
       };
 
       
@@ -317,6 +319,7 @@ const Shop = () => {
 
   return (
     <>
+    <ToastContainer/>
       <Header />
       <div className="z-20">
         <Image
