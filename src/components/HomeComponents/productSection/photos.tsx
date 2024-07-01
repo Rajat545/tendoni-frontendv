@@ -16,7 +16,6 @@ function Photos() {
     activeCategory === "All"
       ? portfolioItems.All
       : portfolioItems[activeCategory];
-  // console.log(filteredItems[0].imgSrc, "filteredItems");
   return (
     <>
       <Section

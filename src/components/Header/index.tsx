@@ -1,4 +1,4 @@
-"use client";
+"use client";;
 import React, { useState, useRef, useEffect, useContext } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -8,7 +8,6 @@ import CloseIcon from "@Images/logo/Close_round.svg";
 import ExpandIcon from "@Images/logo/Expand_down.svg";
 import Menu from "@Images/svgs/menu.svg";
 import AccentMenu from "@Images/logo/accent-menu.png";
-import UserIcon from "@Images/svgs/user_3.png";
 import './style.css'
 import { menuItems, childMenuData } from "../../Data/home";
 import { ToastContainer, toast } from 'react-toastify';
@@ -37,9 +36,9 @@ const Header: React.FC = () => {
 
   const handleLogout = () => {
 
-    toast.success("Successfully logged out!");
     localStorage.removeItem("user-info");
     localStorage.removeItem("access-token");
+    toast.success("Successfully logged out!");
     router.push("/login"); 
   };
 
@@ -78,6 +77,9 @@ const Header: React.FC = () => {
     return "480px";
   };
   const handleCartIconClick = () => {
+    if(cart.length === 0){
+      toast.error('cart is empty add to cart first!')
+    }
     setShowCartPopup(true);
   };
 
@@ -146,7 +148,7 @@ const Header: React.FC = () => {
     };
 
     window.addEventListener("scroll", headerScrolled);
-    headerScrolled(); // Call it on mount to check initial position
+    headerScrolled();
 
     return () => {
       window.removeEventListener("scroll", headerScrolled);

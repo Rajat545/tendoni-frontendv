@@ -18,8 +18,8 @@ export function CartProvider({ children }) {
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
   const [number, setNumber] = useState('');
-  const [singleProduct, setSingleProduct]= useState({})
-  
+  const [singleProduct, setSingleProduct] = useState({})
+
   const router = useRouter();
 
   useEffect(() => {
@@ -31,10 +31,6 @@ export function CartProvider({ children }) {
         }
         const result = await response.json();
         setData(result.data);
-
-        console.log('result', result.data);
-
-        // Extract variants from the fetched data
         const allVariants = result.data.flatMap(product => product.Variant);
         setVariant(allVariants);
       } catch (error) {
@@ -48,7 +44,6 @@ export function CartProvider({ children }) {
   useEffect(() => {
     const productVariants = cart.map(product => product.Variant);
     setVariant(...productVariants);
-    console.log(productVariants, "productVariants");
   }, [cart]);
 
   //  ----------------------signup api ---------------
@@ -68,17 +63,15 @@ export function CartProvider({ children }) {
       });
 
       const data = await response.json();
-      console.log("data", data);
 
       if (!data.error) {
-        localStorage.setItem('token', data.token); 
+        localStorage.setItem('token', data.token);
         toast.success("Account Created Successfully!");
         router.push("/login");
       } else {
         toast.error(data.message || "Signup failed! Please try again.");
       }
     } catch (error) {
-      console.error("Signup error:", error);
       toast.error("Signup failed! Please try again.");
     }
   };
@@ -89,21 +82,25 @@ export function CartProvider({ children }) {
   // ------------------ProductById------------
 
   const getSingleProduct = async () => {
-    try{
+    try {
       const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getAllSpicesProduct');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
       const singleProduct = await response.json();
       setSingleProduct(singleProduct.data)
-      console.log(singleProduct,"singleProduct data")
 
 
-    } catch(error){
-                 console.error('Error fetching data:', error);
+    } catch (error) {
+      toast.error('Error fetching data:');
     }
   }
-  
+  const buyProduct = async (item,product) => {
+    console.log(item,product,"item or product")
+    const productData =  data.filter((item) => item.productId === product.productId);
+    console.log(productData,"new data")
+  };
+
 
   return (
     <CartContext.Provider
@@ -134,8 +131,9 @@ export function CartProvider({ children }) {
         setPassword,
         signUp,
         getSingleProduct,
+        buyProduct
 
-        
+
       }}
     >
       {children}

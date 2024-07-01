@@ -72,7 +72,6 @@ body {
 
 .order-details {
     background-color: #eceff1;
-    width: 60%;
     border-radius: 9px;
     padding: 10px;
 }
@@ -296,6 +295,9 @@ body {
     }
     #price{
         height: 47vh;
+    }
+    #total-price{
+        display: flex;
     }
 
     .card {

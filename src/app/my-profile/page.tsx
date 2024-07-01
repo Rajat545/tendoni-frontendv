@@ -6,42 +6,56 @@ import garamMasala from '@Images/ProductImages/garammasala.png';
 import { AuthContext } from '@/Context/AuthContext';
 
 const MyProfile = () => {
-    const { orderHistory } = useContext(AuthContext);
-    const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+    const { trackProduct } = useContext(AuthContext);
 
-    const totalSalePrice = orderHistory?.reduce((total, order) => {
-        return total + order.products.reduce((orderTotal, item) => orderTotal + item.price * item.quantity, 0);
-    }, 0) || 0;
-
-    console.log(orderHistory, 'here is all order');
+    const getStepIndex = () => {
+        switch (trackProduct[0]?.orderStatus) {
+            case 'Inventory':
+                return 0; 
+            case 'ReadyToShip':
+                return 1; 
+            case 'Delivered':
+                return 2; 
+            case 'InDelivery':
+                return 3; 
+            default:
+                return 0;
+        }
+    };
 
     return (
         <div className="container px-1 px-md-4 py-5 mx-auto">
             <div className="card">
                 <div className="row d-flex justify-content-between px-3 top pl-11">
                     <div className="d-flex">
-                        <h1 className="text-xl">Hy : <span className="text-primary font-weight-bold">{orderHistory?.[0]?.customerName || ''}</span></h1>
+                        <h1 className="text-xl">Hello : <span className="text-primary font-weight-bold">{trackProduct ? trackProduct[0]?.customerName : 'NA'}</span></h1>
                     </div>
                     <div className="d-flex">
-                        <h1>OrderID <span className="text-primary font-weight-bold">: {orderHistory?.[0]?.orderId || ''}</span></h1>
-                        <h5>Order Date <span className="text-primary font-weight-bold">: {orderHistory?.[0]?.orderDate ? new Date(orderHistory[0].orderDate).toLocaleDateString() : ''}</span></h5>
-                        <h5> Shipping Address <span className="text-primary font-weight-bold">: {orderHistory?.[0]?.shippingAddress?.addressLine1}</span></h5>
+                        <h1>OrderID <span className="text-primary font-weight-bold">: {trackProduct ? trackProduct[0]?.orderId : 'NA'}</span></h1>
+                        <h5>Order Date <span className="text-primary font-weight-bold">: {trackProduct ? trackProduct[0]?.orderDate : 'NA'}</span></h5>
+                        <h5> Shipping Address <span className="text-primary font-weight-bold">: {trackProduct ? trackProduct[0]?.shippingAddress.addressLine1 : 'NA'}</span></h5>
                     </div>
                 </div>
                 <div>
                     <div className="track">
                         <ul id="progressbar" className="text-center flex justify-between">
-                            <li className="flex flex-col items-center">
-                                <p className="font-bold p-3">Order Confirmed</p>
+                            
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 0 ? 'text-green-500' : 'text-black'}`}>
+                                <p className="font-bold p-3">Order Placed</p>
                             </li>
-                            <li className="flex flex-col items-center">
-                                <p className="font-bold p-3">Out of delivery</p>
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 0 ? 'text-green-500' : 'text-black'}`}>
+                                <p className="font-bold p-3">Order Confirm</p>
                             </li>
-                            <li className="flex flex-col items-center">
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 0 ? 'text-green-500' : 'text-black'}`}>
+                                <p className="font-bold p-3">Order Dispatched</p>
+                            </li>
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 1 ? 'text-green-500' : 'text-black'}`}>
+                                <p className="font-bold p-3">ReadyToShip</p>
+                            </li>
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 2 ? 'text-green-500' : 'text-black'}`}>
                                 <p className="font-bold p-3">Delivered</p>
                             </li>
-                            <li className="flex flex-col items-center">
-
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 3 ? 'text-red-500' : 'text-black'}`}>
                                 <p className="font-bold p-3">Order Cancelled</p>
                             </li>
                         </ul>
@@ -49,23 +63,23 @@ const MyProfile = () => {
                 </div>
             </div>
             <div className="flex">
-                {orderHistory.length === 0 ? (
-                    <div className='order-details bg-eceff1 w-60 rounded-lg p-4'>
+                {trackProduct.length === 0 ? (
+                    <div className='bg-[#eceff1] rounded-lg p-2.5 w-full p-4'>
                         <h1 className='text-xl px-4 py-2'>Order Item</h1>
                         <hr className="my-2" />
                         <p>Looks like you haven't placed an order.</p>
                     </div>
                 ) : (
                     <>
-                        <div className='order-details bg-eceff1 w-60 rounded-lg p-4'>
+                        <div className='bg-[#eceff1] rounded-lg p-2.5 w-full'>
                             <h1 className="text-xl">Order Item</h1>
                             <hr className="my-2" />
-                            {orderHistory.map(order => (
+                            {trackProduct.map(order => (
                                 order.products.map(item => (
                                     <div key={item.productId} id='justify-contant' className="flex items-center justify-between p-4">
-                                        <Image
-                                            className="w-9"
-                                            src={garamMasala}
+                                        <img
+                                            className="h-[55px]"
+                                            src={item.ProductImage}
                                             alt="Product"
                                         />
                                         <h1 className="ml-4">{item.ProductName}</h1>
@@ -75,28 +89,51 @@ const MyProfile = () => {
                                 ))
                             ))}
                         </div>
-                        <div className='sub-total bg-eceff1 w-60 rounded-lg p-4 ml-64'id='price'>
-                            <div id='total' className="flex items-center justify-between mb-2">
-                                <p>Sub Total</p>
-                                <p>Rs. {totalSalePrice}</p>
+                        <div className='sub-total bg-eceff1 w-60 rounded-lg p-4 ml-64' id='price'>
+                            <div id='total-price' className="flex item-center justify-between">
+                                <div>
+                                    <p>Total Price</p>
+                                </div>
+                                <div>
+                                    <p>Rs.{trackProduct ? trackProduct[0]?.totalPrice : 'NA'}</p>
+                                </div>
                             </div>
-                            <div id='total2' className="flex items-center justify-between mb-2">
-                                <p>Discount</p>
-                                <p>20%</p>
+                            <div id='total-price'  className="flex item-center justify-between">
+                                <div>
+                                    <p>Discount</p>
+                                </div>
+                                <div>
+                                    <p> {trackProduct ? trackProduct[0]?.discount : 'NA'}</p>
+                                </div>
                             </div>
-                            <div id='total3' className="flex items-center justify-between mb-2">
-                                <p className="font-medium">Total Price</p>
-                                <p className="font-medium">{totalSalePrice}</p>
+                            <div id='total-price' className="flex item-center justify-between">
+                                <div>
+                                    <p>Sub Total</p>
+                                </div>
+                                <div>
+                                    <p>Rs. {trackProduct ? trackProduct[0]?.totalSalePrice : 'NA'}</p>
+                                </div>
                             </div>
-                            <div id='total4' className="flex items-center justify-between">
-                                <p>Shipping charge</p>
-                                <p><b>Rs. {totalSalePrice + 6.00}</b></p>
+                            <div id='total-price'className="flex item-center justify-between">
+                                <div>
+                                    <p>Shipping charge</p>
+                                </div>
+                                <div>
+                                    <p> + {trackProduct ? trackProduct[0]?.deliveryCharge : 'NA'}</p>
+                                </div>
+                            </div>
+                            <div id='total-price' className="flex item-center justify-between">
+                                <div>
+                                    <p className='font-medium'>Grand Total</p>
+                                </div>
+                                <div>
+                                    <p className='font-medium'> {trackProduct ? trackProduct[0]?.finaltotalPrice : 'NA'}</p>
+                                </div>
                             </div>
                         </div>
                     </>
                 )}
             </div>
-
         </div>
     );
 };

@@ -18,8 +18,10 @@ const ProductDetails = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [originalHeaderDisplay, setOriginalHeaderDisplay] = useState("block");
   const [quantity, setQuantity] = useState({ valueId: "", Value: "", saleAmount: 900 });
-  const { productId, data, cart, count, setCart, setCount, variant, setVariant } = useContext(CartContext);
-  
+
+
+  const { productId, data, cart, count, setCart, setCount, variant, setVariant,buyProduct } = useContext(CartContext);
+
   const productDetails = data.filter((item) => item.productId === productId);
   console.log(productDetails, "product details");
   console.log("variant", variant);
@@ -41,7 +43,7 @@ const ProductDetails = () => {
       )
     );
   };
-  
+
   const decrementCount = (productId) => {
     console.log(productId, 'productId')
     setCart(prevCart =>
@@ -53,11 +55,11 @@ const ProductDetails = () => {
     );
   };
   useEffect(() => {
-  const productInCart = cart.find(item => item.productId === productId);
-  if (productInCart) {
-    setCount(productInCart.quantity);
-  }
-}, [cart, productId]);
+    const productInCart = cart.find(item => item.productId === productId);
+    if (productInCart) {
+      setCount(productInCart.quantity);
+    }
+  }, [cart, productId]);
 
   const openPopup = () => {
     setShowPopup(true);
@@ -113,61 +115,56 @@ const ProductDetails = () => {
     return cart.reduce((total, item) => total + variantPrice * item.quantity, 0);
   };
 
-  const isAuthnticate = isAuth()
+  const isAuthenticate = isAuth()
 
-  // const handleCheckOut = () => {
-
-  //   if (isAuthnticate){
-  //     router.push("/shop-now/checkOutDetails")
-  //   }else{
-  //     router.push("/login")
-  //   }
-  // }
-
-
-
-
-  // const {productId} = productDetails
   const fetchProductById = async (productId) => {
     try {
       const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getProductById/${productId}`;
-      console.log(`Fetching product with URL: ${url}`);
-
       const response = await fetch(url);
+  
+      console.log(`Fetching product with ID: ${productId}`);
       console.log(`Response status: ${response.status}`);
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
       }
-
+  
       const product = await response.json();
-      console.log(product, "API response");
+      console.log(product, "Full API response");
+  
+      if (!product.data) {
+        console.error("No data found in the API response", product);
+        throw new Error("No data found in the API response");
+      }
+  
       return product.data;
     } catch (error) {
       console.error('Error fetching data:', error);
       return null;
     }
   };
+  
   const handleCheckOut = async () => {
+    const { productId } = productDetails;
     try {
       const productDetailsPromises = cart.map(item => fetchProductById(item.productId));
       cart.map(item => console.log("Fetching details for productId:", item.productId));
       const productsDetails = await Promise.all(productDetailsPromises);
       console.log(productsDetails, "Fetched product details");
-      if (isAuthnticate) {
-        router.push("/shop-now/checkOutDetails");
-      } else {
-        router.push("/login");
-      }
+  
+      // Uncomment this part if you need to navigate after fetching product details
+      // if (isAuthnticate) {
+      //   router.push("/shop-now/checkOutDetails");
+      // } else {
+      //   router.push("/login");
+      // }
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
-
-
-
-
+  
+ 
   return (
     <>
       <ToastContainer />
@@ -197,10 +194,10 @@ const ProductDetails = () => {
                         className={`flex justify-center box-border relative w-full max-w-md px-4 md:px-8 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10 ${index % 2 === 0 ? "order-first " : ""
                           }`}
                       >
-                        <Image
-                          src={item.ProductImage || garamMasala}
+                        <img
+                          src={item.productImages}
                           alt="Image"
-                          // style={{ height: "200px", width: "200px" }}
+                        // style={{ height: "200px", width: "200px" }}
                         />
                       </div>
                       <div style={{ marginTop: "20px", display: "flex" }}>
@@ -213,8 +210,8 @@ const ProductDetails = () => {
                           className={`box-border relative text-center bg-no-repeat bg-contain border-solid${index % 2 === 0 ? "order-first " : ""
                             }`}
                         >
-                          <Image
-                           src={item.ProductImage || garamMasala}
+                          <img
+                            src={item.productImages}
                             // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
@@ -229,8 +226,8 @@ const ProductDetails = () => {
                           className={` box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
                             }`}
                         >
-                          <Image
-                            src={item.ProductImage || garamMasala}
+                          <img
+                            src={item.productImages}
                             // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
@@ -245,8 +242,8 @@ const ProductDetails = () => {
                           className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
                             }`}
                         >
-                          <Image
-                            src={item.ProductImage || garamMasala}
+                          <img
+                            src={item.productImages}
                             // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
@@ -261,8 +258,8 @@ const ProductDetails = () => {
                           className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
                             }`}
                         >
-                          <Image
-                            src={item.ProductImage || garamMasala}
+                          <img
+                            src={item.productImages}
                             // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
@@ -280,7 +277,8 @@ const ProductDetails = () => {
                       </h2>
                       <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                         <div>
-                          <h5>Rs: {quantity.saleAmount}</h5>
+                          <h5>Rs: {quantity.amount}  Rs: {quantity.saleAmount}</h5>
+
                         </div>
                         <div>
                           <h5>Shipping Charge: Rs. 6.50</h5>
@@ -355,9 +353,7 @@ const ProductDetails = () => {
                           </div>
                           <div>
                             <button
-                              onClick={() =>
-                                router.push("/shop-now/checkOutDetails")
-                              }
+                            onClick={() => buyProduct(item, quantity)}
                               className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                             >
                               Buy Now
@@ -427,7 +423,7 @@ const ProductDetails = () => {
                 >
                   <img
                     className="lg:w-1/6 imgWidth"
-                    src="/images/ProductImages/turmericpowder.png"
+                    src={item.productImages}
                     alt=""
                   />
                   <div>
@@ -517,7 +513,7 @@ const ProductDetails = () => {
                   <p>Estimate Total</p>
                 </div>
                 <div>
-                  <p>{calculateTotalPrice()}</p>
+                <p>{calculateTotalPrice()}</p>
                 </div>
               </div>
               <div
@@ -528,7 +524,7 @@ const ProductDetails = () => {
                   <button
                     style={{ padding: "10px 100px" }}
                     className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={handleCheckOut}
+                    onClick={()=>handleCheckOut(productId)}
                   >
                     Check Out
                   </button>

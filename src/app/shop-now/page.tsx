@@ -15,6 +15,8 @@ const Shop = () => {
   const [showPopup, setShowPopup] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState({});
 
+  console.log(selectedVariants,"varient");
+
   const { data,
     setCart,
     cart,
@@ -30,11 +32,12 @@ const Shop = () => {
 
   useEffect(() => {
     const productVariants = cart.reduce((acc, product) => {
-      acc[product.productId] = product.variant?.valueId || "1kg";
+      console.log("inside useEffecr", product) 
+      acc[product.productId] = product.Variant[0]?.valueId;
       return acc;
     }, {});
     setSelectedVariants(productVariants);
-  }, [cart]);
+  }, []);
 
 
   const incrementCount = (productId) => {
@@ -123,139 +126,8 @@ const Shop = () => {
   const calculateTotalPrice = () => {
     return cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
   };
-
-  // const handleCheckOut = async () => {
-  //   const isAuthnticate = isAuth(); // Move this inside the function to ensure it reflects the current state
-
-
-  //   if (!isAuthnticate) {
-  //     router.push("/login");
-  //     return;
-  //   }
-
-  //   try {
-  //     const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
-  //     if (!userData.data) {
-  //       throw new Error("User data not found");
-  //     }
-
-  //     const { customerId, access_token, name } = userData.data;
-
-
-  //     const apiRequests = cart.map((item) => {
-  //       const payload = {
-  //         productId: item.productId,
-  //         quantity: item.quantity,
-  //         variantId: item.variant.variantId,
-  //         valueId: item.variant.valueId,
-  //       }
-  //       cart.push(payload);
-  //       console.log(cart,'carts')
-  //       const requestOptions = {
-  //         method: 'POST',
-  //         headers: {
-  //           "Content-Type": 'application/json',
-  //           'Accept': 'application/json',
-  //           'Authorization': `${access_token}`
-  //         },
-  //         body: JSON.stringify({
-  //           customerId,
-  //           items: cart,
-  //         })
-
-  //       };
-
-
-  //       return fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions)
-  //         .then(response => response.json())
-  //         .then(data => {
-  //           if (data.success) {
-  //             toast.success('Product added to cart successfully!');
-  //           } else {
-  //             toast.error('Failed to add product to cart! Please try again.');
-  //           }
-  //         })
-  //         .catch(error => {
-  //           console.error('Error adding product to cart:', error);
-  //           toast.error('Failed to add product to cart! Please try again.');
-  //         });
-  //     });
-
-  //     await Promise.all(apiRequests);
-
-  //     setCart([]);
-  //   } catch (error) {
-  //     console.error("Checkout error:", error);
-  //     toast.error("Failed to complete checkout! Please try again.");
-  //   }
-  // }
-
-
-
-  // const isAuthnticate = isAuth()
-
-  // const handleCheckOut = async () => {
-
-  //   // const isAuthnticate = isAuth();
-
-  //   if (!isAuthnticate) {
-  //     router.push("/login");
-  //     return;
-  //   }
-  //   try {
-
-  //     const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
-  //     const {customerId,access_token, name} = userData.data;
-  //     console.log(access_token)
-
-
-  //     const apiRequests = [];
-
-
-  //     cart.forEach((item) => {
-  //       const requestOptions = {
-  //         method: 'POST',
-  //         headers: {
-  //           "Content-Type": 'application/json',
-  //           'Accept': 'application/json',
-  //           'Authorization': `Bearer ${access_token}`
-  //         },
-  //         body: JSON.stringify({ productId: item.productId, quantity: item.quantity })
-  //       };
-
-
-  //       apiRequests.push(
-  //         fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions)
-  //           .then(response => response.json())
-  //           .then(data => {
-  //             console.log(data,"new data")
-  //             if (data.error) {
-  //               toast.success('Product added to cart successfully!');
-  //             } else {
-  //               toast.error('Failed to add product  to cart! Please try again.')
-  //             }
-  //           })
-  //           .catch(error => {
-  //             console.error('Error adding product to cart:', error);
-  //             toast.error('Failed to add product to cart! Please try again.');
-  //           })
-  //       );
-  //     });
-
-
-  //     await Promise.all(apiRequests);
-
-
-  //     setCart([]);
-  //   } catch (error) {
-  //     console.error("Checkout error:", error);
-  //     toast.error("Failed to complete checkout! Please try again.");
-  //   }
-  // }
-
-
   const handleCheckOut = async () => {
-    const isAuthnticate = isAuth(); // Move this inside the function to ensure it reflects the current state
+    const isAuthnticate = isAuth(); 
 
     if (!isAuthnticate) {
       router.push("/login");
@@ -352,8 +224,8 @@ const Shop = () => {
                     }}
                   >
                     <div style={{ marginBottom: "8px" }}>
-                      <Image
-                          src={item?.ProductImage || garamMasala}
+                      <img
+                          src={item.productImages}
                         className="lazyload img-fluid fixed-image-main"
                         alt="Images"
                         width={200}
@@ -367,7 +239,7 @@ const Shop = () => {
                       {Math.floor(item.discount)}% Off
                     </div>
                     <div>
-                      <h4 style={{ textAlign: "center" }} onClick={() => productById(item.productId)}>{item.productName}</h4>
+                      <h4 style={{ textAlign: "center",cursor:'pointer' }} onClick={() => productById(item.productId)}>{item.productName}</h4>
                       <div style={{ display: "flex", gap: "20px" }}>
                         <div>
                           <div
@@ -458,9 +330,9 @@ const Shop = () => {
                     className="mt-5"
                     style={{ display: "flex", alignItems: "center", gap: "24%" }}
                   >
-                    <Image
+                    <img
                       className="lg:w-1/6 imgWidth"
-                      src={item?.ProductImage || garamMasala}
+                      src={item.productImages}
                       alt="image"
                     />
                     <div style={{ width: '84px' }}>
@@ -517,6 +389,7 @@ const Shop = () => {
                         value={selectedVariants[item.productId] || ""}
                         onChange={(e) => handleVariantChange(item, e.target.value)}
                       >
+                       
                         {variant?.map((variant) => (
                           <option key={variant.variantId} value={variant.valueId}>
                             {variant.Value}

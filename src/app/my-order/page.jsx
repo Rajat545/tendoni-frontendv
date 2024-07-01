@@ -1,5 +1,4 @@
-"use client";
-import Image from 'next/image';
+"use client";;
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import '@/app/my-order/style.css'; // Ensure your global styles are imported correctly
@@ -7,29 +6,53 @@ import Link from 'next/link';
 import { AuthContext, isAuth } from '@/Context/AuthContext';
 import './style.css'; // Local styles specific to MyOrder component
 import { useRouter } from 'next/navigation';
-import { useContext, useState } from 'react';
-import garamMasala from '@Images/ProductImages/garammasala.png';
+import { useContext, useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import { ToastContainer, toast } from 'react-toastify';
+
+const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: '90%',
+    maxWidth: 400,
+    bgcolor: 'background.paper',
+    boxShadow: 24,
+    p: 4,
+};
 
 const MyOrder = () => {
     const router = useRouter();
     const isAuthenticated = isAuth();
-    const { orderHistory, setOrderHistory } = useContext(AuthContext);
+    const { orderHistory, setOrderHistory, handleOrderDetails } = useContext(AuthContext);
 
     const [currentPage, setCurrentPage] = useState(0);
-    const [itemPerPage] = useState(2);
+    const [itemPerPage] = useState(3);
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
         email: '',
         number: ''
     });
-
-    const openModal = () => {
-        setFormData({
+    const [displayData, setDisplayData] = useState({
+        name: '',
+        email: '',
+        number: ''
+    });
+    useEffect(() => {
+        const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
+        const userDisplayData = {
             name: userData?.data?.name || '',
             email: userData?.data?.email || '',
             number: userData?.data?.number || ''
-        });
+        };
+        setFormData(userDisplayData);
+        setDisplayData(userDisplayData);
+    }, []);
+
+    const openModal = () => {
         setModalIsOpen(true);
     };
 
@@ -54,31 +77,30 @@ const MyOrder = () => {
             });
             const result = await response.json();
             if (response.ok) {
-                // Update UI with new data
+                const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
                 userData.data.name = formData.name;
                 userData.data.email = formData.email;
                 userData.data.number = formData.number;
+                localStorage.setItem("user-info", JSON.stringify(userData));
+                setDisplayData(formData);
                 closeModal();
-                // Apply CSS effect to highlight changes
+                toast.success("Save Change!"); s
                 document.querySelector('.user-details').classList.add('highlight');
                 setTimeout(() => {
                     document.querySelector('.user-details').classList.remove('highlight');
                 }, 2000);
             } else {
-                console.error(result);
+                toast.error("check your Network");
             }
         } catch (error) {
             console.error(error);
         }
     };
 
-    const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
-    console.log(userData.data, "UserData");
+    // Sorting orderHistory by createdAt date in descending order
+    const sortedOrderHistory = orderHistory.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
 
-    console.log(orderHistory, 'Order history details');
-
-    const sortedOrderHistory = orderHistory.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-
+    // Pagination logic
     const indexOfLastItem = (currentPage + 1) * itemPerPage;
     const indexOfFirstItem = indexOfLastItem - itemPerPage;
     const currentItems = sortedOrderHistory.slice(indexOfFirstItem, indexOfLastItem);
@@ -96,32 +118,34 @@ const MyOrder = () => {
             router.push("/login");
         }
     };
+    console.log(currentItems,"data")
 
     return (
         <div className="page-content page-container" id="page-content">
+            <ToastContainer />
             <div className="padding">
                 <div className="row container d-flex justify-content-center">
-                    <div className="user-info">
+                    <div className="user-info w-full">
                         <div className="card user-card-full">
                             <div className="row m-l-0 m-r-0">
-                                <div className="col-sm-8">
+                                <div className="col-12">
                                     <div className="card-block">
                                         <div className="flex justify-between items-center">
                                             <h1 className="text-xl">User Information</h1>
                                             <button onClick={openModal} className="ml-auto"><EditNoteIcon /></button>
                                         </div>
-                                        <div className="user-details mt-4">
+                                        <div className="user-details mt-4 gap-[312px]">
                                             <div className="flex items-center mb-2">
-                                                <h1 className="name">Name :</h1>
-                                                <h6 className="user-name ml-2">{userData?.data?.name}</h6>
+                                                <h1 className="name font-semibold">Name:</h1>
+                                                <h6 className="user-name ml-2">{displayData.name}</h6>
                                             </div>
                                             <div className="flex items-center mb-2">
-                                                <h1 className="name">Email :</h1>
-                                                <h6 className="text-muted ml-2">{userData?.data?.email}</h6>
+                                                <h1 className="name font-semibold">Email:</h1>
+                                                <h6 className="text-muted ml-2">{displayData.email}</h6>
                                             </div>
                                             <div className="flex items-center mb-2">
-                                                <h1 className="name">Phone :</h1>
-                                                <h6 className="text-muted ml-2">{userData?.data?.number}</h6>
+                                                <h1 className="name font-semibold">Phone:</h1>
+                                                <h6 className="text-muted ml-2">{displayData.number}</h6>
                                             </div>
                                         </div>
                                     </div>
@@ -143,39 +167,48 @@ const MyOrder = () => {
                     ) : (
                         <div className="container border border-gray-300 rounded-lg">
                             <div className="class">
+                                <div id='responsive-list' className="flex p-4 gap-[174px]">
+                                    <h1 className="text-lg font-semibold">OrderId</h1>
+                                    <h1 className="text-lg font-semibold">Product Details</h1>
+                                    <h1 className="text-lg font-semibold ml-[86px]">Order Date</h1>
+                                    <h1 className="text-lg font-semibold">Price</h1>
+                                    <h1 className="text-lg font-semibold ml-[64px]">Status</h1>
+                                    <h1 className="text-lg font-semibold">Track Order</h1>
+                                </div>
                                 <hr />
+
                                 {currentItems.map((order) => (
-                                    order.products.map((item) => (
-                                        <div key={item.productId}>
-                                            <div className="flex items-center justify-between p-4">
-                                                <Image
-                                                    src={garamMasala}
-                                                    alt="Product"
-                                                    width={50}
-                                                    height={50}
-                                                    className="w-12 h-15"
-                                                />
-                                                <div className="flex">
-                                                    <h1 className="text-lg">{item.ProductName} : Quantity: {item.quantity} x {item.value}</h1>
+                                    <div key={order.orderId}  className="mb-6">
+                                        <div id='order-list' className="p-6 bg-white shadow rounded-lg">
+                                            <div id='responsive-div' className="grid grid-cols-12 items-center gap-4">
+                                                <div className="col-span-2">
+                                                    <h1 className="text-lg font-semibold">{order.orderId}</h1>
                                                 </div>
-                                                <h1 className="text-lg">Order Date: {new Date(order.orderDate).toLocaleDateString()}</h1>
-                                                <div>
-                                                    <h1 className="text-lg">Rs. {item.price}</h1>
+                                                <div className="col-span-3">
+                                                    <h1 className="text-lg">{order.products.length} Items</h1>
                                                 </div>
-                                                <div>
-                                                    <h1 className="text-lg">Status</h1>
-                                                    <span className="text-gray-700">DELIVERED</span>
+                                                <div className="col-span-2">
+                                                    <h1 className="text-lg">{new Date(order.orderDate).toLocaleDateString()}</h1>
                                                 </div>
-                                                <div>
-                                                    <Link href="/my-profile">
+                                                <div className="col-span-2">
+                                                    <h1 className="text-lg">
+                                                        Rs. {order.finaltotalPrice}
+                                                    </h1>
+                                                </div>
+                                                <div className="col-span-2">
+                                                    <span className="text-gray-700">{order.orderState}</span>
+                                                </div>
+                                                <div className="col-span-1 flex justify-center">
+                                                    <Link href="/my-profile" onClick={() => handleOrderDetails(order.orderId)}>
                                                         <RemoveRedEyeOutlinedIcon className="text-gray-700" />
                                                     </Link>
                                                 </div>
                                             </div>
-                                            <hr className="border-gray-200" />
                                         </div>
-                                    ))
+                                        <hr className="border-gray-200 mt-4" />
+                                    </div>
                                 ))}
+
                             </div>
                         </div>
                     )}
@@ -210,6 +243,7 @@ const MyOrder = () => {
                                 className={`inline-flex items-center justify-center w-8 h-8 border rounded-md shadow-md ${currentPage === totalPage - 1 ? 'bg-gray-200' : 'bg-white'}`}
                                 disabled={currentPage === totalPage - 1}
                             >
+
                                 <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-4">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
@@ -217,51 +251,51 @@ const MyOrder = () => {
                         </div>
                     )}
 
-                    {/* Modal for editing user information */}
-                    {modalIsOpen && (
-                        <div className="modal">
-                            <div className="modal-content">
-                                <span className="close" onClick={closeModal}>&times;</span>
-                                <form onSubmit={handleSubmit}>
-                                    <div className="form-group">
-                                        <label>Name:</label>
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            value={formData.name}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Email:</label>
-                                        <input
-                                            type="email"
-                                           
-                                            name="email"
-                                            value={formData.email}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                            required
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label>Phone:</label>
-                                        <input
-                                            type="text"
-                                            name="number"
-                                            value={formData.number}
-                                            onChange={handleChange}
-                                            className="form-control"
-                                            required
-                                        />
-                                    </div>
-                                    <button type="submit" className="btn btn-primary">Save Changes</button>
-                                </form>
-                            </div>
-                        </div>
-                    )}
+                    <Modal
+                        open={modalIsOpen}
+                        onClose={closeModal}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                    >
+                        <Box sx={style}>
+                            <form onSubmit={handleSubmit}>
+                                <div className="form-group">
+                                    <label>Name:</label>
+                                    <input
+                                        type="text"
+                                        name="name"
+                                        value={formData.name}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Email:</label>
+                                    <input
+                                        type="email"
+                                        name="email"
+                                        value={formData.email}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Phone:</label>
+                                    <input
+                                        type="text"
+                                        name="number"
+                                        value={formData.number}
+                                        onChange={handleChange}
+                                        className="form-control"
+                                        required
+                                    />
+                                </div>
+                                <button type="submit" className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Save Changes</button>
+                            </form>
+                        </Box>
+                    </Modal>
                 </div>
             </div>
         </div>
