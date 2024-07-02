@@ -112,7 +112,6 @@ const Shop = () => {
   const handleVariantChange = (item, value, variantId) => {
     const { productId } = item
     const selectedVariant = variant.find(v => v.valueId === value);
-
     const newCart = cart.map(item => {
       if (item.productId === productId) {
         item.variant = selectedVariant;
@@ -126,6 +125,9 @@ const Shop = () => {
   const calculateTotalPrice = () => {
     return cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
   };
+
+
+  
   const handleCheckOut = async () => {
     const isAuthnticate = isAuth(); 
 
@@ -133,18 +135,13 @@ const Shop = () => {
       router.push("/login");
       return;
     }
-
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
       if (!userData.data) {
         throw new Error("User data not found");
       }
-
       const { customerId, access_token } = userData.data;
-
-      // Create the payload with the structure you want
       const items = cart.map((item) => ({
-       
         productId: item.productId,
         productName: item.productName,
         variantId: item.variant.variantId,
@@ -153,15 +150,10 @@ const Shop = () => {
         price: item.variant.saleAmount,
         maxPrice: item.variant.amount,
       }));
-
       const payload = {
         customerId,
         items,
-        
       };
-
-      
-
       const requestOptions = {
         method: 'POST',
         headers: {
@@ -170,8 +162,7 @@ const Shop = () => {
           'Authorization': `${access_token}`,
         },
         body: JSON.stringify(payload),
-      };
-
+      }
       // Make the API request
       const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions);
       const data = await response.json();

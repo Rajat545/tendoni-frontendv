@@ -96,9 +96,7 @@ export function CartProvider({ children }) {
     }
   }
   const buyProduct = async (item,product) => {
-    console.log(item,product,"item or product")
     const productData =  data.filter((item) => item.productId === product.productId);
-    console.log(productData,"new data")
   };
 
 

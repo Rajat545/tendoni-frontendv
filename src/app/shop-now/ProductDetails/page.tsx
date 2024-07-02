@@ -7,36 +7,50 @@ import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CartContext } from "@/Context/CartContext";
 import { ToastContainer } from "react-toastify";
-import { toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import { isAuth } from "@/Context/AuthContext";
-import garamMasala from '@Images/ProductImages/garammasala.png';
-
+import garamMasala from "@Images/ProductImages/garammasala.png";
 
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
   const [originalHeaderDisplay, setOriginalHeaderDisplay] = useState("block");
-  const [quantity, setQuantity] = useState({ valueId: "", Value: "", saleAmount: 900 });
+  const [quantity, setQuantity] = useState({
+    valueId: "",
+    Value: "",
+    saleAmount: 900,
+  });
 
-
-  const { productId, data, cart, count, setCart, setCount, variant, setVariant,buyProduct } = useContext(CartContext);
+  const {
+    productId,
+    data,
+    cart,
+    count,
+    setCart,
+    setCount,
+    variant,
+    setVariant,
+    buyProduct,
+  } = useContext(CartContext);
 
   const productDetails = data.filter((item) => item.productId === productId);
-  console.log(productDetails, "product details");
-  console.log("variant", variant);
-
-  console.log(data, 'data')
+  const productInCart = cart.find((item) => item.productId === productId);
 
   // Extract variant data from productDetails
-  const quantityData = productDetails.length > 0 ? productDetails[0].Variant : [];
+  const quantityData =
+    productDetails.length > 0 ? productDetails[0].Variant : [];
 
   const variantPrice = quantity.saleAmount;
-  const variantValue = quantity.Value
+  const variantValue = quantity.Value;
+
+  console.log(quantity, "quantity");
+
   const incrementCount = (productId) => {
-    console.log(productId, 'productId')
-    setCart(prevCart =>
-      prevCart.map(item =>
+    console.log(productId, "productId");
+
+    setCart((prevCart) =>
+      prevCart.map((item) =>
         item.productId === productId
           ? { ...item, quantity: item.quantity + 1 }
           : item
@@ -45,17 +59,21 @@ const ProductDetails = () => {
   };
 
   const decrementCount = (productId) => {
-    console.log(productId, 'productId')
-    setCart(prevCart =>
-      prevCart.map(item =>
+    console.log(productId, "productId");
+
+    console.log(cart, "cart");
+
+    setCart((cart) =>
+      cart.map((item) =>
         item.productId === productId
           ? { ...item, quantity: Math.max(1, item.quantity - 1) }
           : item
       )
     );
   };
+
   useEffect(() => {
-    const productInCart = cart.find(item => item.productId === productId);
+    const productInCart = cart.find((item) => item.productId === productId);
     if (productInCart) {
       setCount(productInCart.quantity);
     }
@@ -79,14 +97,15 @@ const ProductDetails = () => {
     toast.error("Removed from cart");
   };
 
-  const addToCart = (item) => {
-    const existingItemIndex = cart.findIndex((cartItem) => cartItem.productId === item.productId);
+  const addToCart = (item , name) => {
+    const existingItemIndex = cart.findIndex(
+      (cartItem) => cartItem.productId === item.productId
+    );
 
     if (existingItemIndex !== -1) {
       const updatedCart = [...cart];
       updatedCart[existingItemIndex].quantity += 1;
       setCart(updatedCart);
-
     } else {
       const defaultVariant = {
         valueId: "1kg",
@@ -94,77 +113,136 @@ const ProductDetails = () => {
         amount: item.price,
         saleAmount: item.sale_price,
       };
-
       setCart((prevCart) => [
         ...prevCart,
         { ...item, quantity: 1, variant: defaultVariant },
       ]);
     }
-
+    if(name == 'buy'){
     toast.success("Added to cart successfully!");
+    // handleCheckOut()
+    }else{
+
+      toast.success("Added to cart successfully!");
+    }
   };
 
   const handleVariantChange = (e) => {
     const selectedVariantId = e.target.value;
-    const selectedVariant = quantityData.find(v => v.valueId === selectedVariantId);
+    const selectedVariant = quantityData.find(
+      (v) => v.valueId === selectedVariantId
+    );
 
     setQuantity(selectedVariant);
-    console.log(selectedVariant, "selected variant");
   };
   const calculateTotalPrice = () => {
-    return cart.reduce((total, item) => total + variantPrice * item.quantity, 0);
+    return cart.reduce(
+      (total, item) => total + variantPrice * item.quantity,
+      0
+    );
   };
 
-  const isAuthenticate = isAuth()
+  const isAuthenticate = isAuth();
 
   const fetchProductById = async (productId) => {
     try {
       const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getProductById/${productId}`;
       const response = await fetch(url);
-  
-      console.log(`Fetching product with ID: ${productId}`);
-      console.log(`Response status: ${response.status}`);
-  
       if (!response.ok) {
         const errorText = await response.text();
-        throw new Error(`HTTP error! status: ${response.status}, message: ${errorText}`);
+        throw new Error(
+          `HTTP error! status: ${response.status}, message: ${errorText}`
+        );
       }
-  
+
       const product = await response.json();
-      console.log(product, "Full API response");
-  
       if (!product.data) {
         console.error("No data found in the API response", product);
         throw new Error("No data found in the API response");
       }
-  
       return product.data;
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
       return null;
     }
   };
-  
+
   const handleCheckOut = async () => {
-    const { productId } = productDetails;
+    const isAuthnticate = isAuth();
+
+    if (!isAuthnticate) {
+      router.push("/login");
+      return;
+    }
     try {
-      const productDetailsPromises = cart.map(item => fetchProductById(item.productId));
-      cart.map(item => console.log("Fetching details for productId:", item.productId));
-      const productsDetails = await Promise.all(productDetailsPromises);
-      console.log(productsDetails, "Fetched product details");
-  
-      // Uncomment this part if you need to navigate after fetching product details
-      // if (isAuthnticate) {
-      //   router.push("/shop-now/checkOutDetails");
-      // } else {
-      //   router.push("/login");
-      // }
+      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+      if (!userData.data) {
+        throw new Error("User data not found");
+      }
+      const { customerId, access_token } = userData.data;
+
+      const items = cart.map((item) => ({
+        productId: item.productId,
+        productName: item.productName,
+        variantId: quantity.variantId,
+        valueId: quantity.valueId,
+        quantity: item.quantity,
+        price: quantity.saleAmount,
+        maxPrice: quantity.amount,
+      }));
+      const payload = {
+        customerId,
+        items,
+      };
+      const requestOptions = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `${access_token}`,
+        },
+        body: JSON.stringify(payload),
+      };
+      // Make the API request
+      const response = await fetch(
+        "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart",
+        requestOptions
+      );
+      const data = await response.json();
+      if (
+        response.status == 200 &&
+        data.message === "Items added to cart successfully"
+      ) {
+        toast.success("Product added to cart successfully!");
+        router.push("/shop-now/checkOutDetails");
+      } else {
+        toast.error("Failed to add product to cart! Please try again.");
+      }
+
+      setCart([]);
     } catch (error) {
-      console.error('Error fetching data:', error);
+      toast.error("Failed to complete checkout! Please try again.");
     }
   };
-  
- 
+
+  // const handleCheckOut = async () => {
+  //   const { productId } = productDetails;
+  //   try {
+  //     const productDetailsPromises = cart.map((item) =>
+  //       fetchProductById(item.productId)
+  //     );
+  //     const productsDetails = await Promise.all(productDetailsPromises);
+  //     // Uncomment this part if you need to navigate after fetching product details
+  //     // if (isAuthnticate) {
+  //     //   router.push("/shop-now/checkOutDetails");
+  //     // } else {
+  //     //   router.push("/login");
+  //     // }
+  //   } catch (error) {
+  //     console.error("Error fetching data:", error);
+  //   }
+  // };
+
   return (
     <>
       <ToastContainer />
@@ -179,25 +257,28 @@ const ProductDetails = () => {
                 <section
                   key={index}
                   id={item?.sectionId}
-                  className={`${index % 2 === 0
-                    ? "py-6 md:py-8 lg:py-10"
-                    : "bg-stone-300 py-6 md:py-8 lg:py-14"
-                    }`}
+                  className={`${
+                    index % 2 === 0
+                      ? "py-6 md:py-8 lg:py-10"
+                      : "bg-stone-300 py-6 md:py-8 lg:py-14"
+                  }`}
                 >
                   <div
                     key={index}
-                    className={`box-border flex flex-col max-w-7xl items-center content-center px-4 md:px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row ${index % 2 === 0 ? "" : ""
-                      }`}
+                    className={`box-border flex flex-col max-w-7xl items-center content-center px-4 md:px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row ${
+                      index % 2 === 0 ? "" : ""
+                    }`}
                   >
                     <div style={{ maxWidth: "50%" }}>
                       <div
-                        className={`flex justify-center box-border relative w-full max-w-md px-4 md:px-8 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10 ${index % 2 === 0 ? "order-first " : ""
-                          }`}
+                        className={`flex justify-center box-border relative w-full max-w-md px-4 md:px-8 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10 ${
+                          index % 2 === 0 ? "order-first " : ""
+                        }`}
                       >
                         <img
                           src={item.productImages}
                           alt="Image"
-                        // style={{ height: "200px", width: "200px" }}
+                          // style={{ height: "200px", width: "200px" }}
                         />
                       </div>
                       <div style={{ marginTop: "20px", display: "flex" }}>
@@ -207,8 +288,9 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative text-center bg-no-repeat bg-contain border-solid${index % 2 === 0 ? "order-first " : ""
-                            }`}
+                          className={`box-border relative text-center bg-no-repeat bg-contain border-solid${
+                            index % 2 === 0 ? "order-first " : ""
+                          }`}
                         >
                           <img
                             src={item.productImages}
@@ -223,8 +305,9 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={` box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
-                            }`}
+                          className={` box-border relative bg-no-repeat bg-contain border-solid ${
+                            index % 2 === 0 ? "order-first " : ""
+                          }`}
                         >
                           <img
                             src={item.productImages}
@@ -239,8 +322,9 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
-                            }`}
+                          className={`box-border relative bg-no-repeat bg-contain border-solid ${
+                            index % 2 === 0 ? "order-first " : ""
+                          }`}
                         >
                           <img
                             src={item.productImages}
@@ -255,8 +339,9 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
-                            }`}
+                          className={`box-border relative bg-no-repeat bg-contain border-solid ${
+                            index % 2 === 0 ? "order-first " : ""
+                          }`}
                         >
                           <img
                             src={item.productImages}
@@ -269,16 +354,18 @@ const ProductDetails = () => {
                     </div>
 
                     <div
-                      className={`py-8 box-border text-wrap w-full text-black border-solid md:w-1/2 md:pl-10 ${index % 2 !== 0 ? "md:order-first" : ""
-                        }`}
+                      className={`py-8 box-border text-wrap w-full text-black border-solid md:w-1/2 md:pl-10 ${
+                        index % 2 !== 0 ? "md:order-first" : ""
+                      }`}
                     >
                       <h2 className="m-0 text-xl text-balance font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
                         {item.productName}
                       </h2>
                       <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                         <div>
-                          <h5>Rs: {quantity.amount}  Rs: {quantity.saleAmount}</h5>
-
+                          <h5>
+                            Rs: {quantity.amount} Rs: {quantity.saleAmount}{" "}
+                          </h5>
                         </div>
                         <div>
                           <h5>Shipping Charge: Rs. 6.50</h5>
@@ -301,65 +388,78 @@ const ProductDetails = () => {
                           value={quantity.valueId}
                           onChange={handleVariantChange}
                         >
-
                           {quantityData?.map((variant) => (
-                            <option key={variant.valueId} value={variant.valueId}>
+                            <option
+                              key={variant.valueId}
+                              value={variant.valueId}
+                            >
                               {variant.Value}
                             </option>
                           ))}
                         </select>
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "20px",
-                            alignItems: "center",
-                            border: "1px solid black",
-                            width: "20%",
-                            justifyContent: "center",
-                            padding: "6px",
-                            borderRadius: "5px",
-                          }}
-                        >
-                          <div>
-                            <button onClick={() => decrementCount(item.productId)}>
-                              <h1>-</h1>
-                            </button>
-                          </div>
-                          <div>{count}</div>
-                          <div>
-                            <button onClick={() => incrementCount(item.productId)}>
-                              <h1>+</h1>
-                            </button>
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            display: "flex",
-                            gap: "20px",
-                            alignItems: "center",
-                            marginTop: "20px",
-                          }}
-                        >
-                          <div>
-                            <button
-                              onClick={() => {
-                                addToCart(item);
-                                openPopup();
+
+                        {productInCart ? (
+                          <>
+                            <div
+                              style={{
+                                display: "flex",
+                                gap: "20px",
+                                alignItems: "center",
+                                border: "1px solid black",
+                                width: "20%",
+                                justifyContent: "center",
+                                padding: "6px",
+                                borderRadius: "5px",
                               }}
-                              className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                             >
-                              Add to Cart
-                            </button>
+                              <div>
+                                <button
+                                  onClick={() => decrementCount(item.productId)}
+                                >
+                                  <h1>-</h1>
+                                </button>
+                              </div>
+                              <div>{count}</div>
+                              <div>
+                                <button
+                                  onClick={() => incrementCount(item.productId)}
+                                >
+                                  <h1>+</h1>
+                                </button>
+                              </div>
+                            </div>
+                          </>
+                        ) : (
+                          <div
+                            style={{
+                              display: "flex",
+                              gap: "20px",
+                              alignItems: "center",
+                              marginTop: "20px",
+                            }}
+                          >
+                            <div>
+                              <button
+                                onClick={() => {
+                                  addToCart(item);
+                                  openPopup();
+                                }}
+                                className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                              >
+                                Add to Cart
+                              </button>
+                            </div>
+                            <div>
+                              <button
+                                onClick={()=>addToCart(item , 'buy')}
+                                className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                              >
+                                Buy Now
+                              </button>
+                            </div>
                           </div>
-                          <div>
-                            <button
-                            onClick={() => buyProduct(item, quantity)}
-                              className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            >
-                              Buy Now
-                            </button>
-                          </div>
-                        </div>
+                        )}
+
                         <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                           {item.description}
                         </p>
@@ -438,9 +538,13 @@ const ProductDetails = () => {
                         width: "60%",
                       }}
                     ></div>
-                    <p style={{ textDecoration: 'line-through' }}> Rs{item.price}</p>
-                    <p className="mt-3" style={{ width: '150px' }}>Quantity: ({item.quantity}) {variantValue}</p>
-
+                    <p style={{ textDecoration: "line-through" }}>
+                      {" "}
+                      Rs{item.price}
+                    </p>
+                    <p className="mt-3" style={{ width: "150px" }}>
+                      Quantity: ({item.quantity}) {variantValue}
+                    </p>
                   </div>
                   <div>
                     <div
@@ -451,9 +555,8 @@ const ProductDetails = () => {
                         width: "60%",
                       }}
                     ></div>
-                    <p style={{ marginLeft: '-42px' }}>Rs</p>
-                    <p style={{ marginLeft: '-42px' }}>{variantPrice}</p>
-
+                    <p style={{ marginLeft: "-42px" }}>Rs</p>
+                    <p style={{ marginLeft: "-42px" }}>{variantPrice}</p>
                   </div>
                 </div>
               ))}
@@ -485,7 +588,7 @@ const ProductDetails = () => {
                   </div>
                   <div>{count}</div>
                   <div>
-                    <button onClick={() => decrementCount(productId)}>
+                    <button onClick={() => incrementCount(productId)}>
                       <h1>+</h1>
                     </button>
                   </div>
@@ -513,7 +616,7 @@ const ProductDetails = () => {
                   <p>Estimate Total</p>
                 </div>
                 <div>
-                <p>{calculateTotalPrice()}</p>
+                  <p>{calculateTotalPrice()}</p>
                 </div>
               </div>
               <div
@@ -524,7 +627,7 @@ const ProductDetails = () => {
                   <button
                     style={{ padding: "10px 100px" }}
                     className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={()=>handleCheckOut(productId)}
+                    onClick={() => handleCheckOut(productId)}
                   >
                     Check Out
                   </button>
