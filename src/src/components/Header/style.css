@@ -1,0 +1,41 @@
+.dropDownProfile {
+    position: absolute;
+    top: 5.5rem;
+    right: 0.5rem;
+    width: 129px;
+    padding: 12px;
+    border-radius: 15px;
+    border: 1px solid grey;
+    height: 14vh;
+    margin-right: 100px;
+}
+.dropDownProfile::before{
+    position: absolute;
+    content: '';
+    top: -1rem;
+    right: 1rem;
+    width: 25px;
+    transform: rotate(45deg);
+    height: 25px;
+    border-left: 1px solid grey;
+    border-top: 1px solid gray;
+}
+.addToCart{
+    /* background-color: red; */
+    border-radius: 10px;
+    color: white;
+    width: 20px;
+    font-weight: 400;
+    /* border: 1px solid #fff; */
+    font-size: 10px;
+    text-align: center;
+    margin-left: 3px;
+    height: 20px;
+}
+ .cart{
+    margin-bottom: -5px;
+    margin-left: 5px;
+    background-color: #a67a44;
+    border-radius: 10px;
+    margin-top: -12px;
+}

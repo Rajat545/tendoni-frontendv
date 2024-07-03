@@ -6,9 +6,10 @@ import Grand from "@Images/slider/spices.jpeg";
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CartContext } from "@/Context/CartContext";
-import { ToastContainer } from "react-toastify";
-import { toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+// import { ToastContainer } from "react-hot-toast";
+// import  toast , {Toa}from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+
 import { isAuth } from "@/Context/AuthContext";
 import garamMasala from "@Images/ProductImages/garammasala.png";
 
@@ -19,7 +20,7 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState({
     valueId: "",
     Value: "",
-    saleAmount: 900,
+
   });
 
   const {
@@ -41,14 +42,10 @@ const ProductDetails = () => {
   const quantityData =
     productDetails.length > 0 ? productDetails[0].Variant : [];
 
-  const variantPrice = quantity.saleAmount;
+  const variantPrice = quantity?.saleAmount;
   const variantValue = quantity.Value;
 
-  console.log(quantity, "quantity");
-
   const incrementCount = (productId) => {
-    console.log(productId, "productId");
-
     setCart((prevCart) =>
       prevCart.map((item) =>
         item.productId === productId
@@ -59,10 +56,6 @@ const ProductDetails = () => {
   };
 
   const decrementCount = (productId) => {
-    console.log(productId, "productId");
-
-    console.log(cart, "cart");
-
     setCart((cart) =>
       cart.map((item) =>
         item.productId === productId
@@ -97,33 +90,36 @@ const ProductDetails = () => {
     toast.error("Removed from cart");
   };
 
-  const addToCart = (item , name) => {
+  const addToCart = async (item, name) => {
+    if (!quantity.valueId || !quantity.Value) {
+      toast.error("Please Select Quantity");
+      return;
+    }
+
     const existingItemIndex = cart.findIndex(
       (cartItem) => cartItem.productId === item.productId
     );
-
     if (existingItemIndex !== -1) {
       const updatedCart = [...cart];
       updatedCart[existingItemIndex].quantity += 1;
-      setCart(updatedCart);
+      await setCart(updatedCart);
+      toast.success("Added to cart successfully!");
+      if (name === "buy") {
+        handleCheckOut(updatedCart);
+      }
     } else {
       const defaultVariant = {
-        valueId: "1kg",
-        Value: "1kg",
+        valueId: quantity.valueId,
+        Value: quantity.Value,
         amount: item.price,
         saleAmount: item.sale_price,
       };
-      setCart((prevCart) => [
-        ...prevCart,
-        { ...item, quantity: 1, variant: defaultVariant },
-      ]);
-    }
-    if(name == 'buy'){
-    toast.success("Added to cart successfully!");
-    // handleCheckOut()
-    }else{
-
+      const newItem = { ...item, quantity: 1, variant: defaultVariant };
+      await setCart((prevCart) => [...prevCart, newItem]);
       toast.success("Added to cart successfully!");
+      if (name === "buy") {
+        handleCheckOut([...cart, newItem]);
+      }
     }
   };
 
@@ -135,6 +131,7 @@ const ProductDetails = () => {
 
     setQuantity(selectedVariant);
   };
+
   const calculateTotalPrice = () => {
     return cart.reduce(
       (total, item) => total + variantPrice * item.quantity,
@@ -154,7 +151,6 @@ const ProductDetails = () => {
           `HTTP error! status: ${response.status}, message: ${errorText}`
         );
       }
-
       const product = await response.json();
       if (!product.data) {
         console.error("No data found in the API response", product);
@@ -167,33 +163,39 @@ const ProductDetails = () => {
     }
   };
 
-  const handleCheckOut = async () => {
+  const handleCheckOut = async (updatedCart) => {
+    if (Object.keys(quantity).length === 0) {
+      toast.error("Please Select quantity");
+      return;
+    }
     const isAuthnticate = isAuth();
-
     if (!isAuthnticate) {
       router.push("/login");
       return;
     }
-    try {
-      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
-      if (!userData.data) {
-        throw new Error("User data not found");
-      }
-      const { customerId, access_token } = userData.data;
 
-      const items = cart.map((item) => ({
+    const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+    if (!userData.data) {
+      throw new Error("User data not found");
+    }
+
+    try {
+      const { customerId, access_token } = userData.data;
+      const items = updatedCart.map((item) => ({
         productId: item.productId,
         productName: item.productName,
-        variantId: quantity.variantId,
-        valueId: quantity.valueId,
+        variantId: item.variant.valueId,
+        valueId: item.variant.valueId,
         quantity: item.quantity,
-        price: quantity.saleAmount,
-        maxPrice: quantity.amount,
+        price: item.variant.saleAmount,
+        maxPrice: item.variant.amount,
       }));
+
       const payload = {
         customerId,
         items,
       };
+
       const requestOptions = {
         method: "POST",
         headers: {
@@ -203,22 +205,22 @@ const ProductDetails = () => {
         },
         body: JSON.stringify(payload),
       };
+
       // Make the API request
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart",
         requestOptions
       );
+
       const data = await response.json();
-      if (
-        response.status == 200 &&
-        data.message === "Items added to cart successfully"
-      ) {
+      if (response.status === 200) {
         toast.success("Product added to cart successfully!");
         router.push("/shop-now/checkOutDetails");
       } else {
         toast.error("Failed to add product to cart! Please try again.");
       }
 
+      // Clear cart after checkout
       setCart([]);
     } catch (error) {
       toast.error("Failed to complete checkout! Please try again.");
@@ -245,7 +247,7 @@ const ProductDetails = () => {
 
   return (
     <>
-      <ToastContainer />
+      <Toaster />
       <div className="z-20">
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
@@ -257,28 +259,25 @@ const ProductDetails = () => {
                 <section
                   key={index}
                   id={item?.sectionId}
-                  className={`${
-                    index % 2 === 0
+                  className={`${index % 2 === 0
                       ? "py-6 md:py-8 lg:py-10"
                       : "bg-stone-300 py-6 md:py-8 lg:py-14"
-                  }`}
+                    }`}
                 >
                   <div
                     key={index}
-                    className={`box-border flex flex-col max-w-7xl items-center content-center px-4 md:px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row ${
-                      index % 2 === 0 ? "" : ""
-                    }`}
+                    className={`box-border flex flex-col max-w-7xl items-center content-center px-4 md:px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row ${index % 2 === 0 ? "" : ""
+                      }`}
                   >
                     <div style={{ maxWidth: "50%" }}>
                       <div
-                        className={`flex justify-center box-border relative w-full max-w-md px-4 md:px-8 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10 ${
-                          index % 2 === 0 ? "order-first " : ""
-                        }`}
+                        className={`flex justify-center box-border relative w-full max-w-md px-4 md:px-8 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10 ${index % 2 === 0 ? "order-first " : ""
+                          }`}
                       >
                         <img
                           src={item.productImages}
                           alt="Image"
-                          // style={{ height: "200px", width: "200px" }}
+                        // style={{ height: "200px", width: "200px" }}
                         />
                       </div>
                       <div style={{ marginTop: "20px", display: "flex" }}>
@@ -288,9 +287,8 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative text-center bg-no-repeat bg-contain border-solid${
-                            index % 2 === 0 ? "order-first " : ""
-                          }`}
+                          className={`box-border relative text-center bg-no-repeat bg-contain border-solid${index % 2 === 0 ? "order-first " : ""
+                            }`}
                         >
                           <img
                             src={item.productImages}
@@ -305,9 +303,8 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={` box-border relative bg-no-repeat bg-contain border-solid ${
-                            index % 2 === 0 ? "order-first " : ""
-                          }`}
+                          className={` box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
+                            }`}
                         >
                           <img
                             src={item.productImages}
@@ -322,9 +319,8 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative bg-no-repeat bg-contain border-solid ${
-                            index % 2 === 0 ? "order-first " : ""
-                          }`}
+                          className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
+                            }`}
                         >
                           <img
                             src={item.productImages}
@@ -339,9 +335,8 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative bg-no-repeat bg-contain border-solid ${
-                            index % 2 === 0 ? "order-first " : ""
-                          }`}
+                          className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
+                            }`}
                         >
                           <img
                             src={item.productImages}
@@ -354,9 +349,8 @@ const ProductDetails = () => {
                     </div>
 
                     <div
-                      className={`py-8 box-border text-wrap w-full text-black border-solid md:w-1/2 md:pl-10 ${
-                        index % 2 !== 0 ? "md:order-first" : ""
-                      }`}
+                      className={`py-8 box-border text-wrap w-full text-black border-solid md:w-1/2 md:pl-10 ${index % 2 !== 0 ? "md:order-first" : ""
+                        }`}
                     >
                       <h2 className="m-0 text-xl text-balance font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
                         {item.productName}
@@ -364,7 +358,8 @@ const ProductDetails = () => {
                       <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                         <div>
                           <h5>
-                            Rs: {quantity.amount} Rs: {quantity.saleAmount}{" "}
+                            {quantity.amount ? `RS ${quantity.amount}` : 'Select Item'}{" "}
+                            {quantity.saleAmount ? `Rs: ${quantity.saleAmount}` : ''}
                           </h5>
                         </div>
                         <div>
@@ -388,13 +383,18 @@ const ProductDetails = () => {
                           value={quantity.valueId}
                           onChange={handleVariantChange}
                         >
+                          <option defaultValue={"null"} value="null">
+                            Select quantity
+                          </option>
                           {quantityData?.map((variant) => (
-                            <option
-                              key={variant.valueId}
-                              value={variant.valueId}
-                            >
-                              {variant.Value}
-                            </option>
+                            <>
+                              <option
+                                key={variant.valueId}
+                                value={variant.valueId}
+                              >
+                                {variant.Value}
+                              </option>
+                            </>
                           ))}
                         </select>
 
@@ -428,6 +428,17 @@ const ProductDetails = () => {
                                 </button>
                               </div>
                             </div>
+
+                            <div>
+                              <button
+                                onClick={() => {
+                                  openPopup();
+                                }}
+                                className="bg-yellow-500 mt-3 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                              >
+                                View Cart
+                              </button>
+                            </div>
                           </>
                         ) : (
                           <div
@@ -441,8 +452,7 @@ const ProductDetails = () => {
                             <div>
                               <button
                                 onClick={() => {
-                                  addToCart(item);
-                                  openPopup();
+                                  addToCart(item, "add"), openPopup();
                                 }}
                                 className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                               >
@@ -451,7 +461,7 @@ const ProductDetails = () => {
                             </div>
                             <div>
                               <button
-                                onClick={()=>addToCart(item , 'buy')}
+                                onClick={() => addToCart(item, "buy")}
                                 className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                               >
                                 Buy Now
@@ -608,7 +618,7 @@ const ProductDetails = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-                  marginTop: "48vh",
+
                   borderTop: "1px solid gray",
                 }}
               >

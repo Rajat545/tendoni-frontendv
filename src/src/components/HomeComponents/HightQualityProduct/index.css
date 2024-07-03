@@ -1,0 +1,93 @@
+.showcase1 {
+  width: 100%;
+  height: 450px;
+  position: relative;
+  color: white;
+  text-align: center;
+}
+
+.showcase1 img {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* z-index:99 */
+}
+
+.showcase1 .overlay {
+  width: 100%;
+  height: 500px;
+  background-color: rgba(30, 43, 61, 0.7);
+  position: absolute;
+  top: 0;
+  left: 0;
+  /* z-index:999 */
+}
+.spicy {
+  width: 100%;
+  height: 450px;
+  background-color: rgba(59, 59, 59, 0.24);
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+.main-quality-spices {
+  padding: 30px;
+}
+.high-quality-head {
+  font-weight: bold;
+  margin-top: 80px;
+  
+}
+.whatsapp-logo {
+  display: flex;
+  padding: 40px;
+  margin-left: 135px;
+  gap: 10px;
+}
+.custom-card {
+  width: 550px;
+  height: 400px;
+  border-radius: 10px;
+}
+.orange-bg {
+  background: #eba134;
+}
+
+/* 
+.new-cc {
+  padding: 55px;
+  border-bottom: 1px solid rgb(238, 233, 233);
+  border-right: 1px solid rgb(238, 233, 233);
+}
+.new-cc1 {
+  padding: 60px;
+ 
+  border-right: 1px solid rgb(242, 237, 237);
+}
+
+.new-cc2 {
+  padding: 55px;
+  border-bottom: 1px solid rgb(249, 248, 248);
+
+}
+.new-cc2 {
+  padding: 55px;
+  border-bottom: 1px solid rgb(249, 248, 248);
+
+} */
+
+@media (max-width: 640px) {
+  .whatsapp-logo {
+    display: flex;
+    padding: 40px;
+    margin-left: 0 !important;
+    gap: 10px;
+  }
+  .high-quality-head {
+  font-weight: bold;
+  margin-top: 0px;
+  
+}
+}

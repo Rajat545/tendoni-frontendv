@@ -1,0 +1,249 @@
+
+/* Template Name: Space
+* Template Author: Untree.co
+* Author URI: https://untree.co/
+* License: https://creativecommons.org/licenses/by/3.0/
+*/
+.fixed-image {
+    width: 100%; /* You can adjust this value as needed */
+    height: 263px !important; /* You can adjust this value as needed */
+    object-fit: cover; /* This property ensures the image retains its aspect ratio and covers the specified dimensions */
+}
+.fixed-image-main {
+    width: 100%;
+    height: 263px !important; 
+    /* object-fit: cover; */
+}
+.untree_co-section {
+    padding: 2rem 0;
+}
+
+.untree_co-section .heading,
+.untree_co-section .subheading {
+    color: #000000;
+}
+
+.untree_co-section .heading strong,
+.untree_co-section .subheading strong {
+    font-weight: 700;
+}
+
+.untree_co-section .heading {
+    font-size: 40px;
+}
+
+.untree_co-section .subheading {
+    font-size: 18px;
+    font-family: "PT Mono", monospace;
+}
+
+.section-heading {
+    font-size: 30px;
+    color: #000000;
+}
+
+.item {
+    border: none;
+    /* margin-bottom: 30px; */
+    border-radius: 4px;
+}
+
+.item a {
+    display: block;
+    overflow: hidden;
+    position: relative;
+    border-radius: 4px;
+}
+
+.item a img {
+    position: relative;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: .3s all ease-in-out;
+    -o-transition: .3s all ease-in-out;
+    transition: .3s all ease-in-out;
+}
+
+.item .item-wrap {
+    display: block;
+    position: relative;
+}
+
+.item .item-wrap:after {
+    z-index: 2;
+    position: absolute;
+    content: "";
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.4);
+    visibility: hidden;
+    opacity: 0;
+    -webkit-transition: .3s all ease-in-out;
+    -o-transition: .3s all ease-in-out;
+    transition: .3s all ease-in-out;
+}
+
+.item .item-wrap>span {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 3;
+    -webkit-transform: translate(-50%, -50%) scale(0);
+    -ms-transform: translate(-50%, -50%) scale(0);
+    transform: translate(-50%, -50%) scale(0);
+    color: #ffffff;
+    font-size: 1.7rem;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+}
+
+.item .item-wrap:hover:after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.item .item-wrap:hover span {
+    margin-top: 0px;
+    opacity: 1;
+    visibility: visible;
+    -webkit-transform: translate(-50%, -50%) scale(1);
+    -ms-transform: translate(-50%, -50%) scale(1);
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.item:hover a img {
+    -webkit-transform: scale(1.05);
+    -ms-transform: scale(1.05);
+    transform: scale(1.05);
+    -webkit-transition: .3s all ease-in-out;
+    -o-transition: .3s all ease-in-out;
+    transition: .3s all ease-in-out;
+}
+
+
+.grid-item {
+    position: relative;
+}
+
+.grid-item:before {
+    content: '';
+    display: inline-block;
+    padding-top: 20rem;
+}
+
+.grid-item img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: block;
+    -o-object-fit: cover;
+    object-fit: cover;
+}
+
+
+
+.portfolio-item {
+    overflow: hidden;
+}
+
+.portfolio-item img {
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+    position: relative;
+    -webkit-transform: scale(1);
+    -ms-transform: scale(1);
+    transform: scale(1);
+}
+
+.portfolio-item:hover img {
+    -webkit-transform: scale(1.09);
+    -ms-transform: scale(1.09);
+    transform: scale(1.09);
+}
+
+.portfolio-item,
+.blog-item {
+    display: block;
+    overflow: hidden;
+    position: relative;
+}
+
+.portfolio-item .overlay,
+.blog-item .overlay {
+    position: relative;
+    z-index: 8;
+    opacity: 0;
+    visibility: hidden;
+    -webkit-transition: .3s all ease;
+    -o-transition: .3s all ease;
+    transition: .3s all ease;
+}
+
+.portfolio-item .overlay,
+.portfolio-item .overlay:before,
+.blog-item .overlay,
+.blog-item .overlay:before {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+}
+
+.portfolio-item .overlay:before,
+.blog-item .overlay:before {
+    background: rgba(0, 0, 0, 0.5);
+    content: "";
+}
+
+.portfolio-item .wrap-icon,
+.blog-item .wrap-icon {
+    position: absolute;
+    right: 20px;
+    color: #ffffff;
+    top: 20px;
+}
+
+.portfolio-item .portfolio-item-content,
+.blog-item .portfolio-item-content {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+}
+
+.portfolio-item .portfolio-item-content h3,
+.portfolio-item .portfolio-item-content p,
+.blog-item .portfolio-item-content h3,
+.blog-item .portfolio-item-content p {
+    color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+.portfolio-item .portfolio-item-content h3,
+.blog-item .portfolio-item-content h3 {
+    font-size: 18px;
+}
+
+.portfolio-item .portfolio-item-content p,
+.blog-item .portfolio-item-content p {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+}
+
+.portfolio-item:hover .overlay,
+.blog-item:hover .overlay {
+    opacity: 1;
+    visibility: visible;
+}
+

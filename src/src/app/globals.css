@@ -1,0 +1,161 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* * {
+  font-family: "Poppins", sans-serif;
+  font-weight: 300;
+} */
+
+html{
+  scroll-behavior: smooth;
+}
+
+
+
+body{
+  overflow: scroll !important;
+}
+.nav-item {
+    position: relative;
+    padding-bottom: 4px;
+  }
+  
+  .nav-item.active::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #A67A44;
+  }
+
+  .child-visible{
+    color: #A67A44;
+  }
+  
+
+  @keyframes slidein {
+    from {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes slideout {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-100%);
+    }
+  }
+
+  @keyframes fadein {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+
+  .active-child-visible{
+    color: #A67A44;
+    background-color: #262626;
+    transition: background-color 250ms ease;
+  }
+  
+  
+  .slide-in {
+    animation-delay: 250ms;
+    animation: slidein ease-in 1;
+    animation-fill-mode: forwards;
+    animation-duration: 400ms;
+  }
+
+  .slide-out {
+    animation: slideout ease-out 1;
+    animation-fill-mode: forwards;
+    animation-duration: 400ms;
+  }
+  
+  .fade-in {
+    animation-delay: 100ms;
+    animation: fadein ease-in 1;
+    animation-fill-mode: forwards;
+    animation-duration: 400ms;
+  }
+
+  .fade-out {
+    animation: fadeout ease-out 1;
+    animation-fill-mode: forwards;
+    animation-duration: 1000ms;
+  }
+
+.productBackgroundImage{
+  background-image: url('../../public/images/backgroundImages/bg2.jpeg');
+  background-repeat: no-repeat;
+  background-position: center top;
+  background-size: cover;
+  rotate: 180; 
+  color: #262626;
+}
+
+.header {
+  transition: all 0.5s;
+  z-index: 997;
+  padding: 25px 0;
+}
+
+.header.header-scrolled {
+  background: #262626;
+  color: #A67A44;
+  padding: 20px 0;
+  box-shadow: 0px 2px 20px rgba(1, 41, 112, 0.1);
+}
+/* Add these styles to your CSS */
+@media (max-width: 767px) {
+  .overflow-x-auto {
+    overflow-x: auto;
+    white-space: nowrap;  
+  }
+
+  .header{
+    padding: 8px 0;
+  }
+
+  .overflow-x-auto > * {
+    display: inline-block;
+    white-space: normal;
+  }
+  .imgWidth{
+    width: 188px;
+  }
+  .overFlowXScroll{
+    overflow-x: scroll;
+  }
+}
+
+.fontFamilyGloble{
+  /* font-family: ; */
+}
+
+
+

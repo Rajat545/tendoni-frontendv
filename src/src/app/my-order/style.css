@@ -1,0 +1,251 @@
+body {
+    background-color: #f9f9fa;
+}
+
+.padding {
+    padding: 2rem;
+}
+
+.user-card-full {
+    overflow: hidden;
+}
+
+.card {
+    border-radius: 5px;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+    margin-bottom: 30px;
+    margin-left: 37px;
+    width: 100%;
+}
+
+.m-r-0 {
+    margin-right: 0px;
+}
+
+.m-l-0 {
+    margin-left: 0px;
+}
+
+.card-block {
+    padding: 1.25rem;
+}
+
+.user-info {
+    margin-top: 105px;
+}
+
+.info-item {
+    flex: 1 1 100%;
+}
+
+.order-details {
+    margin-top: 20px;
+    padding: 20px;
+}
+
+.order-title {
+    font-size: x-large;
+}
+
+.order-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 10px;
+}
+
+.order-image {
+    width: 50px;
+    height: 50px;
+}
+
+.order-info {
+    flex: 1 1 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.old-price {
+    text-decoration: line-through;
+}
+
+.flex-name {
+    display: flex;
+    gap: 8px;
+}
+
+.user-name {
+    margin-left: 3px;
+}
+
+.user-details {
+    display: flex;
+    flex-wrap: wrap;
+    padding-bottom: 15px;
+    margin-left: 16px;
+}
+
+.order-actions {
+    display: flex;
+    align-items: center;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Modal content */
+.modal {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    outline: none;
+}
+
+/* Close button */
+.modal .close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 24px;
+    cursor: pointer;
+}
+
+/* Form styling */
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+}
+
+.btn {
+    padding: 10px 15px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive adjustments */
+@media only screen and (max-width: 1200px) {
+    .user-details {
+        gap: 20px;
+        margin-left: 0;
+    }
+}
+
+@media only screen and (max-width: 900px) {
+    .user-details {
+        gap: 10px;
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .padding {
+        padding: 1rem;
+    }
+
+    .card {
+        margin-left: 0;
+    }
+
+    .user-info {
+        margin-top: 20px;
+    }
+
+    .user-details {
+        gap: 5px;
+    }
+
+    .order-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .order-info {
+        align-items: flex-start;
+    }
+
+    .order-actions {
+        width: 100%;
+        justify-content: flex-end;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .order-item {
+        padding: 10px;
+    }
+
+    .order-image {
+        width: 40px;
+        height: 40px;
+    }
+    #responsive-list{
+        display: none;
+    }
+
+    .user-details {
+        gap: 0;
+        padding-bottom: 10px;
+    }
+      #responsive-div {
+        display: flow;
+        text-align: center;
+    }
+}
+@media  screen and (max-width: 430px) {
+    #responsive-div {
+        display: flow;
+        text-align: center;
+    }
+    #responsive-list{
+        display: none;
+    }
+    #order-list{
+        /* align-items: center; */
+        text-align: center;
+        
+    }
+
+}
