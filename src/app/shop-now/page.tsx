@@ -281,7 +281,7 @@ const Shop = () => {
             onClick={closePopup}
           >
             <div
-              style={{ width: "50%", overflow: 'scroll', marginTop: '140px' }}
+              style={{ width: "50%", overflow: 'scroll', marginTop: '140px', paddingBottom: '100px'}}
               className="bg-white p-8 max-w-md h-screen fixed right-0"
               onClick={(e) => e.stopPropagation()}
 

@@ -7,19 +7,24 @@ import { AuthContext } from '@/Context/AuthContext';
 
 const MyProfile = () => {
     const { trackProduct } = useContext(AuthContext);
+    
 
     const getStepIndex = () => {
-        switch (trackProduct[0]?.orderStatus) {
-            case 'Inventory':
-                return 0; 
+        switch (trackProduct[0]?.orderState) {
+            case 'OrderPlaced':
+                return 1;
+            case 'OrderConfirm':
+                return 2;
             case 'ReadyToShip':
-                return 1; 
+                return 3;
+            case 'Dispatched':
+                return 4;
             case 'Delivered':
-                return 2; 
-            case 'InDelivery':
-                return 3; 
-            default:
+                return 5;
+            case 'Cancelled':
                 return 0;
+            default:
+                return 1;
         }
     };
 
@@ -39,23 +44,23 @@ const MyProfile = () => {
                 <div>
                     <div className="track">
                         <ul id="progressbar" className="text-center flex justify-between">
-                            
-                            <li className={`flex flex-col items-center ${getStepIndex() >= 0 ? 'text-green-500' : 'text-black'}`}>
+
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 1 ? 'text-green-500' : 'text-black'}`}>
                                 <p className="font-bold p-3">Order Placed</p>
                             </li>
-                            <li className={`flex flex-col items-center ${getStepIndex() >= 0 ? 'text-green-500' : 'text-black'}`}>
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 2 ? 'text-green-500' : 'text-black'}`}>
                                 <p className="font-bold p-3">Order Confirm</p>
                             </li>
-                            <li className={`flex flex-col items-center ${getStepIndex() >= 0 ? 'text-green-500' : 'text-black'}`}>
-                                <p className="font-bold p-3">Order Dispatched</p>
-                            </li>
-                            <li className={`flex flex-col items-center ${getStepIndex() >= 1 ? 'text-green-500' : 'text-black'}`}>
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 3 ? 'text-green-500' : 'text-black'}`}>
                                 <p className="font-bold p-3">ReadyToShip</p>
                             </li>
-                            <li className={`flex flex-col items-center ${getStepIndex() >= 2 ? 'text-green-500' : 'text-black'}`}>
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 4 ? 'text-green-500' : 'text-black'}`}>
+                                <p className="font-bold p-3">Order Dispatched</p>
+                            </li>
+                            <li className={`flex flex-col items-center ${getStepIndex() >= 5 ? 'text-green-500' : 'text-black'}`}>
                                 <p className="font-bold p-3">Delivered</p>
                             </li>
-                            <li className={`flex flex-col items-center ${getStepIndex() >= 3 ? 'text-red-500' : 'text-black'}`}>
+                            <li className={`flex flex-col items-center ${getStepIndex() == 0 ? 'text-red-500' : 'text-black'}`}>
                                 <p className="font-bold p-3">Order Cancelled</p>
                             </li>
                         </ul>
@@ -98,7 +103,7 @@ const MyProfile = () => {
                                     <p>Rs.{trackProduct ? trackProduct[0]?.totalPrice : 'NA'}</p>
                                 </div>
                             </div>
-                            <div id='total-price'  className="flex item-center justify-between">
+                            <div id='total-price' className="flex item-center justify-between">
                                 <div>
                                     <p>Discount</p>
                                 </div>
@@ -114,12 +119,28 @@ const MyProfile = () => {
                                     <p>Rs. {trackProduct ? trackProduct[0]?.totalSalePrice : 'NA'}</p>
                                 </div>
                             </div>
-                            <div id='total-price'className="flex item-center justify-between">
+                            <div id='total-price' className="flex item-center justify-between">
                                 <div>
                                     <p>Shipping charge</p>
                                 </div>
                                 <div>
                                     <p> + {trackProduct ? trackProduct[0]?.deliveryCharge : 'NA'}</p>
+                                </div>
+                            </div>
+                            <div id='total-price' className="flex item-center justify-between">
+                                <div>
+                                    <p>Payment Mode</p>
+                                </div>
+                                <div>
+                                    <p>  {trackProduct ? trackProduct[0]?.paymentDetails.paymentMethod : 'NA'}</p>
+                                </div>
+                            </div>
+                            <div id='total-price' className="flex item-center justify-between">
+                                <div>
+                                    <p>Payment Status</p>
+                                </div>
+                                <div>
+                                    <p>  {trackProduct ? trackProduct[0]?.paymentDetails.paymentStatus : 'NA'}</p>
                                 </div>
                             </div>
                             <div id='total-price' className="flex item-center justify-between">

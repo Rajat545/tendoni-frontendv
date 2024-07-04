@@ -91,6 +91,7 @@ const ProductDetails = () => {
   };
 
   const addToCart = async (item, name) => {
+    console.log(item,'item')
     if (!quantity.valueId || !quantity.Value) {
       toast.error("Please Select Quantity");
       return;
@@ -111,8 +112,8 @@ const ProductDetails = () => {
       const defaultVariant = {
         valueId: quantity.valueId,
         Value: quantity.Value,
-        amount: item.price,
-        saleAmount: item.sale_price,
+        amount: quantity.amount,
+        saleAmount: variantPrice,
       };
       const newItem = { ...item, quantity: 1, variant: defaultVariant };
       await setCart((prevCart) => [...prevCart, newItem]);
@@ -357,10 +358,8 @@ const ProductDetails = () => {
                       </h2>
                       <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                         <div>
-                          <h5>
-                            {quantity.amount ? `RS ${quantity.amount}` : 'Select Item'}{" "}
-                            {quantity.saleAmount ? `Rs: ${quantity.saleAmount}` : ''}
-                          </h5>
+                      
+                       <h5> <span style={{textDecoration: 'line-through'}}>{quantity.amount ? `RS ${quantity.amount}` : ''} {" "}</span>  {quantity.saleAmount ? `Rs: ${quantity.saleAmount}` : 'Select Item'}</h5>
                         </div>
                         <div>
                           <h5>Shipping Charge: Rs. 6.50</h5>
@@ -550,7 +549,7 @@ const ProductDetails = () => {
                     ></div>
                     <p style={{ textDecoration: "line-through" }}>
                       {" "}
-                      Rs{item.price}
+                      Rs{quantity.amount}
                     </p>
                     <p className="mt-3" style={{ width: "150px" }}>
                       Quantity: ({item.quantity}) {variantValue}
@@ -637,7 +636,7 @@ const ProductDetails = () => {
                   <button
                     style={{ padding: "10px 100px" }}
                     className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={() => handleCheckOut(productId)}
+                    onClick={() => handleCheckOut(cart)}
                   >
                     Check Out
                   </button>

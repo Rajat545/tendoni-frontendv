@@ -539,6 +539,7 @@ const Shop = () => {
       toast.error("Error removing item");
     }
   };
+  console.log(cartData,"cartData")
 
   return (
     <>
@@ -778,7 +779,7 @@ const Shop = () => {
                     <p>Discount</p>
                   </div>
                   <div>
-                    <p>{Number(cartData.discount) || 0} %</p>
+                    <p>{(cartData.discount)}</p>
                   </div>
                 </div>
                 <div className="flex item-center justify-between">
@@ -840,11 +841,9 @@ const Shop = () => {
                         Pay now
                       </button>
                     ) : (
-                      <form onSubmit={handleOrderSubmit}>
-                        <button id="pay-btn" type="submit">
+                        <button onClick={handleOrderSubmit} id="pay-btn" type="submit">
                           Place Order
                         </button>
-                      </form>
                     )}
                   </div>
                 </div>
