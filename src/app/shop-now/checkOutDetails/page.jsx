@@ -301,7 +301,7 @@ const Shop = () => {
       toast.success("Order placed successfully!");
       setPopUp(true);
       setCartData([]);
-      router.push("/");
+      router.push("/shop-now");
     } catch (error) {
       toast.error("Error placing order.", error);
     }
@@ -597,13 +597,14 @@ const Shop = () => {
                         <div className="w-1/2">
                           <label htmlFor="pincode">Pincode</label>
                           <input
-                            type="text"
+                            type="type"
                             id="pincode"
                             name="pincode"
                             placeholder="Pincode"
                             value={formData.pincode}
                             onChange={handleChange}
                             required
+                            
                           />
                         </div>
                         <div className="w-1/2">

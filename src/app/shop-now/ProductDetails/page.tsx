@@ -6,13 +6,8 @@ import Grand from "@Images/slider/spices.jpeg";
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { CartContext } from "@/Context/CartContext";
-// import { ToastContainer } from "react-hot-toast";
-// import  toast , {Toa}from "react-hot-toast";
 import toast, { Toaster } from "react-hot-toast";
-
 import { isAuth } from "@/Context/AuthContext";
-import garamMasala from "@Images/ProductImages/garammasala.png";
-
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
@@ -20,9 +15,9 @@ const ProductDetails = () => {
   const [quantity, setQuantity] = useState({
     valueId: "",
     Value: "",
-
+    amount: 0,
+      saleAmount: 0
   });
-
   const {
     productId,
     data,
@@ -34,17 +29,12 @@ const ProductDetails = () => {
     setVariant,
     buyProduct,
   } = useContext(CartContext);
-
   const productDetails = data.filter((item) => item.productId === productId);
   const productInCart = cart.find((item) => item.productId === productId);
-
-  // Extract variant data from productDetails
   const quantityData =
     productDetails.length > 0 ? productDetails[0].Variant : [];
-
   const variantPrice = quantity?.saleAmount;
-  const variantValue = quantity.Value;
-
+  const variantValue = quantity?.Value;
   const incrementCount = (productId) => {
     setCart((prevCart) =>
       prevCart.map((item) =>
@@ -54,7 +44,6 @@ const ProductDetails = () => {
       )
     );
   };
-
   const decrementCount = (productId) => {
     setCart((cart) =>
       cart.map((item) =>
@@ -64,39 +53,33 @@ const ProductDetails = () => {
       )
     );
   };
-
   useEffect(() => {
     const productInCart = cart.find((item) => item.productId === productId);
     if (productInCart) {
       setCount(productInCart.quantity);
     }
   }, [cart, productId]);
-
   const openPopup = () => {
     setShowPopup(true);
     setOriginalHeaderDisplay(document.querySelector("header").style.display);
     document.querySelector("header").style.display = "none";
   };
-
   const closePopup = () => {
     setShowPopup(false);
     document.body.style.overflow = "auto";
     document.querySelector("header").style.display = originalHeaderDisplay;
   };
-
   const deleteById2 = (productId) => {
     const deleteData = cart.filter((item) => item.productId !== productId);
     setCart(deleteData);
     toast.error("Removed from cart");
   };
-
   const addToCart = async (item, name) => {
-    console.log(item,'item')
-    if (!quantity.valueId || !quantity.Value) {
+    console.log(item, 'item')
+    if (!quantity?.valueId || !quantity.Value) {
       toast.error("Please Select Quantity");
       return;
     }
-
     const existingItemIndex = cart.findIndex(
       (cartItem) => cartItem.productId === item.productId
     );
@@ -123,25 +106,20 @@ const ProductDetails = () => {
       }
     }
   };
-
   const handleVariantChange = (e) => {
     const selectedVariantId = e.target.value;
     const selectedVariant = quantityData.find(
       (v) => v.valueId === selectedVariantId
     );
-
     setQuantity(selectedVariant);
   };
-
   const calculateTotalPrice = () => {
     return cart.reduce(
       (total, item) => total + variantPrice * item.quantity,
       0
     );
   };
-
   const isAuthenticate = isAuth();
-
   const fetchProductById = async (productId) => {
     try {
       const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getProductById/${productId}`;
@@ -163,7 +141,6 @@ const ProductDetails = () => {
       return null;
     }
   };
-
   const handleCheckOut = async (updatedCart) => {
     if (Object.keys(quantity).length === 0) {
       toast.error("Please Select quantity");
@@ -174,12 +151,10 @@ const ProductDetails = () => {
       router.push("/login");
       return;
     }
-
     const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
     if (!userData.data) {
       throw new Error("User data not found");
     }
-
     try {
       const { customerId, access_token } = userData.data;
       const items = updatedCart.map((item) => ({
@@ -191,12 +166,10 @@ const ProductDetails = () => {
         price: item.variant.saleAmount,
         maxPrice: item.variant.amount,
       }));
-
       const payload = {
         customerId,
         items,
       };
-
       const requestOptions = {
         method: "POST",
         headers: {
@@ -206,13 +179,10 @@ const ProductDetails = () => {
         },
         body: JSON.stringify(payload),
       };
-
-      // Make the API request
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart",
         requestOptions
       );
-
       const data = await response.json();
       if (response.status === 200) {
         toast.success("Product added to cart successfully!");
@@ -220,32 +190,11 @@ const ProductDetails = () => {
       } else {
         toast.error("Failed to add product to cart! Please try again.");
       }
-
-      // Clear cart after checkout
       setCart([]);
     } catch (error) {
       toast.error("Failed to complete checkout! Please try again.");
     }
   };
-
-  // const handleCheckOut = async () => {
-  //   const { productId } = productDetails;
-  //   try {
-  //     const productDetailsPromises = cart.map((item) =>
-  //       fetchProductById(item.productId)
-  //     );
-  //     const productsDetails = await Promise.all(productDetailsPromises);
-  //     // Uncomment this part if you need to navigate after fetching product details
-  //     // if (isAuthnticate) {
-  //     //   router.push("/shop-now/checkOutDetails");
-  //     // } else {
-  //     //   router.push("/login");
-  //     // }
-  //   } catch (error) {
-  //     console.error("Error fetching data:", error);
-  //   }
-  // };
-
   return (
     <>
       <Toaster />
@@ -261,8 +210,8 @@ const ProductDetails = () => {
                   key={index}
                   id={item?.sectionId}
                   className={`${index % 2 === 0
-                      ? "py-6 md:py-8 lg:py-10"
-                      : "bg-stone-300 py-6 md:py-8 lg:py-14"
+                    ? "py-6 md:py-8 lg:py-10"
+                    : "bg-stone-300 py-6 md:py-8 lg:py-14"
                     }`}
                 >
                   <div
@@ -278,7 +227,6 @@ const ProductDetails = () => {
                         <img
                           src={item.productImages}
                           alt="Image"
-                        // style={{ height: "200px", width: "200px" }}
                         />
                       </div>
                       <div style={{ marginTop: "20px", display: "flex" }}>
@@ -293,7 +241,6 @@ const ProductDetails = () => {
                         >
                           <img
                             src={item.productImages}
-                            // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                           />
@@ -309,7 +256,6 @@ const ProductDetails = () => {
                         >
                           <img
                             src={item.productImages}
-                            // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                           />
@@ -325,7 +271,6 @@ const ProductDetails = () => {
                         >
                           <img
                             src={item.productImages}
-                            // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                           />
@@ -341,14 +286,12 @@ const ProductDetails = () => {
                         >
                           <img
                             src={item.productImages}
-                            // style={{ height: "200px", width: "200px" }}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                           />
                         </div>
                       </div>
                     </div>
-
                     <div
                       className={`py-8 box-border text-wrap w-full text-black border-solid md:w-1/2 md:pl-10 ${index % 2 !== 0 ? "md:order-first" : ""
                         }`}
@@ -358,8 +301,12 @@ const ProductDetails = () => {
                       </h2>
                       <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                         <div>
-                      
-                       <h5> <span style={{textDecoration: 'line-through'}}>{quantity.amount ? `RS ${quantity.amount}` : ''} {" "}</span>  {quantity.saleAmount ? `Rs: ${quantity.saleAmount}` : 'Select Item'}</h5>
+                          <h5>
+                            <span style={{ textDecoration: 'line-through' }}>
+                              {quantity?.amount ? `RS ${quantity.amount}` : ''} {" "}
+                            </span>
+                            {quantity?.saleAmount ? `Rs: ${quantity.saleAmount}` : 'Select Item'}
+                          </h5>
                         </div>
                         <div>
                           <h5>Shipping Charge: Rs. 6.50</h5>
@@ -379,7 +326,7 @@ const ProductDetails = () => {
                             marginBottom: "10px",
                             borderRadius: "5px",
                           }}
-                          value={quantity.valueId}
+                          value={quantity?.valueId}
                           onChange={handleVariantChange}
                         >
                           <option defaultValue={"null"} value="null">
@@ -396,7 +343,6 @@ const ProductDetails = () => {
                             </>
                           ))}
                         </select>
-
                         {productInCart ? (
                           <>
                             <div
@@ -427,7 +373,6 @@ const ProductDetails = () => {
                                 </button>
                               </div>
                             </div>
-
                             <div>
                               <button
                                 onClick={() => {
@@ -468,7 +413,6 @@ const ProductDetails = () => {
                             </div>
                           </div>
                         )}
-
                         <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                           {item.description}
                         </p>
@@ -569,7 +513,6 @@ const ProductDetails = () => {
                   </div>
                 </div>
               ))}
-
               <div
                 className="mt-3"
                 style={{
@@ -617,7 +560,6 @@ const ProductDetails = () => {
                   display: "flex",
                   justifyContent: "space-between",
                   alignItems: "center",
-
                   borderTop: "1px solid gray",
                 }}
               >
@@ -649,5 +591,4 @@ const ProductDetails = () => {
     </>
   );
 };
-
 export default ProductDetails;

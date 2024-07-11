@@ -5,17 +5,13 @@ import Grand from "@Images/slider/spices.jpeg";
 import { useRouter } from "next/navigation";
 import { CartContext } from "@/Context/CartContext";
 import toast, { Toaster } from 'react-hot-toast';
-
 import Header from "@/components/Header";
 import { isAuth } from "@/Context/AuthContext";
 import garamMasala from '@Images/ProductImages/garammasala.png';
-
-
 const Shop = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
   const [selectedVariants, setSelectedVariants] = useState<any>();
-
   const { data,
     setCart,
     cart,
@@ -26,16 +22,17 @@ const Shop = () => {
     showCartPopup,
     setShowCartPopup,
   } = useContext(CartContext);
-
   useEffect(() => {
-    const productVariants = cart.reduce((acc, product) => {
-      console.log("inside useEffecr", product) 
-      acc[product.productId] = product.Variant[0]?.valueId;
-      return acc;
-    }, {});
-    setSelectedVariants(productVariants);
-  }, []);
-
+    if (cart.length > 0) {
+      const productVariants = cart.reduce((acc, product) => {
+        acc[product.productName] = product.variant?.valueId || ""; // Ensure variant exists
+        return acc;
+      }, {});
+      setSelectedVariants(productVariants);
+    } else {
+      setSelectedVariants({}); // Ensure selectedVariants is an object
+    }
+  }, [cart]);
 
   const incrementCount = (productId) => {
     setCart(prevCart =>
@@ -55,24 +52,20 @@ const Shop = () => {
       )
     );
   };
-
   const closePopup = () => {
     setShowPopup(false);
     setShowCartPopup(false);
     document.body.style.overflow = "auto";
     document.querySelector("header").style.display = "block";
   };
-
   const openPopup = () => {
     setShowPopup(true);
     setShowCartPopup(true);
     document.body.style.overflow = "hidden";
     document.querySelector("header").style.display = "none";
   };
-
   const addToCartItem = (item) => {
     const existingItemIndex = cart.findIndex((cartItem) => cartItem.productId === item.productId);
-
     if (existingItemIndex !== -1) {
       const updatedCart = [...cart];
       updatedCart[existingItemIndex].quantity += 1;
@@ -85,7 +78,6 @@ const Shop = () => {
         saleAmount: item.sale_price,
         variantId: item.varientId
       };
-
       setCart((prevCart) => [
         ...prevCart,
         { ...item, quantity: 1, variant: defaultVariant },
@@ -93,18 +85,15 @@ const Shop = () => {
     }
     toast.success("Added to cart successfully!");
   };
-
   const productById = (id) => {
     setProductId(id);
     router.push('/shop-now/ProductDetails');
   };
-
   const deleteById = (productId) => {
     const deleteData = cart.filter((item) => item.productId !== productId);
     setCart(deleteData);
     toast.error("Removed from cart");
   };
-
   const handleVariantChange = (item, value,) => {
     const { productId } = item
     const selectedVariant = variant.find(v => v.valueId === value);
@@ -117,22 +106,21 @@ const Shop = () => {
     setCart(newCart);
     setSelectedVariants(prevSelected => ({ ...prevSelected, [item.productName]: value }));
   };
-
   const calculateTotalPrice = () => {
-    return cart.reduce((total, item) => total + item.variant.saleAmount * item.quantity, 0);
+    return cart.reduce((total, item) => {
+      if (item.variant && item.variant.saleAmount) {
+        return total + item.variant.saleAmount * item.quantity;
+      }
+      return total;
+    }, 0);
   };
 
-  console.log(selectedVariants , 'secle')
-
-  
   const handleCheckOut = async () => {
     if (Object.keys(selectedVariants).length == 0) {
-     toast.error('Please Select quantity')
-     return;
+      toast.error('Please Select quantity')
+      return;
     }
-
-    const isAuthnticate = isAuth(); 
-
+    const isAuthnticate = isAuth();
     if (!isAuthnticate) {
       router.push("/login");
       return;
@@ -172,18 +160,17 @@ const Shop = () => {
         toast.success('Product added to cart successfully!');
         router.push("/shop-now/checkOutDetails")
       } else {
-        toast.error('Failed to add product to cart! Please try again.');
+        toast.error('please select item');
       }
-
       setCart([]);
     } catch (error) {
-      toast.error("Failed to complete checkout! Please try again.");
+      toast.error("please select item");
     }
   };
-
+  console.log(selectedVariants, "selectedVariants")
   return (
     <>
-    <Toaster/>
+      <Toaster />
       <Header />
       <div className="z-20">
         <Image
@@ -214,49 +201,46 @@ const Shop = () => {
                       position: "relative",
                       overflow: "hidden",
                     }}
-                     >
-                      <div className="cursor-pointer" onClick={() => productById(item.productId)}>
-
-                    <div style={{ marginBottom: "8px" }}>
-                      <img
+                  >
+                    <div className="cursor-pointer" onClick={() => productById(item.productId)}>
+                      <div style={{ marginBottom: "8px" }}>
+                        <img
                           src={item.productImages}
-                        className="lazyload img-fluid fixed-image-main"
-                        alt="Images"
-                        width={200}
-                        height={200}
-                      />
-                    </div>
-                    <div
-                      className="absolute top-[-6px] right-[-6px] bg-yellow-500 text-white px-2 py-1 m-2 rounded"
-                      style={{ fontSize: "12px" }}
-                    >
-                      {Math.floor(item.discount)}% Off
-                    </div>
-                    <div  >
-                      <h4 style={{ textAlign: "center",cursor:'pointer' }} >{item.productName}</h4>
-                      <div style={{ display: "flex", gap: "20px" }}>
-                        <div>
-                          <div
-                            style={{
-                              border: "1px solid rgb(0 0 0 / 64%)",
-                              height: "fit-content",
-                              position: "relative",
-                              top: "15px",
-                              width: "100%",
-                            }}
-                          ></div>
-                          <h4 style={{ color: "rgb(0 0 0 / 64%)" }}>
-                            Price: {item.price}
-                          </h4>
-                        </div>
-                        <div>
-                          <h4 style={{ marginBottom: "20px" }}>Price: {item.sale_price}</h4>
+                          className="lazyload img-fluid fixed-image-main"
+                          alt="Images"
+                          width={200}
+                          height={200}
+                        />
+                      </div>
+                      <div
+                        className="absolute top-[-6px] right-[-6px] bg-yellow-500 text-white px-2 py-1 m-2 rounded"
+                        style={{ fontSize: "12px" }}
+                      >
+                        {Math.floor(item.discount)}% Off
+                      </div>
+                      <div  >
+                        <h4 style={{ textAlign: "center", cursor: 'pointer' }} >{item.productName}</h4>
+                        <div style={{ display: "flex", gap: "20px" }}>
+                          <div>
+                            <div
+                              style={{
+                                border: "1px solid rgb(0 0 0 / 64%)",
+                                height: "fit-content",
+                                position: "relative",
+                                top: "15px",
+                                width: "100%",
+                              }}
+                            ></div>
+                            <h4 style={{ color: "rgb(0 0 0 / 64%)" }}>
+                              Price: {item.price}
+                            </h4>
+                          </div>
+                          <div>
+                            <h4 style={{ marginBottom: "20px" }}>Price: {item.sale_price}</h4>
+                          </div>
                         </div>
                       </div>
                     </div>
-                    </div>
-
-
                     <div style={{ textAlign: "center", marginTop: "8px" }}>
                       <button
                         onClick={() => {
@@ -274,17 +258,15 @@ const Shop = () => {
             </div>
           </div>
         </section>
-
         {showCartPopup && cart.length > 0 && (
           <div
             className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
             onClick={closePopup}
           >
             <div
-              style={{ width: "50%", overflow: 'scroll', marginTop: '140px', paddingBottom: '100px'}}
+              style={{ width: "50%", overflow: 'scroll', marginTop: '140px', paddingBottom: '100px' }}
               className="bg-white p-8 max-w-md h-screen fixed right-0"
               onClick={(e) => e.stopPropagation()}
-
             >
               <div
                 style={{
@@ -320,7 +302,6 @@ const Shop = () => {
                   <p className="mt-5">Total</p>
                 </div>
               </div>
-
               {cart.map((item, index) => (
                 <div key={item.productId} style={{ maxHeight: "400px" }}>
                   <div
@@ -344,23 +325,24 @@ const Shop = () => {
                           width: "60%",
                         }}
                       ></div>
-                      <p style={{ textDecoration: 'line-through' }}>Rs. {item.variant?.amount}</p>
+                      <p style={{ textDecoration: 'line-through' }}>
+                        {item.variant?.amount ? `Rs. ${item.variant.amount}` : ''}
+                      </p>
+
                       <p className="mt-3" style={{ width: '150px' }}>Quantity ({item.quantity})  {item.variant?.Value}</p>
                     </div>
                     <div>
                       {item.variant?.saleAmount !== 0 && (
-                        <p style={{ marginTop: "-25px" }}>Rs. {item.variant?.saleAmount}</p>
+                        <p style={{ marginTop: "-25px" }}> {item.variant?.saleAmount ? `Rs. ${item.variant.saleAmount}` : 0}</p>
                       )}
                     </div>
                   </div>
-
                   <div style={{
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
                     padding: '5px'
                   }}></div>
-
                   <div
                     className="mt-3"
                     style={{
@@ -383,10 +365,11 @@ const Shop = () => {
                           borderRadius: "5px",
                           marginRight: '6px'
                         }}
-                        value={selectedVariants[item.productName] || ""}
+                        value={selectedVariants?.[item.productName] || ""}
+
                         onChange={(e) => handleVariantChange(item, e.target.value)}
                       >
-                       <option value={''}>Select Quantity</option>
+                        <option value={''}>Select Quantity</option>
                         {variant?.map((variant) => (
                           <option key={variant.variantId} value={variant.valueId}>
                             {variant.Value}
@@ -429,7 +412,6 @@ const Shop = () => {
                   </div>
                 </div>
               ))}
-
               <div
                 className="mt-5"
                 style={{
@@ -470,7 +452,4 @@ const Shop = () => {
     </>
   );
 };
-
 export default Shop;
-
-
