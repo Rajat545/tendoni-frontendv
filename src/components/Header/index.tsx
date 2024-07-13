@@ -11,12 +11,9 @@ import AccentMenu from "@Images/logo/accent-menu.png";
 import './style.css'
 import { menuItems, childMenuData } from "../../Data/home";
 import toast, { Toaster } from 'react-hot-toast';
-
 import { useRouter } from 'next/navigation';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import { CartContext } from "@/Context/CartContext";
 import { isAuth } from "@/Context/AuthContext";
-
 const Header: React.FC = () => {
   const router = useRouter();
   const [activeNavItem, setActiveNavItem] = useState<string | null>(null);
@@ -26,22 +23,14 @@ const Header: React.FC = () => {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
   const [expandedChildMenu, setExpandedChildMenu] = useState<string | null>(null);
-
-
-
   const headerRef = useRef<HTMLDivElement>(null);
   const { setShowCartPopup, cart } = useContext(CartContext)
-
-
-
   const handleLogout = () => {
-
     localStorage.removeItem("user-info");
     localStorage.removeItem("access-token");
     toast.success("Successfully logged out!");
-    router.push("/login"); 
+    router.push("/login");
   };
-
   const handleExpandIconClick = (menuItem: any) => {
     if (expandedChildMenu === menuItem.id) {
       setExpandedChildMenu(null);
@@ -49,25 +38,20 @@ const Header: React.FC = () => {
       setExpandedChildMenu(menuItem.id);
     }
   };
-
   const handleToggleMobileMenu = () => {
     setShowMobileMenu((prev) => !prev);
   };
-
   const handleNavItemClick = () => {
     setShowMobileMenu(false);
   };
-
   const handleNavItemHover = (item: any) => {
     setActiveNavItem(item.id);
     setShowChildMenu(item.childMenu);
     setChildMenuItems(childMenuData[item.id] || []);
   };
-
   const handleMouseLeave = () => {
     setShowChildMenu(false);
   };
-
   const getFirstChildPosition = () => {
     const firstNavItem = document.querySelector(".nav-bar");
     if (firstNavItem) {
@@ -77,26 +61,22 @@ const Header: React.FC = () => {
     return "480px";
   };
   const handleCartIconClick = () => {
-    if(cart.length === 0){
+    if (cart.length === 0) {
       toast.error('cart is empty add to cart first!')
     }
     setShowCartPopup(true);
   };
-
   useEffect(() => {
     const handleOutsideClick = (e: MouseEvent) => {
       if (headerRef.current && !headerRef.current.contains(e.target as Node)) {
         setShowChildMenu(false);
       }
     };
-
     document.addEventListener("mousedown", handleOutsideClick);
-
     return () => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-
   const renderChildMenuIcon = (menuItem: any) => {
     if (menuItem.childMenu) {
       return (
@@ -110,9 +90,7 @@ const Header: React.FC = () => {
     }
     return null;
   };
-
   useEffect(() => { }, []);
-
   const renderChildMenu = (childItems: any[], parentId: string) => {
     if (childItems && childItems.length > 0 && expandedChildMenu === parentId) {
       return (
@@ -141,30 +119,24 @@ const Header: React.FC = () => {
     }
     return null;
   };
-
   useEffect(() => {
     const headerScrolled = () => {
       setIsScrolled(window.scrollY > 100);
     };
-
     window.addEventListener("scroll", headerScrolled);
     headerScrolled();
-
     return () => {
       window.removeEventListener("scroll", headerScrolled);
     };
   }, []);
   const isAuthnticate = isAuth()
-
   const handleCheckOut = () => {
-
     if (isAuthnticate) {
       router.push("/my-order")
     } else {
       router.push("/login")
     }
   }
-
   return (
     <header
       id="header"
@@ -209,17 +181,15 @@ const Header: React.FC = () => {
           >
             Become a partner
           </button>
-
         </Link>
-
         <div >
           <div className='addToCart'>
-          <h1 className="cart" style={{ marginBottom: '-5px', marginLeft: '5px', backgroundColor: '#a67a44' }}> {cart.length > 0 ? cart.length : null}</h1>
-          <ShoppingCartOutlinedIcon onClick={handleCartIconClick} style={{ color: '#a67a44', cursor: 'pointer' }} />
+            <h1 className="cart" style={{ marginBottom: '-13px', marginLeft: '5px', backgroundColor: '#a67a44' }}> {cart.length > 0 ? cart.length : null}</h1>
+            <svg xmlns="http://www.w3.org/2000/svg" onClick={handleCartIconClick} fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="cursor-pointer size-6 mt-2 text-[#A67A44]">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            </svg>
           </div>
         </div>
-
-
         <>
           <button
             className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
@@ -233,11 +203,9 @@ const Header: React.FC = () => {
             className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
               } rounded-sm text-center `}
             style={{ marginTop: '-2px' }}
-
           >
             {!isAuthnticate ? "Login" : ''}
           </Link>
-
           {openProfile && (
             <div className="flex flex-col dropDownProfile">
               <ul className="flex flex-col gap-4">
@@ -260,8 +228,6 @@ const Header: React.FC = () => {
             </div>
           )}
         </>
-
-
         <button className="lg:hidden p-2" onClick={handleToggleMobileMenu}>
           <Image
             src={showChildMenu || isScrolled ? AccentMenu : Menu}
@@ -373,11 +339,9 @@ const Header: React.FC = () => {
               BECOME PARTNER
             </button>
           </Link>
-
         </div>
       )}
     </header>
   );
 };
-
 export default Header;

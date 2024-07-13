@@ -1,5 +1,5 @@
-"use client";
-import React, { useState, useEffect, useContext } from "react";
+"use client";;
+import { useState, useEffect, useContext } from "react";
 import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import { useRouter } from "next/navigation";
@@ -7,7 +7,6 @@ import { CartContext } from "@/Context/CartContext";
 import toast, { Toaster } from 'react-hot-toast';
 import Header from "@/components/Header";
 import { isAuth } from "@/Context/AuthContext";
-import garamMasala from '@Images/ProductImages/garammasala.png';
 const Shop = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
@@ -25,15 +24,14 @@ const Shop = () => {
   useEffect(() => {
     if (cart.length > 0) {
       const productVariants = cart.reduce((acc, product) => {
-        acc[product.productName] = product.variant?.valueId || ""; // Ensure variant exists
+        acc[product.productName] = product.variant?.valueId || "";
         return acc;
       }, {});
       setSelectedVariants(productVariants);
     } else {
-      setSelectedVariants({}); // Ensure selectedVariants is an object
+      setSelectedVariants({});
     }
   }, [cart]);
-
   const incrementCount = (productId) => {
     setCart(prevCart =>
       prevCart.map(item =>
@@ -72,7 +70,7 @@ const Shop = () => {
       setCart(updatedCart);
     } else {
       const defaultVariant = {
-        valueId: item.valueId, // Assuming the variant's ID for 1kg is "1kg"
+        valueId: item.valueId,
         Value: item.value,
         amount: item.price,
         saleAmount: item.sale_price,
@@ -114,7 +112,6 @@ const Shop = () => {
       return total;
     }, 0);
   };
-
   const handleCheckOut = async () => {
     if (Object.keys(selectedVariants).length == 0) {
       toast.error('Please Select quantity')
@@ -153,21 +150,18 @@ const Shop = () => {
         },
         body: JSON.stringify(payload),
       }
-      // Make the API request
       const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions);
       const data = await response.json();
       if (response.status == 200 && data.message === 'Items added to cart successfully') {
-        toast.success('Product added to cart successfully!');
         router.push("/shop-now/checkOutDetails")
       } else {
         toast.error('please select item');
       }
-      setCart([]);
     } catch (error) {
       toast.error("please select item");
     }
   };
-  console.log(selectedVariants, "selectedVariants")
+
   return (
     <>
       <Toaster />
@@ -200,6 +194,7 @@ const Shop = () => {
                       borderRadius: "5px",
                       position: "relative",
                       overflow: "hidden",
+                      height: "400px",
                     }}
                   >
                     <div className="cursor-pointer" onClick={() => productById(item.productId)}>
@@ -218,8 +213,8 @@ const Shop = () => {
                       >
                         {Math.floor(item.discount)}% Off
                       </div>
-                      <div  >
-                        <h4 style={{ textAlign: "center", cursor: 'pointer' }} >{item.productName}</h4>
+                      <div>
+                        <h4 style={{ textAlign: "center", cursor: 'pointer' }}>{item.productName}</h4>
                         <div style={{ display: "flex", gap: "20px" }}>
                           <div>
                             <div
@@ -241,7 +236,7 @@ const Shop = () => {
                         </div>
                       </div>
                     </div>
-                    <div style={{ textAlign: "center", marginTop: "8px" }}>
+                    <div style={{ position: "absolute", bottom: "20px", width: "100%", textAlign: "center" }}>
                       <button
                         onClick={() => {
                           addToCartItem(item);
@@ -328,7 +323,6 @@ const Shop = () => {
                       <p style={{ textDecoration: 'line-through' }}>
                         {item.variant?.amount ? `Rs. ${item.variant.amount}` : ''}
                       </p>
-
                       <p className="mt-3" style={{ width: '150px' }}>Quantity ({item.quantity})  {item.variant?.Value}</p>
                     </div>
                     <div>
@@ -366,7 +360,6 @@ const Shop = () => {
                           marginRight: '6px'
                         }}
                         value={selectedVariants?.[item.productName] || ""}
-
                         onChange={(e) => handleVariantChange(item, e.target.value)}
                       >
                         <option value={''}>Select Quantity</option>

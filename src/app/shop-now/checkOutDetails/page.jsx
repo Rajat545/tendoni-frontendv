@@ -1,18 +1,13 @@
-"use client";
-import React, { useContext, useEffect, useState } from "react";
+"use client";;
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import "./style.css";
 import Header from "@/components/Header";
 import toast, { Toaster } from "react-hot-toast";
-
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import axios from "axios";
-import { AuthContext } from "@/Context/AuthContext";
 import OrderSuccessFull from "../OrderSuccessFull/page";
 import Modal from "react-modal";
-import garamMasala from "@Images/ProductImages/garammasala.png";
-import { Router } from "next/router";
 import { useRouter } from "next/navigation";
 // Modal.setAppElement('#__next');
 const Shop = () => {
@@ -25,7 +20,7 @@ const Shop = () => {
   const [radioOptions, setRadioOptions] = useState("Razorpay");
   const [newAddress, setNewAddress] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState([]);
-  const [address, setAddress] = useState("");
+  const [address, setAddress] = useState();
   const [formData, setFormData] = useState({
     addressLine1: address ? address?.addressLine1 : "",
     pinCode: address ? address?.pinCode : "",
@@ -38,14 +33,12 @@ const Shop = () => {
     addressId: address ? address?.addressId : "",
   });
   const [message, setMessage] = useState("");
-
   useEffect(() => {
     const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
     if (userData.data) {
       setCustomerId(userData.data.customerId); // Set customerId from user data
     }
   }, []);
-
   const handleAddressSelect = (item) => {
     setFormData({
       ...item,
@@ -125,7 +118,6 @@ const Shop = () => {
       fetchCustomerDataById(customerId);
     }
   }, [customerId]);
-
   const handleDelete = async (item) => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -154,7 +146,6 @@ const Shop = () => {
       toast.error("Error deleting address");
     }
   };
-
   const fetchCartData = async () => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -186,7 +177,6 @@ const Shop = () => {
       toast.error("Error fetching cart data:", error);
     }
   };
-
   const handleRadioChange = (e) => {
     setRadioOptions(e.target.value);
   };
@@ -194,7 +184,6 @@ const Shop = () => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
-
   // Handle Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -221,8 +210,11 @@ const Shop = () => {
       }
       const data = await response.json();
       setMessage("Address saved successfully!");
-      setAddress(data, "create address");
-      toast.success("Address saved successfully!");
+      // setAddress(data, "create address");
+      setAddress(data.data)
+      
+      
+      toast.success('New Address stored sucessfully');
       const newAddress = {
         addressId: data.addressId,
         name: formData.name,
@@ -239,6 +231,7 @@ const Shop = () => {
       setFormData({
         ...formData,
         name: "",
+        addressId: "",
         addressLine1: "",
         pincode: "",
         city: "",
@@ -252,14 +245,11 @@ const Shop = () => {
       toast.error("Error saving address !", error);
     }
   };
+  
   const amount = Math.round(cartData?.finaltotalPrice * 100);
-
-  // Handle Order Submit
   const handleOrderSubmit = async (e) => {
     try {
-      // Retrieve user data from localStorage
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
-      // Validate form data
       const requiredFields = [
         "addressLine1",
         "pincode",
@@ -280,7 +270,7 @@ const Shop = () => {
       }
       const orderData = {
         customerId: userData.data.customerId,
-        addressId: formData.addressId,
+        addressId: address?.addressId,
         paymentMethod: radioOptions,
       };
       // Send order request
@@ -296,18 +286,22 @@ const Shop = () => {
           body: JSON.stringify(orderData),
         }
       );
-      // Process successful order placement
       const data = await response.json();
       toast.success("Order placed successfully!");
       setPopUp(true);
       setCartData([]);
-      router.push("/shop-now");
+      setTimeout(() => {
+        router.push('/shop-now');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1000); 
+      }, 0);
     } catch (error) {
       toast.error("Error placing order.", error);
     }
   };
+  // 
   // -------------------createPaymentOrder  SPI ----------
-
   const createPaymentOrder = async (amount, name) => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -315,7 +309,6 @@ const Shop = () => {
         throw new Error("User data not found or access token missing");
       }
       const { access_token } = userData.data;
-
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/CreatePaymentData",
         {
@@ -335,11 +328,9 @@ const Shop = () => {
           }),
         }
       );
-
       if (!response.ok) {
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
-
       const { data } = await response.json();
       return {
         id: data.id, // Assuming 'id' is the field name for order ID in your API response
@@ -350,7 +341,6 @@ const Shop = () => {
       throw error;
     }
   };
-
   const verifyPayment = async (payment_id, order_id, signature) => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -374,20 +364,18 @@ const Shop = () => {
           }),
         }
       );
-      console.log(response);
+      
       if (!response.status == 200) {
         throw new Error("Network response was not ok");
       }
       const data = await response.json();
       handleOrderSubmit();
-
       return data;
     } catch (error) {
       console.error("Error verifying payment:", error);
       throw error;
     }
   };
-
   const handleOnlinePay = async () => {
     if (!formData || Object.keys(formData).length === 0) {
       toast.error("Please select an address.");
@@ -429,7 +417,6 @@ const Shop = () => {
         alert("Razorpay SDK failed to load. Are you online?");
         return;
       }
-
       const paymentOrder = await createPaymentOrder(amount, formData.name);
       if (!paymentOrder || !paymentOrder.id || !paymentOrder.amount) {
         throw new Error("Failed to create or invalid payment order");
@@ -453,7 +440,7 @@ const Shop = () => {
         handler: async (response) => {
           const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
             response;
-          console.log(response, "id signature");
+          
           try {
             const verificationResponse = await verifyPayment(
               razorpay_payment_id,
@@ -473,19 +460,16 @@ const Shop = () => {
           color: "#acaf4c",
         },
       };
-
       const paymentObject = new window.Razorpay(options);
       paymentObject.open();
     } catch (error) {
       toast.error(error.message);
     }
   };
-
   useEffect(() => {
     fetchCartData();
     fetchAddressById();
   }, []);
-
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -500,10 +484,7 @@ const Shop = () => {
       number: address?.number || "",
     }));
   }, [address]);
-
-
   //  -----------------RemoveItem API --------- //
-  
   const removeItem = async (cartId, itemId) => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -531,27 +512,23 @@ const Shop = () => {
       }
       const updateCart = await response.json();
       await fetchCartData();
-
       // router.push("/shop-now");
-
       toast.success(updateCart.message);
     } catch (error) {
       toast.error("Error removing item");
     }
   };
-  console.log(cartData,"cartData")
-
   return (
     <>
       <Header />
-      <div className="z-20">
+    <div className="z-20">
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
       <section className="w-full bg-white">
         <div className="py-6 md:py-8 lg:py-10">
           <div id="responsive-dev" className="flex m-0">
             <div id="responsive-container" className="w-[50%]">
-              <div className="container_checkOut" style={{ height: "100%" }}>
+              <div className="container_checkOut ml-[55px]" style={{ height: "100%" }}>
                 <form onSubmit={handleSubmit}>
                   <div className="">
                     <div className="col-md-6">
@@ -603,8 +580,8 @@ const Shop = () => {
                             placeholder="Pincode"
                             value={formData.pincode}
                             onChange={handleChange}
+                            maxLength={6}
                             required
-                            
                           />
                         </div>
                         <div className="w-1/2">

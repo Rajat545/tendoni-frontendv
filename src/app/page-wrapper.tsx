@@ -1,8 +1,6 @@
 "use client";
-
 import { motion, AnimatePresence } from "framer-motion";
 import "flowbite";
-
 const PageWrapper = ({ children }: { children: React.ReactNode }) => {
   <>
     <AnimatePresence>
@@ -17,5 +15,4 @@ const PageWrapper = ({ children }: { children: React.ReactNode }) => {
     </AnimatePresence>
   </>;
 };
-
 export default PageWrapper;

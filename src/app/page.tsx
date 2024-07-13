@@ -1,12 +1,6 @@
-"use client";
+"use client";;
 import CarouselSlider from "@/components/CarouselSlider";
-import AboutSection from "@/components/AboutSection";
-// import Testimonials from "@/components/Testimonials";
 import WhatSetsUsApart from "@/components/AboutSection/whatSetsUsApart";
-import Service from "@/components/ServicesSection";
-import Services from "@/components/ServicesSection/services";
-import Photos from "@/components/HomeComponents/productSection/photos";
-// import HightQuality from "@/components/HightQualityProduct";
 import ProductsScrollSec from "@/components/HomeComponents/ProductsScrollSec/ProductScrollSec";
 import BuisnessSection from "@/components/HomeComponents/BusinessSection/BusinessSection";
 import ScrollAnimation from "../utils/ScrollAnimation";
@@ -14,7 +8,6 @@ import HightQuality from "@/components/HomeComponents/HightQualityProduct";
 import Testimonials from "@/components/HomeComponents/Testimonials";
 import OtherCategoryPhotos from "@/components/HomeComponents/OtherCategory";
 import GlobalSlider from "@/components/HomeComponents/GlobalSlider";
-
 export default function Home() {
   return (
     <>
@@ -31,7 +24,6 @@ export default function Home() {
               </p>
               </div>
             </div>
-
           </ScrollAnimation>
           <ScrollAnimation>
             <WhatSetsUsApart />
@@ -48,18 +40,14 @@ export default function Home() {
           <ScrollAnimation>
             <OtherCategoryPhotos />
           </ScrollAnimation>
-          {/* <ScrollAnimation>
-            <Service />
-          </ScrollAnimation> */}
+          {
+}
           <ScrollAnimation>
             <HightQuality />
           </ScrollAnimation>
           <ScrollAnimation>
             <Testimonials />
           </ScrollAnimation>
-          
-
-
         </div>
       </main>
     </>

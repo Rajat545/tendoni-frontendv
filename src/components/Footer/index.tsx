@@ -1,7 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
 import Logo from "../../../public/images/logo/AccentLogo.png";
-
 const Footer = () => {
   return (
     <footer id="footer" className="w-full bg-darkColor bottom-0 pb-6">
@@ -31,7 +30,6 @@ const Footer = () => {
               worldwide.
             </span>
           </div>
-
           <div className="flex flex-row w-full font-poppins space-x-4 pt-2">
             <Link href={"#"} className=" ">
               <svg
@@ -142,7 +140,6 @@ const Footer = () => {
         <hr className=" w-full h-px my-4 bg-gray-200 border-0 dark:bg-gray-700 lg:hidden opacity-50" />
         <div className="flex flex-col text-start items-start align-top w-full text-accentColor space-y-2 md:space-y-4">
           <h1 className="font-oswald text-lg lg:text-xl">Contact Us</h1>
-
           <div className="flex flex-col font-poppins items-start">
             <span className="w-full">
               <p className="m-0 font-light  text-sm lg:text-base">
@@ -171,7 +168,7 @@ const Footer = () => {
         <h1 className="font-oswald text-sm lg:text-base">
           © Tendoni Group 2016 |{" "}
           <Link href="/terms"> Terms and Conditions </Link> |{" "}
-          <Link href="/privacy"> Privacy Policy</Link>
+          <Link href="/return"> Return and Refund Policy </Link>
         </h1>
         <Link href="https://venturingdigitally.com">
           <h1 className="font-oswald text-sm lg:text-base">
@@ -182,5 +179,4 @@ const Footer = () => {
     </footer>
   );
 };
-
 export default Footer;
