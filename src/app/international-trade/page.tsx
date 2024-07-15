@@ -13,7 +13,7 @@ const InternationalTradePage = () => {
       <div className="relative">
         <Image
           src={dockyard}
-          alt=""
+          alt="this is a image"
           className="lg:h-[80vh] h-[50vh]"
         />
         <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center w-full" style={{ backdropFilter: "brightness(0.5)" }}>
@@ -151,7 +151,7 @@ const InternationalTradePage = () => {
                 {/* {item.icon} */}
                 <Image
                   src={item.icon}
-                  alt=""
+                  alt="this is a image"
                   className="lg:h-[38px] lg:w-[38px] h-auto"
                 />
               </div>

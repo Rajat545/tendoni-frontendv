@@ -1,13 +1,12 @@
 'use client'
 import Image from "next/image";
-import Handshake from "../../../public/images/svgs/Handshake.jpg";
 import Link from "next/link";
 import { useContext, useState } from "react";
 import { useRouter } from 'next/navigation'
 import toast, { Toaster } from 'react-hot-toast';
 
-import { CartContext } from "@/Context/CartContext";
 import '@/app/sign-up/style.css'
+import { CartContext } from "../../Context/CartContext";
 const Login = () => {
   const [showOTPSection, setShowOTPSection] = useState(false);
   const { email, setEmail, number, setNumber, name, setName, password, setPassword, signUp } = useContext(CartContext);
@@ -160,7 +159,7 @@ const Login = () => {
           </form>
         </div>
       </div>
-      <img
+      <Image
         alt="Violin"
         src="https://png.pngtree.com/png-clipart/20230929/original/pngtree-flat-vector-illustration-of-man-working-from-home-vector-png-image_12913303.png"
         className="h-full py-8 w-full object-cover sm:h-[calc(100%-_2rem)] sm:self-end sm:rounded-ss-[30px] md:h-[calc(100%-_4rem)] md:rounded-ss-[60px]"

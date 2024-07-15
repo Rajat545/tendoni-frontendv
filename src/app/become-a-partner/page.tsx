@@ -1,5 +1,4 @@
 import Image from "next/image";
-import Handshake from "../../../public/images/svgs/Handshake.jpg";
 const BecomeAPartner = () => {
   return (
     <section className="overflow-hidden pt-24 md:pt-16 lg:pt-16 px-6 md:px-24 lg:px-24 bg-gray-50 sm:grid sm:grid-cols-2 sm:items-center min-h-screen">
@@ -31,7 +30,7 @@ const BecomeAPartner = () => {
           </div> */}
         </div>
       </div>
-      <img
+      <Image
         alt="Violin"
         src="https://images.unsplash.com/39/lIZrwvbeRuuzqOoWJUEn_Photoaday_CSD%20%281%20of%201%29-5.jpg?q=80&w=3870&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
         className="h-full py-8 w-full object-cover sm:h-[calc(100%_-_2rem)] sm:self-end sm:rounded-ss-[30px] md:h-[calc(100%_-_4rem)] md:rounded-ss-[60px]"

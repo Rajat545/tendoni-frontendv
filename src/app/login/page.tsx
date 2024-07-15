@@ -5,8 +5,8 @@ import { useContext } from "react";
 import { useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
 
-import { AuthContext } from "@/Context/AuthContext";
-import Header from "@/components/Header";
+import { AuthContext } from "../../Context/AuthContext";
+import Header from "../../components/Header";
 
 const Login = () => {
   const router = useRouter();
@@ -104,7 +104,8 @@ const Login = () => {
         </div>
       </div>
 
-      <img
+      <Image
+
         alt="Working from home illustration"
         src="https://png.pngtree.com/png-clipart/20230929/original/pngtree-flat-vector-illustration-of-man-working-from-home-vector-png-image_12913303.png"
         className="h-full py-8 w-full object-cover sm:h-[calc(100%_-_2rem)] sm:self-end sm:rounded-ss-[30px] md:h-[calc(100%_-_4rem)] md:rounded-ss-[60px]"

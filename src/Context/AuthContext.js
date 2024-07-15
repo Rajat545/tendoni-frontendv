@@ -39,7 +39,7 @@ export function AuthProvider({ children }) {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          body: JSON.stringify(userData), // Send userData object as JSON string
+          body: JSON.stringify(userData), 
         }
       );
 
@@ -63,7 +63,7 @@ export function AuthProvider({ children }) {
       } else {
         toast.error(
           data.message ||
-            "Login failed! Please check your credentials and try again."
+          "Login failed! Please check your credentials and try again."
         );
       }
     } catch (error) {
@@ -130,52 +130,55 @@ export function AuthProvider({ children }) {
 
   // ---------------OrderHistory API ---------
 
-  const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+
   useEffect(() => {
-    const fetchOrderHistory = async () => {
-      if (
-        !userData.data ||
-        !userData.data.customerId ||
-        !userData.data.access_token
-      ) {
-        router.push("/login");
-        return;
-      }
-
-      const { customerId, access_token } = userData.data;
-      try {
-        const response = await fetch(
-          "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderHistoryData",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              Authorization: `${access_token}`,
-            },
-            body: JSON.stringify({ customerId }),
-          }
-        );
-
-        if (!response.ok) {
-          if (response.status === 401) {
-            toast.error("Unauthorized Token, Please login again.");
-            router.push("/login");
-          }
-          throw new Error("Network response was not ok");
+    if (typeof window !== "undefined") {
+      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+      const fetchOrderHistory = async () => {
+        if (
+          !userData.data ||
+          !userData.data.customerId ||
+          !userData.data.access_token
+        ) {
+          router.push("/login");
+          return;
         }
 
-        const data = await response.json();
-        setOrderHistory(data?.data || []);
-      } catch (error) {
-        toast.error("Error fetching order history:", error);
-      }
-    };
+        const { customerId, access_token } = userData.data;
+        try {
+          const response = await fetch(
+            "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderHistoryData",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `${access_token}`,
+              },
+              body: JSON.stringify({ customerId }),
+            }
+          );
 
-    if (userData?.data?.customerId) {
-      fetchOrderHistory();
+          if (!response.ok) {
+            if (response.status === 401) {
+              toast.error("Unauthorized Token, Please login again.");
+              router.push("/login");
+            }
+            throw new Error("Network response was not ok");
+          }
+
+          const data = await response.json();
+          setOrderHistory(data?.data || []);
+        } catch (error) {
+          toast.error("Error fetching order history:", error);
+        }
+      };
+
+      if (userData?.data?.customerId) {
+        fetchOrderHistory();
+      }
     }
-  }, [userData?.data?.customerId, router]);
+  }, [router]);
 
   return (
     <AuthContext.Provider

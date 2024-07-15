@@ -1,12 +1,12 @@
 "use client";;
 import { useState, useEffect, useContext } from "react";
 import Image from "next/image";
-import Grand from "@Images/slider/spices.jpeg";
+// import Grand from "@Images/slider/spices.jpeg";
 import { useRouter } from "next/navigation";
-import { CartContext } from "@/Context/CartContext";
 import toast, { Toaster } from 'react-hot-toast';
-import Header from "@/components/Header";
-import { isAuth } from "@/Context/AuthContext";
+import { CartContext } from "../../Context/CartContext";
+import { isAuth } from "../../Context/AuthContext";
+import Header from "../../components/Header";
 const Shop = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
@@ -123,6 +123,7 @@ const Shop = () => {
       return;
     }
     try {
+      if (typeof window !== "undefined") {
       const userData = JSON.parse(localStorage.getItem("user-info") || '{}');
       if (!userData.data) {
         throw new Error("User data not found");
@@ -157,6 +158,7 @@ const Shop = () => {
       } else {
         toast.error('please select item');
       }
+    }
     } catch (error) {
       toast.error("please select item");
     }
@@ -168,8 +170,8 @@ const Shop = () => {
       <Header />
       <div className="z-20">
         <Image
-          src={Grand}
-          alt=""
+          src={"Grand"}
+          alt="this is a image"
           className="lg:h-[80vh] h-auto w-full"
         />
       </div>
@@ -199,7 +201,7 @@ const Shop = () => {
                   >
                     <div className="cursor-pointer" onClick={() => productById(item.productId)}>
                       <div style={{ marginBottom: "8px" }}>
-                        <img
+                        <Image
                           src={item.productImages}
                           className="lazyload img-fluid fixed-image-main"
                           alt="Images"
@@ -303,7 +305,7 @@ const Shop = () => {
                     className="mt-5"
                     style={{ display: "flex", alignItems: "center", gap: "24%" }}
                   >
-                    <img
+                    <Image
                       className="lg:w-1/6 imgWidth"
                       src={item.productImages}
                       alt="image"
