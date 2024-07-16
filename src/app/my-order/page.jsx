@@ -10,8 +10,6 @@ import { useContext, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import toast, { Toaster } from 'react-hot-toast';
-
-
 const style = {
     position: 'absolute',
     top: '50%',
@@ -23,12 +21,10 @@ const style = {
     boxShadow: 24,
     p: 4,
 };
-
 const MyOrder = () => {
     const router = useRouter();
     const isAuthenticated = isAuth();
     const { orderHistory, setOrderHistory, handleOrderDetails } = useContext(AuthContext);
-
     const [currentPage, setCurrentPage] = useState(0);
     const [itemPerPage] = useState(3);
     const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -52,20 +48,16 @@ const MyOrder = () => {
         setFormData(userDisplayData);
         setDisplayData(userDisplayData);
     }, []);
-
     const openModal = () => {
         setModalIsOpen(true);
     };
-
     const closeModal = () => {
         setModalIsOpen(false);
     };
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({ ...prevData, [name]: value }));
     };
-
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -97,21 +89,16 @@ const MyOrder = () => {
             console.error(error);
         }
     };
-
     // Sorting orderHistory by createdAt date in descending order
     const sortedOrderHistory = orderHistory.sort((a, b) => new Date(b.orderDate) - new Date(a.orderDate));
-
     // Pagination logic
     const indexOfLastItem = (currentPage + 1) * itemPerPage;
     const indexOfFirstItem = indexOfLastItem - itemPerPage;
     const currentItems = sortedOrderHistory.slice(indexOfFirstItem, indexOfLastItem);
-
     const totalPage = Math.ceil(orderHistory.length / itemPerPage);
-
     const handlePageChange = (selectedPage) => {
         setCurrentPage(selectedPage);
     };
-
     const handleCheck = () => {
         if (isAuthenticated) {
             router.push("/my-profile");
@@ -119,8 +106,7 @@ const MyOrder = () => {
             router.push("/login");
         }
     };
-    console.log(currentItems,"data")
-
+  
     return (
         <div className="page-content page-container" id="page-content">
             <Toaster />
@@ -160,7 +146,6 @@ const MyOrder = () => {
                         <h1 className="text-xl">Order history</h1>
                         <p className="text-gray-600">Check the status of recent orders, manage returns, and discover similar products</p>
                     </div>
-
                     {orderHistory.length === 0 ? (
                         <div className="container border border-gray-300 rounded-lg p-4 text-center">
                             <h2>You have not ordered yet.</h2>
@@ -177,7 +162,6 @@ const MyOrder = () => {
                                     <h1 className="text-lg font-semibold">Track Order</h1>
                                 </div>
                                 <hr />
-
                                 {currentItems.map((order) => (
                                     <div key={order.orderId}  className="mb-6">
                                         <div id='order-list' className="p-6 bg-white shadow rounded-lg">
@@ -209,11 +193,9 @@ const MyOrder = () => {
                                         <hr className="border-gray-200 mt-4" />
                                     </div>
                                 ))}
-
                             </div>
                         </div>
                     )}
-
                     {orderHistory.length > 0 && (
                         <div className="flex justify-center space-x-1">
                             <button
@@ -244,14 +226,12 @@ const MyOrder = () => {
                                 className={`inline-flex items-center justify-center w-8 h-8 border rounded-md shadow-md ${currentPage === totalPage - 1 ? 'bg-gray-200' : 'bg-white'}`}
                                 disabled={currentPage === totalPage - 1}
                             >
-
                                 <svg viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round" className="w-4">
                                     <polyline points="9 18 15 12 9 6"></polyline>
                                 </svg>
                             </button>
                         </div>
                     )}
-
                     <Modal
                         open={modalIsOpen}
                         onClose={closeModal}
@@ -302,5 +282,4 @@ const MyOrder = () => {
         </div>
     );
 }
-
 export default MyOrder;

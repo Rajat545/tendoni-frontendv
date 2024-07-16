@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 // Modal.setAppElement('#__next');
 const Shop = () => {
   const router = useRouter();
+  const [updateAddressId, setUpdateAddressId] = useState('')
   const [popUp, setPopUp] = useState(false);
   const [customerId, setCustomerId] = useState("");
   const [cartData, setCartData] = useState("");
@@ -40,6 +41,9 @@ const Shop = () => {
     }
   }, []);
   const handleAddressSelect = (item) => {
+    var updateAddressId = item.addressId
+    setUpdateAddressId(updateAddressId)
+    console.log(item, "items")
     setFormData({
       ...item,
     });
@@ -50,6 +54,7 @@ const Shop = () => {
       setCustomerId(userData.data.customerId); // Set customerId from user data
     }
   }, []);
+  console.log(updateAddressId, 'updateAddressId')
   const fetchAddressById = async () => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -212,8 +217,9 @@ const Shop = () => {
       setMessage("Address saved successfully!");
       // setAddress(data, "create address");
       setAddress(data.data)
-      
-      
+      await fetchCustomerDataById(data.data.customerId)
+
+
       toast.success('New Address stored sucessfully');
       const newAddress = {
         addressId: data.addressId,
@@ -245,11 +251,12 @@ const Shop = () => {
       toast.error("Error saving address !", error);
     }
   };
-  
+
   const amount = Math.round(cartData?.finaltotalPrice * 100);
   const handleOrderSubmit = async (e) => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+
       const requiredFields = [
         "addressLine1",
         "pincode",
@@ -268,11 +275,18 @@ const Shop = () => {
           return;
         }
       }
+
       const orderData = {
-        customerId: userData.data.customerId,
-        addressId: address?.addressId,
+        customerId: userData.data?.customerId,
+        addressId: updateAddressId,
         paymentMethod: radioOptions,
       };
+
+      // Validate order data
+      if (!validateOrderData(orderData)) {
+        return;
+      }
+      console.log(orderData, 'orderData')
       // Send order request
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
@@ -281,25 +295,51 @@ const Shop = () => {
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
-            Authorization: userData.data.access_token,
+            Authorization: userData.data?.access_token,
           },
           body: JSON.stringify(orderData),
         }
       );
+
       const data = await response.json();
-      toast.success("Order placed successfully!");
-      setPopUp(true);
-      setCartData([]);
-      setTimeout(() => {
-        router.push('/shop-now');
+
+      if (response.ok) {
+        toast.success("Order placed successfully!");
+        setPopUp(true);
+        setCartData([]);
+
+        setCartData([]);
         setTimeout(() => {
-          window.location.reload();
-        }, 1000); 
-      }, 0);
+          router.push('/shop-now');
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        }, 0);
+
+      } else {
+        toast.error("Error placing order: " + (data.message || "Unknown error"));
+      }
     } catch (error) {
-      toast.error("Error placing order.", error);
+      toast.error("Error placing order: " + error.message);
     }
   };
+
+  const validateOrderData = (orderData) => {
+    if (!orderData.customerId) {
+      toast.error("Customer ID is required.");
+      return false;
+    }
+    if (!orderData.addressId) {
+      toast.error("Address ID is required.");
+      return false;
+    }
+    if (!orderData.paymentMethod) {
+      toast.error("Payment method is required.");
+      return false;
+    }
+    return true;
+  };
+
   // 
   // -------------------createPaymentOrder  SPI ----------
   const createPaymentOrder = async (amount, name) => {
@@ -308,6 +348,7 @@ const Shop = () => {
       if (!userData.data || !userData.data.access_token) {
         throw new Error("User data not found or access token missing");
       }
+
       const { access_token } = userData.data;
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/CreatePaymentData",
@@ -364,7 +405,7 @@ const Shop = () => {
           }),
         }
       );
-      
+
       if (!response.status == 200) {
         throw new Error("Network response was not ok");
       }
@@ -440,7 +481,7 @@ const Shop = () => {
         handler: async (response) => {
           const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
             response;
-          
+
           try {
             const verificationResponse = await verifyPayment(
               razorpay_payment_id,
@@ -448,14 +489,28 @@ const Shop = () => {
               razorpay_signature
             );
             if (verificationResponse.success) {
+             
+
               toast.success("Payment was successful and verified!");
+
             } else {
               toast.error("Payment verification failed!");
             }
           } catch (error) {
             toast.error("Error verifying payment!");
           }
+          await handleOrderSubmit(e);
+
+          // setTimeout(() => {
+          //   router.push('/shop-now');
+          //   setTimeout(() => {
+          //     window.location.reload();
+          //   }, 1000); 
+          // }, 0);
+
         },
+
+
         theme: {
           color: "#acaf4c",
         },
@@ -521,7 +576,7 @@ const Shop = () => {
   return (
     <>
       <Header />
-    <div className="z-20">
+      <div className="z-20">
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
       <section className="w-full bg-white">
@@ -819,9 +874,9 @@ const Shop = () => {
                         Pay now
                       </button>
                     ) : (
-                        <button onClick={handleOrderSubmit} id="pay-btn" type="submit">
-                          Place Order
-                        </button>
+                      <button onClick={handleOrderSubmit} e id="pay-btn" type="submit">
+                        Place Order
+                      </button>
                     )}
                   </div>
                 </div>
