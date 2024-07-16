@@ -59,9 +59,9 @@ function BusinessVerticalsFooter({ cardObject }) {
                 >
                   <div className="sm:col-span-6 md:col-span-6">
                     <div>
-                      <img
+                      <Image
                         src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_366/6b90ce74782f607ed008f378a811d90c"
-                        alt=""
+                        alt="this is a image"
                       />
                     </div>
                   </div>
@@ -141,10 +141,10 @@ function BusinessVerticalsFooter({ cardObject }) {
                 >
                   <div className="sm:col-span-6 md:col-span-6">
                     <div>
-                      <img
+                      <Image
                         style={{ width: "354px", height: "419px" }}
                         src="https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_366/6b90ce74782f607ed008f378a811d90c"
-                        alt=""
+                        alt="this is a image"
                       />
                     </div>
                   </div>

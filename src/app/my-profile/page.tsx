@@ -82,7 +82,7 @@ const MyProfile = () => {
                             {trackProduct.map(order => (
                                 order.products.map(item => (
                                     <div key={item.productId} id='justify-contant' className="flex items-center justify-between p-4">
-                                        <img
+                                        <Image
                                             className="h-[55px]"
                                             src={item.ProductImage}
                                             alt="Product"

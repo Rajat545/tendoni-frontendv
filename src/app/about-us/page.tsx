@@ -1,27 +1,27 @@
 "use client";
-import AboutSection from "@/components/AboutSection";
-import Section from "@/components/Section/Section";
+// import AboutSection from "@/components/AboutSection";
+// import Section from "@/components/Section/Section";
 import Image from "next/image";
-import Map from "@Images/svgs/Asset 1.png";
 import Masale from "@Images/slider/masale.png";
 import Crisil from "@Images/backgroundImages/crisil_certificate.png";
 import mission from "@Images/achievement/mission.jpg";
 import administration from "@Images/achievement/administration.jpg";
-import { products } from "@/Data/about";
-import { A11y, Autoplay } from "swiper/modules";
-import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/swiper-bundle.css";
 import Mission from "@Images/about-us/mission.jpeg";
 import Vision from "@Images/about-us/vision.jpeg";
 import AboutusImage from "@Images/hero-images/business-vertical.jpeg";
+import { useEffect } from "react";
+import Section from "../../components/Section/Section";
 const AboutUs: React.FC = () => {
+
+
   return (
     <div className=" min-h-screen">
       <div className=" z-20">
         <Image
           src={AboutusImage}
-          alt=""
+          alt="this is a image"
           className="lg:h-[80vh] h-auto w-full"
         />
       </div>
@@ -61,7 +61,7 @@ const AboutUs: React.FC = () => {
         <>
           <div className="-mt-4 md:mt-0 flex flex-col items-center content-center leading-6 text-black border-0 border-gray-300 border-solid md:flex-row pb-6 md:pb-8 lg:pb-10 xl:pb-12">
             <div className="relative w-full max-w-md mt-5 mb-4  text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 ">
-              <img src={Vision.src} className=" w-full" />
+              <Image src={Vision.src} alt="global mao" className=" w-full" />
             </div>
 
             <div className="box-border order-first w-full text-black border-solid md:w-1/2  md:order-none md:pl-4 xl:pl-10">
@@ -140,7 +140,7 @@ const AboutUs: React.FC = () => {
             </div>
 
             <div className="box-border relative w-full max-w-md  mt-5 mb-0 text-center bg-no-repeat bg-contain border-solid md:mt-0 md:max-w-none lg:mb-0 md:w-1/2">
-              <img src={Mission.src} className="md:pl-4 xl:pl-10 w-full" />
+              <Image src={Mission.src} alt="global mao" className="md:pl-4 xl:pl-10 w-full" />
             </div>
           </div>
         </>
@@ -194,7 +194,7 @@ const AboutUs: React.FC = () => {
                       </div>
                     </div>
                     <div className="w-full px-3 mb-12 lg:w-1/2 order-0 lg:order-1 lg:mb-0">
-                      <img
+                      <Image
                         className="mx-auto sm:max-w-sm lg:max-w-full"
                         src="https://cdn.devdojo.com/images/november2020/feature-graphic.png"
                         alt="feature image"
@@ -226,10 +226,7 @@ const AboutUs: React.FC = () => {
                 style={{ height: "265px" }}
               >
                 <h3 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-black border-0 border-solid sm:text-3xl md:text-4xl">
-                  {/* <img
-                    src="http://tendonigroup.com/images/about/mission/achievement/india5000bestMSME.jpg"
-                    alt="..."
-                  /> */}
+                  
                   <Image
                     src={mission}
                     alt="global mao"
@@ -254,10 +251,6 @@ const AboutUs: React.FC = () => {
                 style={{ height: "265px" }}
               >
                 <h3 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-black border-0 border-solid sm:text-3xl md:text-4xl">
-                  {/* <img
-                    src="http://tendonigroup.com/images/about/mission/achievement/iso90012015.jpg"
-                    alt=""
-                  /> */}
                   <Image
                     src={administration}
                     alt="global mao"

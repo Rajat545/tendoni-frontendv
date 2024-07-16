@@ -14,7 +14,7 @@ const Spices = () => {
       <div className=" z-20">
         <Image
           src={Grand}
-          alt=""
+          alt="this is a image"
           className="
           lg:h-[80vh] h-auto w-full"
         />
@@ -47,14 +47,14 @@ const Spices = () => {
                       index % 2 === 0 ? "order-first " : ""
                     }`}
                   >
-                    {/* <img
+                    {/* <Image
                       src={JSON.stringify(item.imageSrc)}
                       className="p-2 pl-6 pr-5 xl:pl-16 xl:pr-20"
                       alt={`Productivity ${index}`}
                     /> */}
                     <Image
                       src={item.imageSrc}
-                      alt=""
+                      alt="this is a image"
                       // w-[120px] md:w-[140px] lg:w-[120px] xl:w-[150px]
                       className="
                     lg:w-1/2 imgWidth

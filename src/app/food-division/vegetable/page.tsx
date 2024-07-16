@@ -11,7 +11,7 @@ const Vegetable = () => {
       <div className=" z-20">
         <Image
           src={Banner}
-          alt=""
+          alt="this is a image"
           
           className="lg:h-[80vh] h-auto w-full"
         />

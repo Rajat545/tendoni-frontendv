@@ -19,7 +19,7 @@ const RawSpices = () => {
         <div className="flex z-20">
           <Image
             src={Grand}
-            alt=""
+            alt="this is a image"
             className="
           lg:h-[80vh] h-auto"
           />

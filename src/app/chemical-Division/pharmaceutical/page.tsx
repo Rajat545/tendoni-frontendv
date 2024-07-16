@@ -55,7 +55,7 @@ const Pharmaceutica = () => {
         <div className="flex z-20">
           <Image
             src={pharmaceutica}
-            alt=""
+            alt="this is a image"
             // w-[120px] md:w-[140px] lg:w-[120px] xl:w-[150px]
 
             className="lg:h-[80vh] h-auto"

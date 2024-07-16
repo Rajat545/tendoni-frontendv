@@ -90,7 +90,7 @@ const ContactUs = () => {
       {/* <div className="flex z-20">
         <Image
           src={content}
-          alt=""
+          alt="this is a image"
           className="
           lg:h-auto h-auto"
         />
@@ -140,14 +140,14 @@ const ContactUs = () => {
                     index % 2 === 0 ? "order-first " : ""
                   }`}
                 >
-                  {/* <img
+                  {/* <Image
                     src="/public/images/country/Bhopal.jpg"
                     className="rounded-md"
                     alt="..."
                   /> */}
                   <Image
                     src={item.img}
-                    alt=""
+                    alt="this is a image"
                     className="rounded"
                     // w-[120px] md:w-[140px] lg:w-[120px] xl:w-[150px]
                     //                           className="
@@ -178,7 +178,7 @@ const ContactUs = () => {
                       <p className=" ">
                         <Image
                           src={location}
-                          alt=""
+                          alt="this is a image"
                           className=" w-[25px] md:w-[25px] lg:w-[25px] xl:w-[25px]"
                         />
                       </p>
@@ -193,7 +193,7 @@ const ContactUs = () => {
                       {" "}
                       <Image
                         src={email}
-                        alt=""
+                        alt="this is a image"
                         className=" w-[25px] md:w-[25px] lg:w-[25px] xl:w-[25px]"
                       />{" "}
                       <span className="text-[#4a90e2]"> {item.email}</span>

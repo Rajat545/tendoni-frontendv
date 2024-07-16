@@ -1,13 +1,16 @@
 "use client";
 import Image from "next/image";
-import { ProductsDivision } from "@/Data/productDetails";
-import ScrollAnimation from "@/utils/ScrollAnimation";
-import Grand from "@Images/slider/spices.jpeg";
+// import ScrollAnimation from "@/utils/ScrollAnimation";
+// import Grand from "@Images/slider/spices.jpeg";
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CartContext } from "@/Context/CartContext";
+// import { CartContext } from "@/Context/CartContext";
 import toast, { Toaster } from "react-hot-toast";
-import { isAuth } from "@/Context/AuthContext";
+import { CartContext } from "../../../Context/CartContext";
+import { isAuth } from "../../../Context/AuthContext";
+import ScrollAnimation from "../../../utils/ScrollAnimation";
+// import { isAuth } from "@/Context/AuthContext";
+
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
@@ -58,7 +61,7 @@ const ProductDetails = () => {
     if (productInCart) {
       setCount(productInCart.quantity);
     }
-  }, [cart, productId]);
+  }, [cart, productId, setCount]);
   const openPopup = () => {
     setShowPopup(true);
     setOriginalHeaderDisplay(document.querySelector("header").style.display);
@@ -119,7 +122,6 @@ const ProductDetails = () => {
       0
     );
   };
-  const isAuthenticate = isAuth();
   const fetchProductById = async (productId) => {
     try {
       const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getProductById/${productId}`;
@@ -151,6 +153,7 @@ const ProductDetails = () => {
       router.push("/login");
       return;
     }
+    if (typeof window !== "undefined") {
     const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
     if (!userData.data) {
       throw new Error("User data not found");
@@ -194,12 +197,13 @@ const ProductDetails = () => {
     } catch (error) {
       toast.error("Failed to complete checkout! Please try again.");
     }
+  }
   };
   return (
     <>
       <Toaster />
       <div className="z-20">
-        <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
+        <Image src={"Grand"} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
       <div>
         <section className="w-full bg-white">
@@ -224,7 +228,7 @@ const ProductDetails = () => {
                         className={`flex justify-center box-border relative w-full max-w-md px-4 md:px-8 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10 ${index % 2 === 0 ? "order-first " : ""
                           }`}
                       >
-                        <img
+                        <Image
                           src={item.productImages}
                           alt="Image"
                         />
@@ -239,7 +243,7 @@ const ProductDetails = () => {
                           className={`box-border relative text-center bg-no-repeat bg-contain border-solid${index % 2 === 0 ? "order-first " : ""
                             }`}
                         >
-                          <img
+                          <Image
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
@@ -254,7 +258,7 @@ const ProductDetails = () => {
                           className={` box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
                             }`}
                         >
-                          <img
+                          <Image
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
@@ -269,7 +273,7 @@ const ProductDetails = () => {
                           className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
                             }`}
                         >
-                          <img
+                          <Image
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
@@ -284,7 +288,7 @@ const ProductDetails = () => {
                           className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
                             }`}
                         >
-                          <img
+                          <Image
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
@@ -474,7 +478,7 @@ const ProductDetails = () => {
                   className="mt-5"
                   style={{ display: "flex", alignItems: "center", gap: "24%" }}
                 >
-                  <img
+                  <Image
                     className="lg:w-1/6 imgWidth"
                     src={item.productImages}
                     alt=""
