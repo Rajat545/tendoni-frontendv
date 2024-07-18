@@ -1,6 +1,6 @@
 
 module.exports = {
        images: {
-         domains: ['img.freepik.com','backend-tendoni-backend.ffbufe.easypanel.host'],
+         domains: ['png.pngtree.com','img.freepik.com','backend-tendoni-backend.ffbufe.easypanel.host'],
        },
      };
