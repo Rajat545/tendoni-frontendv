@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 
 const Shop = () => {
   const router = useRouter();
+  const [updateAddressId, setUpdateAddressId] = useState('')
   const [popUp, setPopUp] = useState(false);
   const [customerId, setCustomerId] = useState("");
   const [cartData, setCartData] = useState("");
@@ -42,6 +43,9 @@ const Shop = () => {
     }
   }, []);
   const handleAddressSelect = (item) => {
+    var updateAddressId = item.addressId
+    setUpdateAddressId(updateAddressId)
+    console.log(item, "items")
     setFormData({
       ...item,
     });
@@ -265,6 +269,39 @@ const Shop = () => {
           number: "",
         });
       }
+      const data = await response.json();
+      setMessage("Address saved successfully!");
+      // setAddress(data, "create address");
+      setAddress(data.data)
+      await fetchCustomerDataById(data.data.customerId)
+
+
+      toast.success('New Address stored sucessfully');
+      const newAddress = {
+        addressId: data.addressId,
+        name: formData.name,
+        addressLine1: formData.addressLine1,
+        city: formData.city,
+        state: formData.state,
+        country: formData.country,
+        landmark: formData.landmark,
+        // zipcode: formData.zipcode,
+        number: formData.number,
+        pincode: formData.pincode,
+      };
+      setCustomerData((prevCustomerData) => [...prevCustomerData, newAddress]);
+      setFormData({
+        ...formData,
+        name: "",
+        addressId: "",
+        addressLine1: "",
+        pincode: "",
+        city: "",
+        state: "",
+        country: "",
+        landmark: "",
+        number: "",
+      });
     } catch (error) {
       setMessage("Error saving address.");
       toast.error("Error saving address !", error);
@@ -274,60 +311,89 @@ const Shop = () => {
   const amount = Math.round(cartData?.finaltotalPrice * 100);
   const handleOrderSubmit = async (e) => {
     try {
-      if (typeof window !== "undefined") {
-        const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
-        const requiredFields = [
-          "addressLine1",
-          "pincode",
-          "city",
-          "state",
-          "country",
-          "name",
-          "number",
-          "landmark",
-        ];
-        for (const field of requiredFields) {
-          if (!formData[field]) {
-            toast.error(
-              `Please fill out ${field
-                .replace(/([A-Z])/g, " $1")
-                .toLowerCase()}.`
-            );
-            return;
-          }
+      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+
+      const requiredFields = [
+        "addressLine1",
+        "pincode",
+        "city",
+        "state",
+        "country",
+        "name",
+        "number",
+        "landmark",
+      ];
+      for (const field of requiredFields) {
+        if (!formData[field]) {
+          toast.error(
+            `Please fill out ${field.replace(/([A-Z])/g, " $1").toLowerCase()}.`
+          );
+          return;
         }
-        const orderData = {
-          customerId: userData.data.customerId,
-          addressId: address?.addressId,
-          paymentMethod: radioOptions,
-        };
-        // Send order request
-        const response = await fetch(
-          "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-              Authorization: userData.data.access_token,
-            },
-            body: JSON.stringify(orderData),
-          }
-        );
-        const data = await response.json();
+      }
+
+      const orderData = {
+        customerId: userData.data?.customerId,
+        addressId: updateAddressId,
+        paymentMethod: radioOptions,
+      };
+
+      // Validate order data
+      if (!validateOrderData(orderData)) {
+        return;
+      }
+      console.log(orderData, 'orderData')
+      // Send order request
+      const response = await fetch(
+        "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: userData.data?.access_token,
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
+
+      const data = await response.json();
+
+      if (response.ok) {
         toast.success("Order placed successfully!");
         setPopUp(true);
         setCartData([]);
+
+        setCartData([]);
         setTimeout(() => {
-          router.push("/shop-now");
+          router.push('/shop-now');
           setTimeout(() => {
             window.location.reload();
           }, 1000);
         }, 0);
+
+      } else {
+        toast.error("Error placing order: " + (data.message || "Unknown error"));
       }
     } catch (error) {
-      toast.error("Error placing order.", error);
+      toast.error("Error placing order: " + error.message);
     }
+  };
+
+  const validateOrderData = (orderData) => {
+    if (!orderData.customerId) {
+      toast.error("Customer ID is required.");
+      return false;
+    }
+    if (!orderData.addressId) {
+      toast.error("Address ID is required.");
+      return false;
+    }
+    if (!orderData.paymentMethod) {
+      toast.error("Payment method is required.");
+      return false;
+    }
+    return true;
   };
   //
   // -------------------createPaymentOrder  SPI ----------
@@ -481,14 +547,28 @@ const Shop = () => {
               razorpay_signature
             );
             if (verificationResponse.success) {
+             
+
               toast.success("Payment was successful and verified!");
+
             } else {
               toast.error("Payment verification failed!");
             }
           } catch (error) {
             toast.error("Error verifying payment!");
           }
+          await handleOrderSubmit(e);
+
+          // setTimeout(() => {
+          //   router.push('/shop-now');
+          //   setTimeout(() => {
+          //     window.location.reload();
+          //   }, 1000); 
+          // }, 0);
+
         },
+
+
         theme: {
           color: "#acaf4c",
         },
@@ -860,11 +940,7 @@ const Shop = () => {
                         Pay now
                       </button>
                     ) : (
-                      <button
-                        onClick={handleOrderSubmit}
-                        id="pay-btn"
-                        type="submit"
-                      >
+                      <button onClick={handleOrderSubmit} e id="pay-btn" type="submit">
                         Place Order
                       </button>
                     )}

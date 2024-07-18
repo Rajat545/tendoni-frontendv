@@ -1,15 +1,16 @@
-"use client";
-import EditNoteIcon from "@mui/icons-material/EditNote";
-import RemoveRedEyeOutlinedIcon from "@mui/icons-material/RemoveRedEyeOutlined";
-import "@/app/my-order/style.css"; // Ensure your global styles are imported correctly
-import Link from "next/link";
-import { AuthContext, isAuth } from "@/Context/AuthContext";
-import "./style.css"; // Local styles specific to MyOrder component
-import { useRouter } from "next/navigation";
-import { useContext, useState, useEffect } from "react";
-import Box from "@mui/material/Box";
-import Modal from "@mui/material/Modal";
-import toast, { Toaster } from "react-hot-toast";
+"use client";;
+import EditNoteIcon from '@mui/icons-material/EditNote';
+import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
+import '@/app/my-order/style.css'; // Ensure your global styles are imported correctly
+import Link from 'next/link';
+import { AuthContext, isAuth } from '@/Context/AuthContext';
+import './style.css'; // Local styles specific to MyOrder component
+import { useRouter } from 'next/navigation';
+import { useContext, useState, useEffect } from 'react';
+import Box from '@mui/material/Box';
+import Modal from '@mui/material/Modal';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const style = {
   position: "absolute",
@@ -22,7 +23,6 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
-
 const MyOrder = () => {
   const router = useRouter();
   const isAuthenticated = isAuth();
