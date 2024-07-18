@@ -1,6 +1,4 @@
 "use client";
-// import AboutSection from "@/components/AboutSection";
-// import Section from "@/components/Section/Section";
 import Image from "next/image";
 import Masale from "@Images/slider/masale.png";
 import Crisil from "@Images/backgroundImages/crisil_certificate.png";
@@ -11,7 +9,6 @@ import "swiper/swiper-bundle.css";
 import Mission from "@Images/about-us/mission.jpeg";
 import Vision from "@Images/about-us/vision.jpeg";
 import AboutusImage from "@Images/hero-images/business-vertical.jpeg";
-import { useEffect } from "react";
 import Section from "../../components/Section/Section";
 const AboutUs: React.FC = () => {
 
