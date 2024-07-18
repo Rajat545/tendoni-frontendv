@@ -3,9 +3,11 @@ import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import React, { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { CartContext } from "@/Context/CartContext";
 import toast, { Toaster } from "react-hot-toast";
+import { CartContext } from "../../../Context/CartContext";
 import { isAuth } from "../../../Context/AuthContext";
+import ScrollAnimation from "../../../utils/ScrollAnimation";
+// import { isAuth } from "@/Context/AuthContext";
 
 const ProductDetails = () => {
   const router = useRouter();
