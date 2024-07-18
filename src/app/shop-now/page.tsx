@@ -1,7 +1,7 @@
 "use client";;
 import { useState, useEffect, useContext } from "react";
 import Image from "next/image";
-// import Grand from "@Images/slider/spices.jpeg";
+import Grand from "@Images/slider/spices.jpeg";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from 'react-hot-toast';
 import { CartContext } from "../../Context/CartContext";
@@ -170,7 +170,7 @@ const Shop = () => {
       <Header />
       <div className="z-20">
         <Image
-          src={"Grand"}
+          src={Grand}
           alt="this is a image"
           className="lg:h-[80vh] h-auto w-full"
         />
