@@ -83,9 +83,10 @@ const MyProfile = () => {
                                 order.products.map(item => (
                                     <div key={item.productId} id='justify-contant' className="flex items-center justify-between p-4">
                                         <Image
-                                            className="h-[55px]"
                                             src={item.ProductImage}
                                             alt="Product"
+                                            width={100}
+                                            height={500}
                                         />
                                         <h1 className="ml-4">{item.ProductName}</h1>
                                         <h1>{item.quantity} x {item.value}</h1>

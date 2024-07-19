@@ -11,14 +11,12 @@ import Vision from "@Images/about-us/vision.jpeg";
 import AboutusImage from "@Images/hero-images/business-vertical.jpeg";
 import Section from "../../components/Section/Section";
 const AboutUs: React.FC = () => {
-
-
   return (
-    <div className=" min-h-screen">
-      <div className=" z-20">
+    <div className="min-h-screen">
+      <div className="z-20">
         <Image
           src={AboutusImage}
-          alt="this is a image"
+          alt="About Us"
           className="lg:h-[80vh] h-auto w-full"
         />
       </div>
@@ -46,10 +44,13 @@ const AboutUs: React.FC = () => {
               </p>
             </div>
           </div>
-          <div className="w-full md:w-1/2  ">
+          <div className="w-full md:w-1/2">
             <div className="w-full h-auto overflow-hidden rounded-md shadow-xl sm:rounded-xl">
-              {/* <Image src={Masale} /> */}
-              <Image src={Masale} alt="global mao" className="w-full h-auto" />
+              <Image
+                src={Masale}
+                alt="Masale Image"
+                className="w-full h-auto"
+              />
             </div>
           </div>
         </div>
@@ -58,7 +59,7 @@ const AboutUs: React.FC = () => {
         <>
           <div className="-mt-4 md:mt-0 flex flex-col items-center content-center leading-6 text-black border-0 border-gray-300 border-solid md:flex-row pb-6 md:pb-8 lg:pb-10 xl:pb-12">
             <div className="relative w-full max-w-md mt-5 mb-4  text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 ">
-              <Image src={Vision.src} alt="global mao" className=" w-full" />
+              <Image src={Vision} alt="Vision Image" className="w-full" />
             </div>
 
             <div className="box-border order-first w-full text-black border-solid md:w-1/2  md:order-none md:pl-4 xl:pl-10">
@@ -137,7 +138,7 @@ const AboutUs: React.FC = () => {
             </div>
 
             <div className="box-border relative w-full max-w-md  mt-5 mb-0 text-center bg-no-repeat bg-contain border-solid md:mt-0 md:max-w-none lg:mb-0 md:w-1/2">
-              <Image src={Mission.src} alt="global mao" className="md:pl-4 xl:pl-10 w-full" />
+              <Image src={Vision} alt="Vision Image" className="w-full" />
             </div>
           </div>
         </>
@@ -191,11 +192,13 @@ const AboutUs: React.FC = () => {
                       </div>
                     </div>
                     <div className="w-full px-3 mb-12 lg:w-1/2 order-0 lg:order-1 lg:mb-0">
-                      <Image
-                        className="mx-auto sm:max-w-sm lg:max-w-full"
+                      {/* <Image
+                        className="w-full"
                         src="https://cdn.devdojo.com/images/november2020/feature-graphic.png"
                         alt="feature image"
-                      />
+                        width={800} // Adjust width as needed
+                        height={600} // Adjust height as needed
+                      /> */}
                     </div>
                   </div>
                 </div>
@@ -223,12 +226,7 @@ const AboutUs: React.FC = () => {
                 style={{ height: "265px" }}
               >
                 <h3 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-black border-0 border-solid sm:text-3xl md:text-4xl">
-                  
-                  <Image
-                    src={mission}
-                    alt="global mao"
-                    className="w-full h-auto"
-                  />
+                  <Image src={mission} alt="global mao" className="w-full" />
                 </h3>
               </div>
               <div
@@ -236,11 +234,7 @@ const AboutUs: React.FC = () => {
                 style={{ height: "265px" }}
               >
                 <h3 className="m-0 text-2xl font-semibold leading-tight tracking-tight text-black border-0 border-solid sm:text-3xl md:text-4xl">
-                  <Image
-                    src={Crisil}
-                    alt="global mao"
-                    className="w-full h-auto"
-                  />
+                  <Image src={Crisil} alt="global mao" className="w-full" />
                 </h3>
               </div>
               <div
@@ -251,7 +245,7 @@ const AboutUs: React.FC = () => {
                   <Image
                     src={administration}
                     alt="global mao"
-                    className="w-full h-auto"
+                    className="w-full"
                   />
                 </h3>
               </div>

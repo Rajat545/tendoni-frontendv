@@ -1,15 +1,25 @@
-'use client'
+"use client";
 import Image from "next/image";
 import Link from "next/link";
 import { useContext, useState } from "react";
-import { useRouter } from 'next/navigation'
-import toast, { Toaster } from 'react-hot-toast';
+import { useRouter } from "next/navigation";
+import toast, { Toaster } from "react-hot-toast";
 
-import '@/app/sign-up/style.css'
+import "@/app/sign-up/style.css";
 import { CartContext } from "../../Context/CartContext";
 const Login = () => {
   const [showOTPSection, setShowOTPSection] = useState(false);
-  const { email, setEmail, number, setNumber, name, setName, password, setPassword, signUp } = useContext(CartContext);
+  const {
+    email,
+    setEmail,
+    number,
+    setNumber,
+    name,
+    setName,
+    password,
+    setPassword,
+    signUp,
+  } = useContext(CartContext);
 
   const handleSendOTP = (e) => {
     e.preventDefault();
@@ -25,9 +35,7 @@ const Login = () => {
             Sign Up
           </h2>
           <div>
-            <h5>
-              Doesn't have an account yet?
-            </h5>
+            <h5>Doesn't have an account yet?</h5>
           </div>
           <form className="mt-8 space-y-6" onSubmit={signUp}>
             <div className="rounded-md shadow-sm -space-y-px">
@@ -51,7 +59,7 @@ const Login = () => {
                 <div className="mb-2">
                   <label htmlFor="password">Mobile No.</label>
                 </div>
-                <div style={{ display: 'flex' }}>
+                <div style={{ display: "flex" }}>
                   <input
                     id="mobileno."
                     name="mobileno"
@@ -63,39 +71,36 @@ const Login = () => {
                     className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-primary-500 focus:border-primary-500 focus:z-10 sm:text-sm"
                     placeholder="Mobile No"
                   />
-                 <button
-                type="submit"
-                onClick={handleSendOTP}
-                style={{marginLeft: '12px'}}
-                className="group relative w-full flex justify-center py-2 px-4 border text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-              >
-                Send OTP
-              </button>
-
+                  <button
+                    type="submit"
+                    onClick={handleSendOTP}
+                    style={{ marginLeft: "12px" }}
+                    className="group relative w-full flex justify-center py-2 px-4 border text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                  >
+                    Send OTP
+                  </button>
                 </div>
-               {showOTPSection && (
-                 <div>
-                 <h1>Enter OTP</h1>
-                 <div className="otp-field">
-                   <input type="text" maxLength={1} />
-                   <input type="text" maxLength={1} />
-                   <input className="space" type="text" maxLength={1} />
-                   <input type="text" maxLength={1} />
-                   <input type="text" maxLength={1} />
-                   <input type="text" maxLength={1} />
+                {showOTPSection && (
+                  <div>
+                    <h1>Enter OTP</h1>
+                    <div className="otp-field">
+                      <input type="text" maxLength={1} />
+                      <input type="text" maxLength={1} />
+                      <input className="space" type="text" maxLength={1} />
+                      <input type="text" maxLength={1} />
+                      <input type="text" maxLength={1} />
+                      <input type="text" maxLength={1} />
 
-                   <button
-               type="submit"
-               style={{marginLeft: '34px'}}
-              
-               className="group relative w-full flex justify-center py-2 px-4 border text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-             >
-               Verify
-             </button>
-
-                 </div>
-               </div>
-               )}
+                      <button
+                        type="submit"
+                        style={{ marginLeft: "34px" }}
+                        className="group relative w-full flex justify-center py-2 px-4 border text-sm font-medium rounded-md bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                      >
+                        Verify
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             <div className="rounded-md shadow-sm -space-y-px">
@@ -162,6 +167,8 @@ const Login = () => {
       <Image
         alt="Violin"
         src="https://png.pngtree.com/png-clipart/20230929/original/pngtree-flat-vector-illustration-of-man-working-from-home-vector-png-image_12913303.png"
+        width={1200}
+        height={800}
         className="h-full py-8 w-full object-cover sm:h-[calc(100%-_2rem)] sm:self-end sm:rounded-ss-[30px] md:h-[calc(100%-_4rem)] md:rounded-ss-[60px]"
       />
     </section>

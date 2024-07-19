@@ -229,6 +229,8 @@ const ProductDetails = () => {
                         <Image
                           src={item.productImages}
                           alt="Image"
+                          width={200}
+                          height={200}
                         />
                       </div>
                       <div style={{ marginTop: "20px", display: "flex" }}>
@@ -245,6 +247,8 @@ const ProductDetails = () => {
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
+                            width={200}
+                          height={200}
                           />
                         </div>
                         <div
@@ -260,6 +264,8 @@ const ProductDetails = () => {
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
+                            width={200}
+                          height={200}
                           />
                         </div>
                         <div
@@ -275,6 +281,8 @@ const ProductDetails = () => {
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
+                            width={200}
+                          height={200}
                           />
                         </div>
                         <div
@@ -290,6 +298,8 @@ const ProductDetails = () => {
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
+                            width={200}
+                          height={200}
                           />
                         </div>
                       </div>
@@ -480,6 +490,8 @@ const ProductDetails = () => {
                     className="lg:w-1/6 imgWidth"
                     src={item.productImages}
                     alt=""
+                    width={200}
+                    height={200}
                   />
                   <div>
                     <a href="">

@@ -14,8 +14,8 @@ function HightQuality() {
             className="object-cover background-cover rounded-2xl"
             src="https://img.freepik.com/free-photo/healthy-eating-with-organic-spices-herbs-generated-by-ai_24640-80521.jpg"
             alt="Picture"
-            // width={100}
-            // height={450}
+            width={100}
+            height={450}
           />
           <div className="spicy rounded-2xl">
             {/* <div className="main-quality-spices lg:flex">

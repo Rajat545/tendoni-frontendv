@@ -309,6 +309,8 @@ const Shop = () => {
                       className="lg:w-1/6 imgWidth"
                       src={item.productImages}
                       alt="image"
+                      width={200}
+                      height={200}
                     />
                     <div style={{ width: '84px' }}>
                       <a href="">

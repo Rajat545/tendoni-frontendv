@@ -12,7 +12,7 @@ import { useRouter } from "next/navigation";
 
 const Shop = () => {
   const router = useRouter();
-  const [updateAddressId, setUpdateAddressId] = useState('')
+  const [updateAddressId, setUpdateAddressId] = useState("");
   const [popUp, setPopUp] = useState(false);
   const [customerId, setCustomerId] = useState("");
   const [cartData, setCartData] = useState("");
@@ -43,9 +43,9 @@ const Shop = () => {
     }
   }, []);
   const handleAddressSelect = (item) => {
-    var updateAddressId = item.addressId
-    setUpdateAddressId(updateAddressId)
-    console.log(item, "items")
+    var updateAddressId = item.addressId;
+    setUpdateAddressId(updateAddressId);
+    console.log(item, "items");
     setFormData({
       ...item,
     });
@@ -121,7 +121,6 @@ const Shop = () => {
           } else {
             throw new Error("Invalid customer data format received");
           }
-          setAddressData(data.data);
         }
       } catch (error) {
         console.error("Error fetching customer data:", error);
@@ -235,20 +234,17 @@ const Shop = () => {
           throw new Error("Network response was not ok");
         }
         const data = await response.json();
-        setMessage("Address saved successfully!");
-        // setAddress(data, "create address");
         setAddress(data.data);
-
-        toast.success("New Address stored sucessfully");
+        const newAddressData = data.data;
+        toast.success(data.message);
         const newAddress = {
-          addressId: data.addressId,
+          addressId: newAddressData.addressId,
           name: formData.name,
           addressLine1: formData.addressLine1,
           city: formData.city,
           state: formData.state,
           country: formData.country,
           landmark: formData.landmark,
-          // zipcode: formData.zipcode,
           number: formData.number,
           pincode: formData.pincode,
         };
@@ -269,41 +265,8 @@ const Shop = () => {
           number: "",
         });
       }
-      const data = await response.json();
-      setMessage("Address saved successfully!");
-      // setAddress(data, "create address");
-      setAddress(data.data)
-      await fetchCustomerDataById(data.data.customerId)
-
-
-      toast.success('New Address stored sucessfully');
-      const newAddress = {
-        addressId: data.addressId,
-        name: formData.name,
-        addressLine1: formData.addressLine1,
-        city: formData.city,
-        state: formData.state,
-        country: formData.country,
-        landmark: formData.landmark,
-        // zipcode: formData.zipcode,
-        number: formData.number,
-        pincode: formData.pincode,
-      };
-      setCustomerData((prevCustomerData) => [...prevCustomerData, newAddress]);
-      setFormData({
-        ...formData,
-        name: "",
-        addressId: "",
-        addressLine1: "",
-        pincode: "",
-        city: "",
-        state: "",
-        country: "",
-        landmark: "",
-        number: "",
-      });
     } catch (error) {
-      setMessage("Error saving address.");
+      // setMessage("Error saving address.");
       toast.error("Error saving address !", error);
     }
   };
@@ -342,7 +305,7 @@ const Shop = () => {
       if (!validateOrderData(orderData)) {
         return;
       }
-      console.log(orderData, 'orderData')
+      console.log(orderData, "orderData");
       // Send order request
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
@@ -366,14 +329,15 @@ const Shop = () => {
 
         setCartData([]);
         setTimeout(() => {
-          router.push('/shop-now');
+          router.push("/shop-now");
           setTimeout(() => {
             window.location.reload();
           }, 1000);
         }, 0);
-
       } else {
-        toast.error("Error placing order: " + (data.message || "Unknown error"));
+        toast.error(
+          "Error placing order: " + (data.message || "Unknown error")
+        );
       }
     } catch (error) {
       toast.error("Error placing order: " + error.message);
@@ -547,10 +511,7 @@ const Shop = () => {
               razorpay_signature
             );
             if (verificationResponse.success) {
-             
-
               toast.success("Payment was successful and verified!");
-
             } else {
               toast.error("Payment verification failed!");
             }
@@ -563,11 +524,9 @@ const Shop = () => {
           //   router.push('/shop-now');
           //   setTimeout(() => {
           //     window.location.reload();
-          //   }, 1000); 
+          //   }, 1000);
           // }, 0);
-
         },
-
 
         theme: {
           color: "#acaf4c",
@@ -940,7 +899,12 @@ const Shop = () => {
                         Pay now
                       </button>
                     ) : (
-                      <button onClick={handleOrderSubmit} e id="pay-btn" type="submit">
+                      <button
+                        onClick={handleOrderSubmit}
+                        e
+                        id="pay-btn"
+                        type="submit"
+                      >
                         Place Order
                       </button>
                     )}
