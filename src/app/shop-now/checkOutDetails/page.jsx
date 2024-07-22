@@ -34,6 +34,7 @@ const Shop = () => {
     addressId: address ? address?.addressId : "",
   });
   const [message, setMessage] = useState("");
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -89,45 +90,40 @@ const Shop = () => {
     }
   }, []);
   // ----------------getCustomerDataById----------------
-  const fetchCustomerDataById = useCallback(
-    async (customerId) => {
-      try {
-        if (typeof window !== "undefined") {
-          const userData = JSON.parse(
-            localStorage.getItem("user-info") || "{}"
-          );
-          if (!userData.data) {
-            throw new Error("User data not found");
-          }
-          const { access_token } = userData.data;
-          const response = await fetch(
-            "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getCustomerDataById",
-            {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-                Authorization: `${access_token}`,
-              },
-              body: JSON.stringify({ customerId }),
-            }
-          );
-          if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-          }
-          const data = await response.json();
-          if (Array.isArray(data.data?.address)) {
-            setCustomerData(data.data?.address);
-          } else {
-            throw new Error("Invalid customer data format received");
-          }
+  const fetchCustomerDataById = useCallback(async (customerId) => {
+    try {
+      if (typeof window !== "undefined") {
+        const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+        if (!userData.data) {
+          throw new Error("User data not found");
         }
-      } catch (error) {
-        console.error("Error fetching customer data:", error);
+        const { access_token } = userData.data;
+        const response = await fetch(
+          "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getCustomerDataById",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+              Authorization: `${access_token}`,
+            },
+            body: JSON.stringify({ customerId }),
+          }
+        );
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+        const data = await response.json();
+        if (Array.isArray(data.data?.address)) {
+          setCustomerData(data.data?.address);
+        } else {
+          throw new Error("Invalid customer data format received");
+        }
       }
-    },
-    []
-  );
+    } catch (error) {
+      console.error("Error fetching customer data:", error);
+    }
+  }, []);
 
   useEffect(() => {
     if (customerId) {
@@ -168,7 +164,7 @@ const Shop = () => {
       toast.error("Error deleting address");
     }
   };
-  const fetchCartData = async () => {
+  const fetchCartData = useCallback(async () => {
     try {
       if (typeof window !== "undefined") {
         const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -200,7 +196,7 @@ const Shop = () => {
     } catch (error) {
       toast.error("Error fetching cart data:", error);
     }
-  };
+  }, []);
   const handleRadioChange = (e) => {
     setRadioOptions(e.target.value);
   };
@@ -540,8 +536,11 @@ const Shop = () => {
   };
   useEffect(() => {
     fetchCartData();
+  }, [fetchCartData]);
+
+  useEffect(() => {
     fetchAddressById();
-  }, [fetchCartData, fetchAddressById]);
+  }, [fetchAddressById]);
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
