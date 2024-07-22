@@ -205,7 +205,7 @@ const Shop = () => {
     setFormData({ ...formData, [name]: value });
   };
   // Handle Submit
-  const handleSubmit = async (e) => {
+  const handleSubmit = useCallback (async (e) => {
     e.preventDefault();
     try {
       if (typeof window !== "undefined") {
@@ -265,7 +265,7 @@ const Shop = () => {
       // setMessage("Error saving address.");
       toast.error("Error saving address !", error);
     }
-  };
+  },[formData, router]);
 
   const amount = Math.round(cartData?.finaltotalPrice * 100);
   const handleOrderSubmit = async (e) => {
