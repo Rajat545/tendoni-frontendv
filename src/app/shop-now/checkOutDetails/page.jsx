@@ -126,7 +126,7 @@ const Shop = () => {
         console.error("Error fetching customer data:", error);
       }
     },
-    [setAddressData]
+    []
   );
 
   useEffect(() => {
@@ -541,7 +541,7 @@ const Shop = () => {
   useEffect(() => {
     fetchCartData();
     fetchAddressById();
-  }, []);
+  }, [fetchCartData, fetchAddressById]);
   useEffect(() => {
     setFormData((prevFormData) => ({
       ...prevFormData,
