@@ -196,7 +196,7 @@ const Shop = () => {
                       borderRadius: "5px",
                       position: "relative",
                       overflow: "hidden",
-                      height: "400px",
+                      height: "350px",
                     }}
                   >
                     <div className="cursor-pointer" onClick={() => productById(item.productId)}>
@@ -217,7 +217,7 @@ const Shop = () => {
                       </div>
                       <div>
                         <h4 style={{ textAlign: "center", cursor: 'pointer' }}>{item.productName}</h4>
-                        <div style={{ display: "flex", gap: "20px" }}>
+                        <div style={{ display: "grid", justifyContent: "center" }}>
                           <div>
                             <div
                               style={{

@@ -8,8 +8,10 @@
     border: 1px solid grey;
     height: 14vh;
     margin-right: 100px;
+    background-color: white;
 }
-.dropDownProfile::before{
+
+.dropDownProfile::before {
     position: absolute;
     content: '';
     top: -1rem;
@@ -20,7 +22,8 @@
     border-left: 1px solid grey;
     border-top: 1px solid gray;
 }
-.addToCart{
+
+.addToCart {
     /* background-color: red; */
     border-radius: 10px;
     color: white;
@@ -32,7 +35,8 @@
     margin-left: 3px;
     height: 20px;
 }
- .cart{
+
+.cart {
     margin-bottom: -5px;
     margin-left: 5px;
     background-color: #a67a44;
