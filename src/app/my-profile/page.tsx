@@ -30,7 +30,7 @@ const MyProfile = () => {
 
     return (
         <div className="container px-1 px-md-4 py-5 mx-auto">
-            <div className="card">
+            <div className="card_info">
                 <div className="row d-flex justify-content-between px-3 top pl-11">
                     <div className="d-flex">
                         <h1 className="text-xl">Hello : <span className="text-primary font-weight-bold">{trackProduct ? trackProduct[0]?.customerName : 'NA'}</span></h1>
@@ -76,7 +76,7 @@ const MyProfile = () => {
                     </div>
                 ) : (
                     <>
-                        <div className='bg-[#eceff1] rounded-lg p-2.5 w-full'>
+                        <div className='bg-[#ffffff] rounded-lg p-2.5 w-full'>
                             <h1 className="text-xl">Order Item</h1>
                             <hr className="my-2" />
                             {trackProduct.map(order => (

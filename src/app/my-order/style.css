@@ -15,7 +15,7 @@ body {
     box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
     border: none;
     margin-bottom: 30px;
-    margin-left: 37px;
+    margin-left: 20px !important;
     width: 100%;
 }
 
@@ -29,6 +29,8 @@ body {
 
 .card-block {
     padding: 1.25rem;
+    background-color: white;
+    ;
 }
 
 .user-info {
@@ -221,7 +223,8 @@ body {
         width: 40px;
         height: 40px;
     }
-    #responsive-list{
+
+    #responsive-list {
         display: none;
     }
 
@@ -229,23 +232,27 @@ body {
         gap: 0;
         padding-bottom: 10px;
     }
-      #responsive-div {
-        display: flow;
-        text-align: center;
-    }
-}
-@media  screen and (max-width: 430px) {
+
     #responsive-div {
         display: flow;
         text-align: center;
     }
-    #responsive-list{
+}
+
+@media screen and (max-width: 430px) {
+    #responsive-div {
+        display: flow;
+        text-align: center;
+    }
+
+    #responsive-list {
         display: none;
     }
-    #order-list{
+
+    #order-list {
         /* align-items: center; */
         text-align: center;
-        
+
     }
 
 }

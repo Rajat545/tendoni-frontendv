@@ -12,12 +12,11 @@ import ScrollAnimation from "../../../utils/ScrollAnimation";
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
-  const [originalHeaderDisplay, setOriginalHeaderDisplay] = useState("block");
   const [quantity, setQuantity] = useState({
     valueId: "",
     Value: "",
     amount: 0,
-      saleAmount: 0
+    saleAmount: 0,
   });
   const {
     productId,
@@ -62,13 +61,12 @@ const ProductDetails = () => {
   }, [cart, productId, setCount]);
   const openPopup = () => {
     setShowPopup(true);
-    setOriginalHeaderDisplay(document.querySelector("header").style.display);
-    document.querySelector("header").style.display = "none";
+    document.body.style.overflow = "hidden";
   };
+
   const closePopup = () => {
     setShowPopup(false);
     document.body.style.overflow = "auto";
-    document.querySelector("header").style.display = originalHeaderDisplay;
   };
   const deleteById2 = (productId) => {
     const deleteData = cart.filter((item) => item.productId !== productId);
@@ -76,7 +74,7 @@ const ProductDetails = () => {
     toast.error("Removed from cart");
   };
   const addToCart = async (item, name) => {
-    console.log(item, 'item')
+    console.log(item, "item");
     if (!quantity?.valueId || !quantity.Value) {
       toast.error("Please Select Quantity");
       return;
@@ -152,50 +150,50 @@ const ProductDetails = () => {
       return;
     }
     if (typeof window !== "undefined") {
-    const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
-    if (!userData.data) {
-      throw new Error("User data not found");
-    }
-    try {
-      const { customerId, access_token } = userData.data;
-      const items = updatedCart.map((item) => ({
-        productId: item.productId,
-        productName: item.productName,
-        variantId: item.variant.valueId,
-        valueId: item.variant.valueId,
-        quantity: item.quantity,
-        price: item.variant.saleAmount,
-        maxPrice: item.variant.amount,
-      }));
-      const payload = {
-        customerId,
-        items,
-      };
-      const requestOptions = {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Authorization: `${access_token}`,
-        },
-        body: JSON.stringify(payload),
-      };
-      const response = await fetch(
-        "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart",
-        requestOptions
-      );
-      const data = await response.json();
-      if (response.status === 200) {
-        toast.success("Product added to cart successfully!");
-        router.push("/shop-now/checkOutDetails");
-      } else {
-        toast.error("Failed to add product to cart! Please try again.");
+      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+      if (!userData.data) {
+        throw new Error("User data not found");
       }
-      setCart([]);
-    } catch (error) {
-      toast.error("Failed to complete checkout! Please try again.");
+      try {
+        const { customerId, access_token } = userData.data;
+        const items = updatedCart.map((item) => ({
+          productId: item.productId,
+          productName: item.productName,
+          variantId: item.variant.valueId,
+          valueId: item.variant.valueId,
+          quantity: item.quantity,
+          price: item.variant.saleAmount,
+          maxPrice: item.variant.amount,
+        }));
+        const payload = {
+          customerId,
+          items,
+        };
+        const requestOptions = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `${access_token}`,
+          },
+          body: JSON.stringify(payload),
+        };
+        const response = await fetch(
+          "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart",
+          requestOptions
+        );
+        const data = await response.json();
+        if (response.status === 200) {
+          toast.success("Product added to cart successfully!");
+          router.push("/shop-now/checkOutDetails");
+        } else {
+          toast.error("Failed to add product to cart! Please try again.");
+        }
+        setCart([]);
+      } catch (error) {
+        toast.error("Failed to complete checkout! Please try again.");
+      }
     }
-  }
   };
   return (
     <>
@@ -211,20 +209,23 @@ const ProductDetails = () => {
                 <section
                   key={index}
                   id={item?.sectionId}
-                  className={`${index % 2 === 0
-                    ? "py-6 md:py-8 lg:py-10"
-                    : "bg-stone-300 py-6 md:py-8 lg:py-14"
-                    }`}
+                  className={`${
+                    index % 2 === 0
+                      ? "py-6 md:py-8 lg:py-10"
+                      : "bg-stone-300 py-6 md:py-8 lg:py-14"
+                  }`}
                 >
                   <div
                     key={index}
-                    className={`box-border flex flex-col max-w-7xl items-center content-center px-4 md:px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row ${index % 2 === 0 ? "" : ""
-                      }`}
+                    className={`box-border flex flex-col max-w-7xl items-center content-center px-4 md:px-8 mx-auto leading-6 text-black border-0 border-gray-300 border-solid md:flex-row ${
+                      index % 2 === 0 ? "" : ""
+                    }`}
                   >
                     <div style={{ maxWidth: "50%" }}>
                       <div
-                        className={`flex justify-center box-border relative w-full max-w-md px-4 md:px-8 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10 ${index % 2 === 0 ? "order-first " : ""
-                          }`}
+                        className={`flex justify-center box-border relative w-full max-w-md px-4 md:px-8 mt-5 mb-4 -ml-5 text-center bg-no-repeat bg-contain border-solid md:ml-0 md:mt-0 md:max-w-none lg:mb-0 md:w-1/2 xl:pl-10 ${
+                          index % 2 === 0 ? "order-first " : ""
+                        }`}
                       >
                         <Image
                           src={item.productImages}
@@ -240,15 +241,16 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative text-center bg-no-repeat bg-contain border-solid${index % 2 === 0 ? "order-first " : ""
-                            }`}
+                          className={`box-border relative text-center bg-no-repeat bg-contain border-solid${
+                            index % 2 === 0 ? "order-first " : ""
+                          }`}
                         >
                           <Image
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                             width={200}
-                          height={200}
+                            height={200}
                           />
                         </div>
                         <div
@@ -257,15 +259,16 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={` box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
-                            }`}
+                          className={` box-border relative bg-no-repeat bg-contain border-solid ${
+                            index % 2 === 0 ? "order-first " : ""
+                          }`}
                         >
                           <Image
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                             width={200}
-                          height={200}
+                            height={200}
                           />
                         </div>
                         <div
@@ -274,15 +277,16 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
-                            }`}
+                          className={`box-border relative bg-no-repeat bg-contain border-solid ${
+                            index % 2 === 0 ? "order-first " : ""
+                          }`}
                         >
                           <Image
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                             width={200}
-                          height={200}
+                            height={200}
                           />
                         </div>
                         <div
@@ -291,22 +295,24 @@ const ProductDetails = () => {
                             marginRight: "-35px",
                             height: "fit-content",
                           }}
-                          className={`box-border relative bg-no-repeat bg-contain border-solid ${index % 2 === 0 ? "order-first " : ""
-                            }`}
+                          className={`box-border relative bg-no-repeat bg-contain border-solid ${
+                            index % 2 === 0 ? "order-first " : ""
+                          }`}
                         >
                           <Image
                             src={item.productImages}
                             alt="Image"
                             className="lg:w-1/2 imgWidth"
                             width={200}
-                          height={200}
+                            height={200}
                           />
                         </div>
                       </div>
                     </div>
                     <div
-                      className={`py-8 box-border text-wrap w-full text-black border-solid md:w-1/2 md:pl-10 ${index % 2 !== 0 ? "md:order-first" : ""
-                        }`}
+                      className={`py-8 box-border text-wrap w-full text-black border-solid md:w-1/2 md:pl-10 ${
+                        index % 2 !== 0 ? "md:order-first" : ""
+                      }`}
                     >
                       <h2 className="m-0 text-xl text-balance font-semibold leading-tight border-0 border-gray-300 lg:text-3xl md:text-2xl">
                         {item.productName}
@@ -314,10 +320,12 @@ const ProductDetails = () => {
                       <p className="py-3 md:pt-4 md:pb-8 m-0 leading-7 text-gray-700 border-0 border-gray-300 sm:pr-12 text-sm md:text-base lg:text-lg">
                         <div>
                           <h5>
-                            <span style={{ textDecoration: 'line-through' }}>
-                              {quantity?.amount ? `RS ${quantity.amount}` : ''} {" "}
+                            <span style={{ textDecoration: "line-through" }}>
+                              {quantity?.amount ? `RS ${quantity.amount}` : ""}{" "}
                             </span>
-                            {quantity?.saleAmount ? `Rs: ${quantity.saleAmount}` : 'Select Item'}
+                            {quantity?.saleAmount
+                              ? `Rs: ${quantity.saleAmount}`
+                              : "Select Item"}
                           </h5>
                         </div>
                         <div>
@@ -408,7 +416,8 @@ const ProductDetails = () => {
                             <div>
                               <button
                                 onClick={() => {
-                                  addToCart(item, "add"), openPopup();
+                                  addToCart(item, "add");
+                                  openPopup();
                                 }}
                                 className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                               >
@@ -442,7 +451,12 @@ const ProductDetails = () => {
             onClick={closePopup}
           >
             <div
-              style={{ width: "50%" }}
+              style={{
+                width: "50%",
+                overflow: "scroll",
+                marginTop: "140px",
+                paddingBottom: "100px",
+              }}
               className="bg-white p-8 max-w-md h-screen fixed right-0"
               onClick={(e) => e.stopPropagation()}
             >

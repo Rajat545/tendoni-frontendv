@@ -121,6 +121,7 @@ input {
 
 .card {
   margin-left: 11%;
+  background-color: none;
 }
 
 .email {
