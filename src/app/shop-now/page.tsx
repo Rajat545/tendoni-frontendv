@@ -331,7 +331,7 @@ const Shop = () => {
                     </div>
                     <div>
                       {item.variant?.saleAmount !== 0 && (
-                        <p style={{ marginTop: "-25px" }}> {item.variant?.saleAmount ? `Rs. ${item.variant.saleAmount}` : 0}</p>
+                        <p style={{ marginTop: "0" }}> {item.variant?.saleAmount ? `Rs. ${item.variant.saleAmount}` : 0}</p>
                       )}
                     </div>
                   </div>
@@ -361,7 +361,8 @@ const Shop = () => {
                           padding: "5px",
                           marginBottom: "24px",
                           borderRadius: "5px",
-                          marginRight: '6px'
+                          marginRight: '6px',
+                          marginTop: "10px",
                         }}
                         value={selectedVariants?.[item.productName] || ""}
                         onChange={(e) => handleVariantChange(item, e.target.value)}
@@ -384,6 +385,7 @@ const Shop = () => {
                         justifyContent: "center",
                         padding: "6px",
                         borderRadius: "5px",
+                        marginTop: "10px",
                       }}
                     >
                       <div>
