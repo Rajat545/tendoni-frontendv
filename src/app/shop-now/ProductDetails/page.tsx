@@ -12,7 +12,7 @@ import ReactImageMagnify from 'react-image-magnify';
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
-    const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState({
     valueId: "",
     Value: "",
@@ -325,7 +325,7 @@ const ProductDetails = () => {
                   </div>
                 )}
                 <p className="py-3 md:pt-4 md:pb-8 text-gray-700 text-sm md:text-base lg:text-lg">
-                Red chili powder is a finely ground spice made from dried red chilies, commonly used in Indian and other South Asian cuisines. It adds heat, flavor, and a vibrant red color to dishes. The spiciness level can vary based on the type of chili used
+                {item.description}
                 </p>
               </div>
             </div>
