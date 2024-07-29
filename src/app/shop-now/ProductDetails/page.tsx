@@ -28,6 +28,8 @@ const ProductDetails = () => {
     setCount,
     variant,
     setVariant,
+    showCartPopup,
+    setShowCartPopup,
     buyProduct,
   } = useContext(CartContext);
   const productDetails = data.filter((item) => item.productId === productId);
@@ -62,11 +64,13 @@ const ProductDetails = () => {
   }, [cart, productId, setCount]);
   const openPopup = () => {
     setShowPopup(true);
+    setShowCartPopup(true);
     document.body.style.overflow = "hidden";
   };
 
   const closePopup = () => {
     setShowPopup(false);
+    setShowCartPopup(false);
     document.body.style.overflow = "auto";
   };
   const deleteById2 = (productId) => {
@@ -203,138 +207,139 @@ const ProductDetails = () => {
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
       <div>
-      <section className="w-full bg-white">
-      <div className="py-6 md:py-8 lg:py-10">
-      {productDetails?.map((item, index) => (
-        <ScrollAnimation key={index}>
-          <section
-            key={index}
-            id={item?.sectionId}
-            className={`${
-              index % 2 === 0 ? "py-6 md:py-8 lg:py-10" : "bg-stone-300 py-6 md:py-8 lg:py-14"
-            }`}
-          >
-            <div className="flex flex-col max-w-7xl items-center mx-auto px-4 md:flex-row">
-              <div
-                className={`relative w-full max-w-md px-4 md:w-1/2 md:max-w-none lg:mb-0 ${
-                  index % 2 === 0 ? "order-first" : ""
-                }`}
-              >
-                <ReactImageMagnify
-                  smallImage={{
-                    alt: "MasalaImage",
-                    isFluidWidth: true,
-                    src: selectedImage || item.productImages,
-                    width: 504,
-                    height: 504,
-                  }}
-                  largeImage={{
-                    src: selectedImage || item.productImages,
-                    width: 2000,
-                    height: 900,
-                  }}
-                />
-                <div className="flex mt-5 space-x-2">
-                  {[...Array(4)].map((_, idx) => (
-                    <div key={idx} className="w-20 h-20 overflow-hidden">
-                      <Image
-                        src={item.productImages}
-                        alt="Image"
-                        className="object-contain cursor-pointer"
-                        width={80}
-                        height={80}
-                        onClick={() => setSelectedImage(item.productImages)}
+        <section className="w-full bg-white">
+          <div className="py-6 md:py-8 lg:py-10">
+            {productDetails?.map((item, index) => (
+              <ScrollAnimation key={index}>
+                <section
+                  key={index}
+                  id={item?.sectionId}
+                  className={`${index % 2 === 0 ? "py-6 md:py-8 lg:py-10" : "bg-stone-300 py-6 md:py-8 lg:py-14"
+                    }`}
+                >
+                  <div className="flex flex-col max-w-7xl items-center mx-auto px-4 md:flex-row">
+                    <div
+                      className={`relative w-full max-w-md px-4 md:w-1/2 md:max-w-none lg:mb-0 ${index % 2 === 0 ? "order-first" : ""
+                        }`}
+                    >
+                      <ReactImageMagnify
+                        {...{
+                          smallImage: {
+                            alt: 'image',
+                            isFluidWidth: false,
+                            src: selectedImage || item.productImages,
+                            width: 504,
+                            height: 504
+                          },
+                          largeImage: {
+                            src: selectedImage || item.productImages,
+                            width: 1200,
+                            height: 1800
+                          },
+                          lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' },
+                          isHintEnabled: true,
+                          shouldHideHintAfterFirstActivation: false,
+                          enlargedImageContainerStyle: { background: '#fff', zIndex: 9999 },
+                          enlargedImageContainerDimensions: {
+                            width: '160%',
+                            height: '100%',
+                          }
+                        }}
                       />
+                      <div className="flex mt-5 space-x-2 gap-4">
+                        {[...Array(4)].map((_, idx) => (
+                          <div key={idx} className="w-20 h-20 overflow-hidden">
+                            <Image
+                              src={item.productImages}
+                              alt="Image"
+                              className="object-contain cursor-pointer"
+                              width={80}
+                              height={80}
+                              onClick={() => setSelectedImage(item.productImages)}
+                            />
+                          </div>
+                        ))}
+                      </div>
                     </div>
-                  ))}
-                </div>
-              </div>
-              <div
-                className={`w-full md:w-1/2 md:pl-10 ${
-                  index % 2 !== 0 ? "md:order-first" : ""
-                }`}
-              >
-                <h2 className="text-xl font-semibold lg:text-3xl md:text-2xl">
-                  {item.productName}
-                </h2>
-                <p className="py-3 md:pt-4 md:pb-8 text-gray-700 text-sm md:text-base lg:text-lg">
-                  <div>
-                    <h5>
-                      <span className="line-through">
-                        {quantity?.amount ? `RS ${quantity.amount}` : ""}{" "}
-                      </span>
-                      {quantity?.saleAmount ? `Rs: ${quantity.saleAmount}` : "Select Item"}
-                    </h5>
-                  </div>
-                  <div>
-                    <h5>Shipping Charge: Rs. 6.50</h5>
-                  </div>
-                </p>
-                <div className="mb-4">
-                  <h3>Available Quantity</h3>
-                  <select
-                    name="quantity"
-                    id="quantity"
-                    className="border border-black p-2 w-40 mb-4 rounded-md"
-                    value={quantity?.valueId}
-                    onChange={handleVariantChange}
-                  >
-                    <option value="null">Select quantity</option>
-                    {quantityData?.map((variant) => (
-                      <option key={variant.valueId} value={variant.valueId}>
-                        {variant.Value}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                {productInCart ? (
-                  <div>
-                    <div className="flex gap-4 items-center border border-black w-40 p-2 rounded-md">
-                      <button onClick={() => decrementCount(item.productId)}>
-                        <h1>-</h1>
-                      </button>
-                      <div>{count}</div>
-                      <button onClick={() => incrementCount(item.productId)}>
-                        <h1>+</h1>
-                      </button>
+                    <div
+                      className={`w-full md:w-1/2 md:pl-10 ${index % 2 !== 0 ? "md:order-first" : ""
+                        }`}
+                    >
+                      <h2 className="text-xl font-semibold lg:text-3xl md:text-2xl">
+                        {item.productName}
+                      </h2>
+                      <p className="py-3 md:pt-4 md:pb-8 text-gray-700 text-sm md:text-base lg:text-lg">
+                        <div>
+                          <h5>
+                            <span className="line-through">
+                              {quantity?.amount ? `RS ${quantity.amount}` : ""}{" "}
+                            </span>
+                            {quantity?.saleAmount ? `Rs: ${quantity.saleAmount}` : "Select Item"}
+                          </h5>
+                        </div>
+                        <div>
+                          <h5>Shipping Charge: Rs. 6.50</h5>
+                        </div>
+                      </p>
+                      <div className="mb-4">
+                        <h3>Available Quantity</h3>
+                        <select
+                          name="quantity"
+                          id="quantity"
+                          className="border border-black p-2 w-40 mb-4 rounded-md"
+                          value={quantity?.valueId}
+                          onChange={handleVariantChange}
+                        >
+                          <option value="null">Select quantity</option>
+                          {quantityData?.map((variant) => (
+                            <option key={variant.valueId} value={variant.valueId}>
+                              {variant.Value}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                      {productInCart ? (
+                        <div>
+                      
+                          <h1>View Cart</h1>
+
+                          <button
+                            onClick={openPopup}
+                            className="bg-yellow-500 mt-3 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          >
+                            View Cart
+                          </button>
+                        </div>
+                      ) : (
+                        <div className="flex gap-4 items-center mt-4">
+                          <button
+                            onClick={() => {
+                              addToCart(item, "add");
+                              openPopup();
+                            }}
+                            className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          >
+                            Add to Cart
+                          </button>
+                          <button
+                            onClick={() => addToCart(item, "buy")}
+                            className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                          >
+                            Buy Now
+                          </button>
+                        </div>
+                      )}
+                      <p className="py-3 md:pt-4 md:pb-8 text-gray-700 text-sm md:text-base lg:text-lg">
+                        {item.description}
+                      </p>
                     </div>
-                    <button
-                      onClick={openPopup}
-                      className="bg-yellow-500 mt-3 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                      View Cart
-                    </button>
                   </div>
-                ) : (
-                  <div className="flex gap-4 items-center mt-4">
-                    <button
-                      onClick={() => {
-                        addToCart(item, "add");
-                        openPopup();
-                      }}
-                      className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                      Add to Cart
-                    </button>
-                    <button
-                      onClick={() => addToCart(item, "buy")}
-                      className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    >
-                      Buy Now
-                    </button>
-                  </div>
-                )}
-                <p className="py-3 md:pt-4 md:pb-8 text-gray-700 text-sm md:text-base lg:text-lg">
-                {item.description}
-                </p>
-              </div>
-            </div>
-          </section>
-        </ScrollAnimation>
-      ))}
-    </div>
-    </section>
-        {showPopup && cart.length > 0 && (
+                </section>
+              </ScrollAnimation>
+            ))}
+          </div>
+        </section>
+        {showCartPopup && showPopup && cart.length > 0 && (
           <div
             className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
             onClick={closePopup}
@@ -384,52 +389,27 @@ const ProductDetails = () => {
                 </div>
               </div>
               {cart.map((item) => (
-                <div
-                  key={item.productId}
-                  className="mt-5"
-                  style={{ display: "flex", alignItems: "center", gap: "24%" }}
-                >
-                  <Image
-                    className="lg:w-1/6 imgWidth"
-                    src={item.productImages}
-                    alt=""
-                    width={200}
-                    height={200}
-                  />
-                  <div>
-                    <a href="">
-                      <p>{item.productName}</p>
-                    </a>
-                    <div
-                      style={{
-                        height: "fit-content",
-                        position: "relative",
-                        top: "15px",
-                        width: "60%",
-                      }}
-                    ></div>
-                    <p style={{ textDecoration: "line-through" }}>
-                      {" "}
-                      Rs{quantity.amount}
-                    </p>
-                    <p className="mt-3" style={{ width: "150px" }}>
-                      Quantity: ({item.quantity}) {variantValue}
-                    </p>
-                  </div>
-                  <div>
-                    <div
-                      style={{
-                        height: "fit-content",
-                        position: "relative",
-                        top: "15px",
-                        width: "60%",
-                      }}
-                    ></div>
-                    <p style={{ marginLeft: "-42px" }}>Rs</p>
-                    <p style={{ marginLeft: "-42px" }}>{variantPrice}</p>
-                  </div>
-                </div>
-              ))}
+        <div key={item.productId} className="mt-5 flex items-center gap-6">
+          <Image
+            className=" object-contain"
+            src={item.productImages}
+            alt={item.productName}
+            width={100}
+            height={100}
+          />
+          <div className="flex-1">
+            <a href="#">
+              <p>{item.productName}</p>
+            </a>
+            
+            <p className="font-normal line-through">Rs {quantity.amount}</p>
+            <p className="mt-3">Quantity:  {'x' + ' ' +  item.quantity} : {variantValue}</p>
+          </div>
+          <div className="text-right">
+            <p>Rs {variantPrice}</p>
+          </div>
+        </div>
+      ))}
               <div
                 className="mt-3"
                 style={{
@@ -451,6 +431,7 @@ const ProductDetails = () => {
                   }}
                 >
                   <div>
+                    
                     <button onClick={() => decrementCount(productId)}>
                       <h1>-</h1>
                     </button>
@@ -481,10 +462,10 @@ const ProductDetails = () => {
                 }}
               >
                 <div>
-                  <p>Estimate Total</p>
+                  <p className="font-medium">Estimate Total</p>
                 </div>
                 <div>
-                  <p>{calculateTotalPrice()}</p>
+                  <p className="font-medium"> Rs: {calculateTotalPrice()}</p>
                 </div>
               </div>
               <div

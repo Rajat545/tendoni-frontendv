@@ -1,4 +1,4 @@
-"use client";;
+"use client";
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import RemoveRedEyeOutlinedIcon from '@mui/icons-material/RemoveRedEyeOutlined';
 import '@/app/my-order/style.css'; // Ensure your global styles are imported correctly
@@ -11,7 +11,6 @@ import Box from '@mui/material/Box';
 import Modal from '@mui/material/Modal';
 import toast, { Toaster } from 'react-hot-toast';
 
-
 const style = {
   position: "absolute",
   top: "50%",
@@ -23,11 +22,11 @@ const style = {
   boxShadow: 24,
   p: 4,
 };
+
 const MyOrder = () => {
   const router = useRouter();
   const isAuthenticated = isAuth();
-  const { orderHistory, setOrderHistory, handleOrderDetails } =
-    useContext(AuthContext);
+  const { orderHistory, setOrderHistory, handleOrderDetails } = useContext(AuthContext);
 
   const [currentPage, setCurrentPage] = useState(0);
   const [itemPerPage] = useState(3);
@@ -42,6 +41,7 @@ const MyOrder = () => {
     email: "",
     number: "",
   });
+
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -84,26 +84,21 @@ const MyOrder = () => {
       const result = await response.json();
       if (response.ok) {
         if (typeof window !== "undefined") {
-          const userData = JSON.parse(
-            localStorage.getItem("user-info") || "{}"
-          );
+          const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
           userData.data.name = formData.name;
           userData.data.email = formData.email;
           userData.data.number = formData.number;
           localStorage.setItem("user-info", JSON.stringify(userData));
           setDisplayData(formData);
           closeModal();
-          toast.success("Save Change!");
-          s;
+          toast.success("Changes saved!");
           document.querySelector(".user-details").classList.add("highlight");
           setTimeout(() => {
-            document
-              .querySelector(".user-details")
-              .classList.remove("highlight");
+            document.querySelector(".user-details").classList.remove("highlight");
           }, 2000);
         }
       } else {
-        toast.error("check your Network");
+        toast.error("Check your network connection.");
       }
     } catch (error) {
       console.error(error);
@@ -118,10 +113,7 @@ const MyOrder = () => {
   // Pagination logic
   const indexOfLastItem = (currentPage + 1) * itemPerPage;
   const indexOfFirstItem = indexOfLastItem - itemPerPage;
-  const currentItems = sortedOrderHistory.slice(
-    indexOfFirstItem,
-    indexOfLastItem
-  );
+  const currentItems = sortedOrderHistory.slice(indexOfFirstItem, indexOfLastItem);
 
   const totalPage = Math.ceil(orderHistory.length / itemPerPage);
 
@@ -136,14 +128,13 @@ const MyOrder = () => {
       router.push("/login");
     }
   };
-  console.log(currentItems, "data");
 
   return (
     <div className="page-content page-container" id="page-content">
       <Toaster />
       <div className="padding">
         <div className="row container d-flex justify-content-center">
-          <div className="user-info w-full">
+          <div className="user-info w-[98%]">
             <div className="card user-card-full">
               <div className="row m-l-0 m-r-0">
                 <div className="col-12">
@@ -165,9 +156,7 @@ const MyOrder = () => {
                       </div>
                       <div className="flex items-center mb-2">
                         <h1 className="name font-semibold">Phone:</h1>
-                        <h6 className="text-muted ml-2">
-                          {displayData.number}
-                        </h6>
+                        <h6 className="text-muted ml-2">{displayData.number}</h6>
                       </div>
                     </div>
                   </div>
@@ -176,12 +165,12 @@ const MyOrder = () => {
             </div>
           </div>
         </div>
+
         <div className="order-details">
           <div className="p-4">
-            <h1 className="text-xl">Order history</h1>
+            <h1 className="text-xl">Order History</h1>
             <p className="text-gray-600">
-              Check the status of recent orders, manage returns, and discover
-              similar products
+              Check the status of recent orders, manage returns, and discover similar products.
             </p>
           </div>
 
@@ -195,34 +184,21 @@ const MyOrder = () => {
                 <div id="responsive-list" className="flex p-4 gap-[174px]">
                   <h1 className="text-lg font-semibold">OrderId</h1>
                   <h1 className="text-lg font-semibold">Product Details</h1>
-                  <h1 className="text-lg font-semibold ml-[86px]">
-                    Order Date
-                  </h1>
+                  <h1 className="text-lg font-semibold ml-[86px]">Order Date</h1>
                   <h1 className="text-lg font-semibold">Price</h1>
                   <h1 className="text-lg font-semibold ml-[64px]">Status</h1>
                   <h1 className="text-lg font-semibold">Track Order</h1>
                 </div>
                 <hr />
-
                 {currentItems.map((order) => (
                   <div key={order.orderId} className="mb-6">
-                    <div
-                      id="order-list"
-                      className="p-6 bg-white shadow rounded-lg"
-                    >
-                      <div
-                        id="responsive-div"
-                        className="grid grid-cols-12 items-center gap-4"
-                      >
+                    <div id="order-list" className="p-6 bg-white shadow rounded-lg">
+                      <div id="responsive-div" className="grid grid-cols-12 items-center gap-4">
                         <div className="col-span-2">
-                          <h1 className="text-lg font-semibold">
-                            {order.orderId}
-                          </h1>
+                          <h1 className="text-lg font-semibold">{order.orderId}</h1>
                         </div>
                         <div className="col-span-3">
-                          <h1 className="text-lg">
-                            {order.products.length} Items
-                          </h1>
+                          <h1 className="text-lg">{order.products.length} Items</h1>
                         </div>
                         <div className="col-span-2">
                           <h1 className="text-lg">
@@ -230,20 +206,13 @@ const MyOrder = () => {
                           </h1>
                         </div>
                         <div className="col-span-2">
-                          <h1 className="text-lg">
-                            Rs. {order.finaltotalPrice}
-                          </h1>
+                          <h1 className="text-lg">Rs. {order.finaltotalPrice}</h1>
                         </div>
                         <div className="col-span-2">
-                          <span className="text-gray-700">
-                            {order.orderState}
-                          </span>
+                          <span className="text-gray-700">{order.orderState}</span>
                         </div>
                         <div className="col-span-1 flex justify-center">
-                          <Link
-                            href="/my-profile"
-                            onClick={() => handleOrderDetails(order.orderId)}
-                          >
+                          <Link href="/my-profile" onClick={() => handleOrderDetails(order.orderId)}>
                             <RemoveRedEyeOutlinedIcon className="text-gray-700" />
                           </Link>
                         </div>
@@ -294,9 +263,7 @@ const MyOrder = () => {
               <button
                 title="next"
                 type="button"
-                onClick={() =>
-                  handlePageChange(Math.min(totalPage - 1, currentPage + 1))
-                }
+                onClick={() => handlePageChange(Math.min(totalPage - 1, currentPage + 1))}
                 className={`inline-flex items-center justify-center w-8 h-8 border rounded-md shadow-md ${
                   currentPage === totalPage - 1 ? "bg-gray-200" : "bg-white"
                 }`}

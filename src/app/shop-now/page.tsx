@@ -256,197 +256,115 @@ const Shop = () => {
           </div>
         </section>
         {showCartPopup && cart.length > 0 && (
-          <div
-            className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
-            onClick={closePopup}
-          >
-            <div
-              style={{ width: "50%", overflow: 'scroll', marginTop: '140px', paddingBottom: '100px' }}
-              className="bg-white p-8 max-w-md h-screen fixed right-0"
-              onClick={(e) => e.stopPropagation()}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                }}
-              >
-                <div>
-                  <h2 className="text-xl font-semibold">Your Cart ({cart.length})</h2>
-                </div>
-                <div>
-                  <button
-                    className="hover:bg-yellow-700 text-gray py-2 px-3 font-bold rounded"
-                    onClick={closePopup}
-                  >
-                    X
-                  </button>
-                </div>
-              </div>
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  borderBottom: "1px solid gray",
-                }}
-              >
-                <div>
-                  <p className="mt-5">Product</p>
-                </div>
-                <div>
-                  <p className="mt-5">Total</p>
-                </div>
-              </div>
-              {cart.map((item, index) => (
-                <div key={item.productId} style={{ maxHeight: "400px" }}>
-                  <div
-                    className="mt-5"
-                    style={{ display: "flex", alignItems: "center", gap: "24%" }}
-                  >
-                    <Image
-                      className="lg:w-1/6 imgWidth"
-                      src={item.productImages}
-                      alt="image"
-                      width={200}
-                      height={200}
-                    />
-                    <div style={{ width: '84px' }}>
-                      <a href="">
-                        <p>{item.productName}</p>
-                      </a>
-                      <div
-                        style={{
-                          height: "fit-content",
-                          position: "relative",
-                          top: "15px",
-                          width: "60%",
-                        }}
-                      ></div>
-                      <p style={{ textDecoration: 'line-through' }}>
-                        {item.variant?.amount ? `Rs. ${item.variant.amount}` : ''}
-                      </p>
-                      <p className="mt-3" style={{ width: '150px' }}>Quantity ({item.quantity})  {item.variant?.Value}</p>
-                    </div>
-                    <div>
-                      {item.variant?.saleAmount !== 0 && (
-                        <p style={{ marginTop: "0" }}> {item.variant?.saleAmount ? `Rs. ${item.variant.saleAmount}` : 0}</p>
-                      )}
-                    </div>
-                  </div>
-                  <div style={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    padding: '5px'
-                  }}></div>
-                  <div
-                    className="mt-3"
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      alignItems: "center",
-                    }}
-                  >
-                    <ul className="p-0 m-0 leading-6 border-0 border-gray-300">
-                      <div>
-                        <h3>Available Quantity</h3>
-                      </div>
-                      <select
-                        name="quantity"
-                        id="quantity"
-                        style={{
-                          border: "1px solid black",
-                          padding: "5px",
-                          marginBottom: "24px",
-                          borderRadius: "5px",
-                          marginRight: '6px',
-                          marginTop: "10px",
-                        }}
-                        value={selectedVariants?.[item.productName] || ""}
-                        onChange={(e) => handleVariantChange(item, e.target.value)}
-                      >
-                        <option value={''}>Select Quantity</option>
-                        {variant?.map((variant) => (
-                          <option key={variant.variantId} value={variant.valueId}>
-                            {variant.Value}
-                          </option>
-                        ))}
-                      </select>
-                    </ul>
-                    <div
-                      style={{
-                        display: "flex",
-                        gap: "20px",
-                        alignItems: "center",
-                        border: "1px solid black",
-                        width: "30%",
-                        justifyContent: "center",
-                        padding: "6px",
-                        borderRadius: "5px",
-                        marginTop: "10px",
-                      }}
-                    >
-                      <div>
-                        <button onClick={() => decrementCount(item.productId)}>
-                          <h1>-</h1>
-                        </button>
-                      </div>
-                      <div>{item.quantity}</div>
-                      <div>
-                        <button onClick={() => incrementCount(item.productId)}>
-                          <h1>+</h1>
-                        </button>
-                      </div>
-                    </div>
-                    <div>
-                      <button
-                        style={{ marginLeft: "10px", color: "red" }}
-                        onClick={() => deleteById(item.productId)}
-                      >
-                        <h1>Remove</h1>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-              <div
-                className="mt-5"
-                style={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  borderTop: "1px solid gray",
-                  paddingTop: "10px",
-                }}
-              >
-                <div>
-                  <p>Estimate Total</p>
-                </div>
-                <div>
-                  <p>Rs: {calculateTotalPrice()}</p>
-                </div>
-              </div>
-              <div
-                className="mt-5"
-                style={{ display: "flex", justifyContent: "center" }}
-              >
-                <div>
-                  <button
-                    style={{ padding: "10px 100px" }}
-                    className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                    onClick={
-                      handleCheckOut
-                    }
-                  >
-                    Check Out
-                  </button>
-                </div>
-              </div>
+  <div
+    className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
+    onClick={closePopup}
+  >
+    <div
+      className="bg-white p-8 max-w-lg h-screen fixed right-0 overflow-y-scroll mt-20 pb-24"
+      onClick={(e) => e.stopPropagation()}
+    >
+      <div className="flex items-center justify-between border-b pb-4 mb-4">
+        <h2 className="text-xl font-semibold">Your Cart ({cart.length})</h2>
+        <button
+          className="hover:bg-red-500 text-gray-700 py-2 px-3 font-bold rounded"
+          onClick={closePopup}
+        >
+          X
+        </button>
+      </div>
+
+      <div className="flex justify-between border-b pb-2 mb-4">
+        <p className="font-medium">Product</p>
+        <p className="font-medium">Total</p>
+      </div>
+
+      {cart.map((item) => (
+        <div key={item.productId} className="flex flex-col mb-6">
+          <div className="flex items-center gap-6 mb-4">
+            <Image
+              className=" object-contain"
+              src={item.productImages}
+              alt="Product Image"
+              width={100}
+              height={100}
+            />
+            <div className="flex flex-col flex-grow">
+              <a href="#" className="font-medium text-blue-600 hover:underline">
+                {item.productName}
+              </a>
+              <p className="font-normal line-through">
+                {item.variant?.amount ? `Rs. ${item.variant.amount}` : ''}
+              </p>
+              <p className="text-gray-700 mt-2">
+                Quantity: {item.quantity}  {item.variant?.Value}
+              </p>
+            </div>
+            <div>
+              {item.variant?.saleAmount !== 0 && (
+                <p className="font-medium">
+                  {item.variant?.saleAmount ? `Rs. ${item.variant.saleAmount}` : 0}
+                </p>
+              )}
             </div>
           </div>
-        )}
+
+          <div className="flex justify-between items-center gap-4">
+            <div className="flex items-center gap-2">
+            
+              <select
+                name="quantity"
+                id="quantity"
+                className="border border-gray-300 p-2 rounded"
+                value={selectedVariants?.[item.productName] || ""}
+                onChange={(e) => handleVariantChange(item, e.target.value)}
+              >
+                <option value="">Select Quantity</option>
+                {variant?.map((variant) => (
+                  <option key={variant.variantId} value={variant.valueId}>
+                    {variant.Value}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="flex items-center border border-gray-300 p-2 rounded">
+              <button onClick={() => decrementCount(item.productId)} className="px-2">
+                -
+              </button>
+              <div className="px-4">{item.quantity}</div>
+              <button onClick={() => incrementCount(item.productId)} className="px-2">
+                +
+              </button>
+            </div>
+
+            <button
+              className="text-red-500 font-bold"
+              onClick={() => deleteById(item.productId)}
+            >
+              Remove
+            </button>
+          </div>
+        </div>
+      ))}
+
+      <div className="flex justify-between items-center border-t pt-4 mt-6">
+        <p className="font-medium">Estimated Total</p>
+        <p className="font-medium">Rs: {calculateTotalPrice()}</p>
+      </div>
+
+      <div className="flex justify-center mt-6">
+        <button
+         className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          onClick={handleCheckOut}
+        >
+          Check Out
+        </button>
+      </div>
+    </div>
+  </div>
+)}
+
       </div>
     </>
   );

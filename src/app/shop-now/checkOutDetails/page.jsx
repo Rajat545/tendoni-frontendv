@@ -205,7 +205,7 @@ const Shop = () => {
     setFormData({ ...formData, [name]: value });
   };
   // Handle Submit
-  const handleSubmit = useCallback (async (e) => {
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     try {
       if (typeof window !== "undefined") {
@@ -265,7 +265,7 @@ const Shop = () => {
       // setMessage("Error saving address.");
       toast.error("Error saving address !", error);
     }
-  },[formData, router]);
+  }, [formData, router]);
 
   const amount = Math.round(cartData?.finaltotalPrice * 100);
   const handleOrderSubmit = async (e) => {
@@ -726,38 +726,38 @@ const Shop = () => {
                     Create And Save Address
                   </button>
                 </form>
+
                 <div className="address-box">
-                  <div className="flex flex-wrap">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 ">
                     {customerData.map((item, index) => (
-                      <div
-                        className="address-list col-lg-6 md:col-lg-2 sm:col-lg-2"
-                        key={index}
-                      >
+                      <div className="address-list border rounded-lg p-4 relative" key={index}>
                         <DeleteForeverIcon
-                          className="delete-icon"
+                          className="delete-icon absolute top-2 right-2 text-red-500 cursor-pointer"
                           onClick={() => handleDelete(item)}
                         />
-                        <hr />
-                        <h3 className="address-head p-2">SHIPPING ADDRESS</h3>
-                        <div>
-                          <hr />
-                          <input
-                            type="radio"
-                            name="address"
-                            className="address-selector"
-                            onChange={() => handleAddressSelect(item)}
-                          />
-                          <span>{item.name} </span>
-                          <p>{item.addressLine1}</p>
+                        <h3 className="address-head text-lg font-semibold mb-2">SHIPPING ADDRESS</h3>
+                        <div className="border-t mt-2 pt-2">
+                          <label className="flex items-center">
+                            <input
+                              type="radio"
+                              name="address"
+                              className="address-selector mr-2"
+                              onChange={() => handleAddressSelect(item)}
+                            />
+                            <span className="font-medium">{item.name}</span>
+                          </label>
+                          <p className="mt-2">{item.addressLine1}</p>
                           <p>
-                            {item.city} , {item.state}, {item.pincode}
+                            {item.city}, {item.state}, {item.pincode}
                           </p>
-                          <p>{item.phone}</p>
+                          <p className="mt-2">{item.phone}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
+
+
               </div>
             </div>
             <div id="responsive-price" className=" w-[44.333333%]  ml-[40px]">
