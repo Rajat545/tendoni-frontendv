@@ -228,22 +228,22 @@ const ProductDetails = () => {
                             alt: 'image',
                             isFluidWidth: false,
                             src: selectedImage || item.productImages,
-                            width: 504,
-                            height: 504
+                            // width: 504,
+                            // height: 504
                           },
                           largeImage: {
                             src: selectedImage || item.productImages,
-                            width: 1200,
-                            height: 1800
+                            width: 0,
+                            height: 0
                           },
-                          lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' },
-                          isHintEnabled: true,
-                          shouldHideHintAfterFirstActivation: false,
-                          enlargedImageContainerStyle: { background: '#fff', zIndex: 9999 },
-                          enlargedImageContainerDimensions: {
-                            width: '160%',
-                            height: '100%',
-                          }
+                          // lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' },
+                          // isHintEnabled: true,
+                          // shouldHideHintAfterFirstActivation: false,
+                          // enlargedImageContainerStyle: { background: '#fff', zIndex: 9999 },
+                          // enlargedImageContainerDimensions: {
+                          //   width: '160%',
+                          //   height: '100%',
+                          // }
                         }}
                       />
                       <div className="flex mt-5 space-x-2 gap-4">
