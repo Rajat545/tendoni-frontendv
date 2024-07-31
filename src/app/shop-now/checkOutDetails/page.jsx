@@ -9,7 +9,6 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import OrderSuccessFull from "../OrderSuccessFull/page";
 import Modal from "react-modal";
 import { useRouter } from "next/navigation";
-
 const Shop = () => {
   const router = useRouter();
   const [updateAddressId, setUpdateAddressId] = useState("");
@@ -34,7 +33,6 @@ const Shop = () => {
     addressId: address ? address?.addressId : "",
   });
   const [message, setMessage] = useState("");
-
   useEffect(() => {
     if (typeof window !== "undefined") {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -46,7 +44,7 @@ const Shop = () => {
   const handleAddressSelect = (item) => {
     var updateAddressId = item.addressId;
     setUpdateAddressId(updateAddressId);
-    console.log(item, "items");
+    
     setFormData({
       ...item,
     });
@@ -124,14 +122,12 @@ const Shop = () => {
       console.error("Error fetching customer data:", error);
     }
   }, []);
-
   useEffect(() => {
     if (customerId) {
       fetchAddressById();
       fetchCustomerDataById(customerId);
     }
   }, [customerId, fetchAddressById, fetchCustomerDataById]);
-
   const handleDelete = async (item) => {
     try {
       if (typeof window !== "undefined") {
@@ -266,12 +262,10 @@ const Shop = () => {
       toast.error("Error saving address !", error);
     }
   }, [formData, router]);
-
   const amount = Math.round(cartData?.finaltotalPrice * 100);
   const handleOrderSubmit = async (e) => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
-
       const requiredFields = [
         "addressLine1",
         "pincode",
@@ -290,18 +284,16 @@ const Shop = () => {
           return;
         }
       }
-
       const orderData = {
         customerId: userData.data?.customerId,
         addressId: updateAddressId,
         paymentMethod: radioOptions,
       };
-
       // Validate order data
       if (!validateOrderData(orderData)) {
         return;
       }
-      console.log(orderData, "orderData");
+      
       // Send order request
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
@@ -315,14 +307,11 @@ const Shop = () => {
           body: JSON.stringify(orderData),
         }
       );
-
       const data = await response.json();
-
       if (response.ok) {
         toast.success("Order placed successfully!");
         setPopUp(true);
         setCartData([]);
-
         setCartData([]);
         setTimeout(() => {
           router.push("/shop-now");
@@ -339,7 +328,6 @@ const Shop = () => {
       toast.error("Error placing order: " + error.message);
     }
   };
-
   const validateOrderData = (orderData) => {
     if (!orderData.customerId) {
       toast.error("Customer ID is required.");
@@ -422,7 +410,6 @@ const Shop = () => {
             }),
           }
         );
-
         if (!response.status == 200) {
           throw new Error("Network response was not ok");
         }
@@ -499,7 +486,6 @@ const Shop = () => {
         handler: async (response) => {
           const { razorpay_payment_id, razorpay_order_id, razorpay_signature } =
             response;
-
           try {
             const verificationResponse = await verifyPayment(
               razorpay_payment_id,
@@ -515,7 +501,6 @@ const Shop = () => {
             toast.error("Error verifying payment!");
           }
           await handleOrderSubmit(e);
-
           // setTimeout(() => {
           //   router.push('/shop-now');
           //   setTimeout(() => {
@@ -523,7 +508,6 @@ const Shop = () => {
           //   }, 1000);
           // }, 0);
         },
-
         theme: {
           color: "#acaf4c",
         },
@@ -537,7 +521,6 @@ const Shop = () => {
   useEffect(() => {
     fetchCartData();
   }, [fetchCartData]);
-
   useEffect(() => {
     fetchAddressById();
   }, [fetchAddressById]);
@@ -600,7 +583,7 @@ const Shop = () => {
           className="lg:h-[80vh] h-auto w-full"
         />
       </div>
-      <section className="w-full bg-white">
+      <section className="w-full bg-white" id='responsive-section'>
         <div className="py-6 md:py-8 lg:py-10">
           <div id="responsive-dev" className="flex m-0">
             <div id="responsive-container" className="w-[50%]">
@@ -608,38 +591,38 @@ const Shop = () => {
                 className="container_checkOut ml-[55px]"
                 style={{ height: "100%" }}
               >
-                <form onSubmit={handleSubmit}>
-                  <div className="">
-                    <div className="col-md-6">
-                      <div className="flex  gap-4">
-                        <div className="w-1/2">
-                          <label htmlFor="name">Full Name</label>
-                          <input
-                            type="text"
-                            id="name"
-                            name="name"
-                            placeholder="John M. Doe"
-                            value={formData.name}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="w-1/2">
-                          <label htmlFor="number">Phone</label>
-                          <input
-                            type="text"
-                            id="number"
-                            name="number"
-                            placeholder="10-digit mobile number"
-                            value={formData.number}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <label htmlFor="addressLine1">
-                        <i className="fa fa-address-card-o"></i> Address
-                      </label>
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="col-span-1">
+                      <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+                      <input
+                        type="text"
+                        id="name"
+                        name="name"
+                        placeholder="John M. Doe"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div className="col-span-1">
+                      <label htmlFor="number" className="block text-sm font-medium text-gray-700">Phone</label>
+                      <input
+                        type="text"
+                        id="number"
+                        name="number"
+                        placeholder="10-digit mobile number"
+                        value={formData.number}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-6">
+                    <div>
+                      <label htmlFor="addressLine1" className="block text-sm font-medium text-gray-700">Address</label>
                       <input
                         type="text"
                         id="addressLine1"
@@ -648,261 +631,250 @@ const Shop = () => {
                         value={formData.addressLine1}
                         onChange={handleChange}
                         required
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                       />
-                      <div className="flex  gap-4">
-                        <div className="w-1/2">
-                          <label htmlFor="pincode">Pincode</label>
-                          <input
-                            type="type"
-                            id="pincode"
-                            name="pincode"
-                            placeholder="Pincode"
-                            value={formData.pincode}
-                            onChange={handleChange}
-                            maxLength={6}
-                            required
-                          />
-                        </div>
-                        <div className="w-1/2">
-                          <label htmlFor="city">City</label>
-                          <input
-                            type="text"
-                            id="city"
-                            name="city"
-                            placeholder="Enter your city"
-                            value={formData.city}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="flex  gap-4">
-                        <div className="w-1/2">
-                          <label htmlFor="state">State</label>
-                          <input
-                            type="text"
-                            id="state"
-                            name="state"
-                            placeholder="State"
-                            value={formData.state}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                        <div className="w-1/2">
-                          <label htmlFor="country">Country</label>
-                          <input
-                            type="text"
-                            id="country"
-                            name="country"
-                            placeholder="India"
-                            value={formData.country}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
-                      <div className="">
-                        <div className="col-12">
-                          <label htmlFor="landmark">Landmark</label>
-                          <input
-                            type="text"
-                            id="landmark"
-                            name="landmark"
-                            placeholder="landmark"
-                            value={formData.landmark}
-                            onChange={handleChange}
-                            required
-                          />
-                        </div>
-                      </div>
                     </div>
                   </div>
-                  <label>
-                    <input type="checkbox" name="sameadr" /> Shipping address
-                    same as billing
-                  </label>
-                  <button type="submit" id="pay-btn">
-                    Create And Save Address
-                  </button>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="col-span-1">
+                      <label htmlFor="pincode" className="block text-sm font-medium text-gray-700">Pincode</label>
+                      <input
+                        type="text"
+                        id="pincode"
+                        name="pincode"
+                        placeholder="Pincode"
+                        value={formData.pincode}
+                        onChange={handleChange}
+                        maxLength={6}
+                        required
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div className="col-span-1">
+                      <label htmlFor="city" className="block text-sm font-medium text-gray-700">City</label>
+                      <input
+                        type="text"
+                        id="city"
+                        name="city"
+                        placeholder="Enter your city"
+                        value={formData.city}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="col-span-1">
+                      <label htmlFor="state" className="block text-sm font-medium text-gray-700">State</label>
+                      <input
+                        type="text"
+                        id="state"
+                        name="state"
+                        placeholder="State"
+                        value={formData.state}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                    <div className="col-span-1">
+                      <label htmlFor="country" className="block text-sm font-medium text-gray-700">Country</label>
+                      <input
+                        type="text"
+                        id="country"
+                        name="country"
+                        placeholder="India"
+                        value={formData.country}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 gap-6">
+                    <div>
+                      <label htmlFor="landmark" className="block text-sm font-medium text-gray-700">Landmark</label>
+                      <input
+                        type="text"
+                        id="landmark"
+                        name="landmark"
+                        placeholder="Landmark"
+                        value={formData.landmark}
+                        onChange={handleChange}
+                        required
+                        className="mt-1 block w-full border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                      />
+                    </div>
+                  </div>
+                  <div className="mt-4">
+                    <label className="flex items-center text-sm font-medium text-gray-700">
+                      <input type="checkbox" name="sameadr" className="form-checkbox h-4 w-4 text-indigo-600 transition duration-150 ease-in-out" />
+                      <span className="ml-2">Shipping address same as billing</span>
+                    </label>
+                  </div>
+                  <div className="mt-6">
+                    <button type="submit" id="pay-btn" className="w-full bg-indigo-600 text-white py-2 px-4 rounded-md shadow-sm hover:bg-indigo-700 transition duration-150 ease-in-out">
+                      Create And Save Address
+                    </button>
+                  </div>
                 </form>
-
-                <div className="address-box">
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 ">
+                <div className="address-box " id='address-card'>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                     {customerData.map((item, index) => (
-                      <div className="address-list border rounded-lg p-4 relative" key={index}>
+                      <div className="address-list border rounded-lg p-6 shadow-lg relative bg-white" key={index}>
                         <DeleteForeverIcon
-                          className="delete-icon absolute top-2 right-2 text-red-500 cursor-pointer"
+                          className="delete-icon absolute top-4 right-4 text-red-500 cursor-pointer hover:text-red-700 transition duration-200"
                           onClick={() => handleDelete(item)}
                         />
-                        <h3 className="address-head text-lg font-semibold mb-2">SHIPPING ADDRESS</h3>
-                        <div className="border-t mt-2 pt-2">
-                          <label className="flex items-center">
+                        <h3 className="address-head text-xl font-semibold mb-4">SHIPPING ADDRESS</h3>
+                        <div className="border-t mt-4 pt-4">
+                          <label className="flex items-center mb-2">
                             <input
                               type="radio"
                               name="address"
-                              className="address-selector mr-2"
+                              className="address-selector mr-3 accent-indigo-600"
                               onChange={() => handleAddressSelect(item)}
                             />
-                            <span className="font-medium">{item.name}</span>
+                            <span className="font-medium text-gray-700">{item.name}</span>
                           </label>
-                          <p className="mt-2">{item.addressLine1}</p>
-                          <p>
+                          <p className="text-gray-600">{item.addressLine1}</p>
+                          <p className="text-gray-600">
                             {item.city}, {item.state}, {item.pincode}
                           </p>
-                          <p className="mt-2">{item.phone}</p>
+                          <p className="mt-2 text-gray-600">{item.phone}</p>
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
-
-
               </div>
             </div>
             <div id="responsive-price" className=" w-[44.333333%]  ml-[40px]">
-              <div className="container_checkOut">
-                <h4 className="font-medium">
+              <div className="container_checkOut bg-white p-6 rounded-lg shadow-lg">
+                <h4 className="font-semibold text-lg m-2">
                   Products{" "}
-                  <span className="price" style={{ color: "black" }}>
+                  <span className="price text-black">
                     <b>{cartData.length}</b>
                   </span>
                 </h4>
-                <br />
+                <hr className="mb-4" />
                 {cartData.items?.length > 0 ? (
                   cartData.items.map((item, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between"
+                      className="flex items-center justify-between mb-4 border-b pb-4"
                     >
                       <Image
-                        style={{ width: "8%" }}
+                        className="w-1/6 rounded-lg"
                         src={item.ProductImage}
                         alt={item.productName}
-                        width={50}
-                        height={50}
+                        width={100}
+                        height={100}
                       />
-                      <div style={{ display: "flex" }}>
-                        <p>
-                          {item.ProductName} : {item.quantity} x {item.value}
+                      <div className="flex-1 ml-4">
+                        <p className="font-medium text-gray-700">{item.ProductName}</p>
+                        <p className="text-gray-500">{item.quantity} x {item.value}</p>
+                      </div>
+                      <div className="text-right flex flex-col items-end">
+                        <p className="price text-red-500 line-through text-sm mb-1">
+                          Rs. {item.maxPrice}
+                        </p>
+                        <p className="price text-gray-900 font-semibold text-lg">
+                          Rs. {item.price}
                         </p>
                       </div>
                       <div>
-                        <p className="price">
-                          <span style={{ textDecorationLine: "line-through" }}>
-                            Rs. {item.maxPrice}
-                          </span>
-                        </p>
-                      </div>
-                      <div>
-                        <p className="price">Rs. {item.price}</p>
-                      </div>
-                      <div>
-                        <p className="cursor-pointer">
-                          <svg
-                            class="h-6 w-6 text-red-400"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                            onClick={() => removeItem(item.cartId, item.itemId)}
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
-                            />
-                          </svg>
-                        </p>
+                        <svg
+                          className="h-6 w-6 text-red-400 cursor-pointer hover:text-red-600 transition duration-200"
+                          fill="none"
+                          viewBox="0 0 24 24"
+                          stroke="currentColor"
+                          onClick={() => removeItem(item.cartId, item.itemId)}
+                        >
+                          <path
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                            strokeWidth="2"
+                            d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"
+                          />
+                        </svg>
                       </div>
                     </div>
                   ))
                 ) : (
-                  <p>No products in cart</p>
+                  <p className="text-gray-500">No products in cart</p>
                 )}
-                <br />
-                <hr />
-                <br />
-                <div className="flex item-center justify-between">
-                  <div>
-                    <p>Total MRP</p>
+                <hr className="my-4" />
+                <div className="space-y-2">
+                  <div className="flex justify-between items-center">
+                    <p className="text-gray-700">Total MRP</p>
+                    <p className="text-gray-900">Rs. {cartData.totalPrice}</p>
                   </div>
-                  <div>
-                    <p>Rs. {cartData.totalPrice}</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-gray-700">Discount</p>
+                    <p className="text-green-500">{cartData.discount}</p>
                   </div>
-                </div>
-                <div className="flex item-center justify-between">
-                  <div>
-                    <p>Discount</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-gray-700">Sub Total</p>
+                    <p className="text-gray-900">Rs. {cartData.totalSalePrice}</p>
                   </div>
-                  <div>
-                    <p>{cartData.discount}</p>
+                  <div className="flex justify-between items-center">
+                    <p className="text-gray-700">Shipping charge</p>
+                    <p className="text-gray-900">+ {cartData.deliveryCharge}</p>
                   </div>
-                </div>
-                <div className="flex item-center justify-between">
-                  <div>
-                    <p>Sub Total</p>
-                  </div>
-                  <div>
-                    <p>Rs. {cartData.totalSalePrice}</p>
+                  <div className="flex justify-between items-center font-semibold">
+                    <p className="text-gray-700">Grand Total</p>
+                    <p className="text-black">Rs. {cartData.finaltotalPrice}</p>
                   </div>
                 </div>
-                <div className="flex item-center justify-between">
-                  <div>
-                    <p>Shipping charge</p>
-                  </div>
-                  <div>
-                    <p> + {cartData.deliveryCharge}</p>
-                  </div>
-                </div>
-                <p className="font-medium">
-                  Grand Total{" "}
-                  <span className="price" style={{ color: "black" }}>
-                    <b>Rs. {cartData.finaltotalPrice}</b>
-                  </span>
-                </p>
               </div>
-              <div className="container_checkOut" style={{ marginTop: "50px" }}>
-                <h4 className="font-medium">Shipping method</h4>
+              <div className="container_checkOut mt-12 bg-white p-6 rounded-lg shadow-lg">
+                <h4 className="font-medium text-lg mb-4">Shipping Method</h4>
                 <div className="mainContainer">
                   <div className="card">
-                    <div className="payments-container">
+                    <div className="payments-container space-y-4">
                       <div className="payments-wrapper">
-                        <label>
+                        <label className="flex items-center space-x-3">
                           <input
                             type="radio"
                             value="Razorpay"
                             name="paymentMethod"
-                            className="form-check-input"
+                            className="form-check-input accent-indigo-600"
                             checked={radioOptions === "Razorpay"}
                             onChange={handleRadioChange}
                           />
-                          Online Payment
+                          <span className="font-medium text-gray-700">Online Payment</span>
                         </label>
                       </div>
                       <div className="payments-wrapper">
-                        <label>
+                        <label className="flex items-center space-x-3">
                           <input
                             type="radio"
                             value="COD"
                             name="paymentMethod"
+                            className="form-check-input accent-indigo-600"
                             checked={radioOptions === "COD"}
                             onChange={handleRadioChange}
                           />
-                          Cash on Delivery
+                          <span className="font-medium text-gray-700">Cash on Delivery</span>
                         </label>
                       </div>
                     </div>
                     {radioOptions === "Razorpay" ? (
-                      <button id="pay-btn" onClick={handleOnlinePay}>
-                        Pay now
+                      <button
+                        id="pay-btn"
+                        onClick={handleOnlinePay}
+                        className="w-full mt-6 py-3 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition duration-200"
+                      >
+                        Pay Now
                       </button>
                     ) : (
                       <button
                         onClick={handleOrderSubmit}
-                        e
                         id="pay-btn"
                         type="submit"
+                        className="w-full mt-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition duration-200"
                       >
                         Place Order
                       </button>

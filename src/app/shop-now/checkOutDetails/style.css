@@ -89,7 +89,7 @@ span.price {
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
   font-weight: 400;
   line-height: 1;
-  margin: 3rem 2rem;
+ 
   padding: 1rem;
   width: 18rem;
 }
@@ -242,6 +242,7 @@ input {
     margin: 0;
   }
 
+
   .row {
     flex-direction: column;
   }
@@ -282,16 +283,22 @@ input {
     width: 100%;
     margin: 1rem 0;
   }
+  #responsive-dev{
+    display: flow;
+    margin-top: 17px;
+  }
 
   .headline, .card, .col-6, .email, .contact, .input, .delivery, .inputForName, .flex, .payment, .input {
     width: 100%;
     margin: 0;
   }
+  
 }
-
-@media (max-width: 430px) {
+@media (max-width: 600px) {
   .container_checkOut {
     display: contents;
+    width: 374px;
+    
   }
 
   #responsive-container, #responsive-dev, #responsive-price {
@@ -302,6 +309,74 @@ input {
   .address-list {
     width: 100%;
     margin: 1rem 0;
+  }
+  #responsive-dev{
+    display: flow;
+    margin-top: 17px;
+  }
+  #responsive-price{
+    width: 100%;
+  }
+}
+
+
+@media (max-width: 500px) {
+  .container_checkOut {
+    display: contents;
+    width: 374px;
+    
+  }
+
+  #responsive-container, #responsive-dev, #responsive-price {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .address-list {
+    width: 100%;
+    margin: 1rem 0;
+  }
+  #responsive-dev{
+    display: flow;
+    margin-top: 17px;
+  }
+  #responsive-price{
+    width: 100%;
+  }
+}
+
+
+
+@media (max-width: 430px) {
+  .container_checkOut {
+    display: contents;
+    width: 374px;
+    
+  }
+
+  #responsive-container, #responsive-dev, #responsive-price {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .address-list {
+    width: 100%;
+    margin: 1rem 0;
+  }
+  #responsive-dev{
+    display: flow;
+    margin-top: 17px;
+  }
+  #responsive-price{
+    width: 100%;
+  }
+}
+
+@media (max-width: 320px) {
+  #responsive-section{
+    padding: 16px;
+  }{
+    padding: 0px;
   }
 }
 

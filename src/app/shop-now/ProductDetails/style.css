@@ -1,0 +1,16 @@
+
+@media (max-width: 412px) {
+    #responsive-cart{
+        width: 70%;
+        margin-right: 126px;
+       
+    }
+    #section{
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+  
+    #slideImage{
+   padding: 36px;
+    }
+  }

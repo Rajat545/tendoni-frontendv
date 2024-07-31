@@ -1,0 +1,9 @@
+@media (max-width: 320px) {
+    #addToCart{
+        width: 22rem;
+    }
+    #btn{
+        gap: 0;
+        
+    }
+  }

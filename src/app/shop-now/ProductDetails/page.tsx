@@ -8,6 +8,7 @@ import { CartContext } from "../../../Context/CartContext";
 import { isAuth } from "../../../Context/AuthContext";
 import ScrollAnimation from "../../../utils/ScrollAnimation";
 import ReactImageMagnify from 'react-image-magnify';
+import '../ProductDetails/style.css'
 
 const ProductDetails = () => {
   const router = useRouter();
@@ -207,8 +208,8 @@ const ProductDetails = () => {
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
       <div>
-        <section className="w-full bg-white">
-          <div className="py-6 md:py-8 lg:py-10">
+        <section className=" bg-white">
+          <div className="py-6 md:py-8 lg:py-10" id='section'>
             {productDetails?.map((item, index) => (
               <ScrollAnimation key={index}>
                 <section
@@ -217,9 +218,9 @@ const ProductDetails = () => {
                   className={`${index % 2 === 0 ? "py-6 md:py-8 lg:py-10" : "bg-stone-300 py-6 md:py-8 lg:py-14"
                     }`}
                 >
-                  <div className="flex flex-col max-w-7xl items-center mx-auto px-4 md:flex-row">
+                  <div className="flex flex-col max-w-7xl items-center px-4 md:flex-row mx-auto" id='container'>
                     <div
-                      className={`relative w-full max-w-md px-4 md:w-1/2 md:max-w-none lg:mb-0 ${index % 2 === 0 ? "order-first" : ""
+                      className={`relative max-w-md px-4 md:w-1/2 md:max-w-none lg:mb-0 ${index % 2 === 0 ? "order-first" : ""
                         }`}
                     >
                       <ReactImageMagnify
@@ -246,7 +247,7 @@ const ProductDetails = () => {
                           }
                         }}
                       />
-                      <div className="flex mt-5 space-x-2 gap-4">
+                      <div className="flex mt-5 space-x-2 gap-4" id='slideImage'>
                         {[...Array(4)].map((_, idx) => (
                           <div key={idx} className="w-20 h-20 overflow-hidden">
                             <Image
@@ -281,7 +282,7 @@ const ProductDetails = () => {
                           <h5>Shipping Charge: Rs. 6.50</h5>
                         </div>
                       </p>
-                      <div className="mb-4">
+                      <div className="">
                         <h3>Available Quantity</h3>
                         <select
                           name="quantity"
@@ -300,12 +301,9 @@ const ProductDetails = () => {
                       </div>
                       {productInCart ? (
                         <div>
-                      
-                          <h1>View Cart</h1>
-
                           <button
                             onClick={openPopup}
-                            className="bg-yellow-500 mt-3 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                            className="bg-yellow-500  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                           >
                             View Cart
                           </button>
@@ -345,13 +343,8 @@ const ProductDetails = () => {
             onClick={closePopup}
           >
             <div
-              style={{
-                width: "50%",
-                overflow: "scroll",
-                marginTop: "140px",
-                paddingBottom: "100px",
-              }}
-              className="bg-white p-8 max-w-md h-screen fixed right-0"
+            id='responsive-cart'
+              className="bg-white p-8  h-full fixed right-0 mt-28"
               onClick={(e) => e.stopPropagation()}
             >
               <div
@@ -392,6 +385,7 @@ const ProductDetails = () => {
         <div key={item.productId} className="mt-5 flex items-center gap-6">
           <Image
             className=" object-contain"
+            id="img"
             src={item.productImages}
             alt={item.productName}
             width={100}
