@@ -148,6 +148,7 @@ const Header: React.FC = () => {
       <Toaster />
       <div
         className={`flex flex-row items-center justify-between container mx-auto lg:px-4 px-6 `}
+        id='header'
       >
         <Link href="/">
           <div className="flex z-20">

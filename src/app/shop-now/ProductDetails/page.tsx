@@ -275,12 +275,10 @@ const ProductDetails = () => {
                             <span className="line-through">
                               {quantity?.amount ? `RS ${quantity.amount}` : ""}{" "}
                             </span>
-                            {quantity?.saleAmount ? `Rs: ${quantity.saleAmount}` : "Select Item"}
+                            {quantity?.saleAmount ? `Rs: ${quantity.saleAmount}` : "Select Item First"}
                           </h5>
                         </div>
-                        <div>
-                          <h5>Shipping Charge: Rs. 6.50</h5>
-                        </div>
+
                       </p>
                       <div className="">
                         <h3>Available Quantity</h3>
@@ -321,6 +319,7 @@ const ProductDetails = () => {
                           </button>
                           <button
                             onClick={() => addToCart(item, "buy")}
+                            id='btn'
                             className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                           >
                             Buy Now
@@ -343,7 +342,7 @@ const ProductDetails = () => {
             onClick={closePopup}
           >
             <div
-            id='responsive-cart'
+              id='responsive-cart'
               className="bg-white p-8  h-full fixed right-0 mt-28"
               onClick={(e) => e.stopPropagation()}
             >
@@ -382,28 +381,28 @@ const ProductDetails = () => {
                 </div>
               </div>
               {cart.map((item) => (
-        <div key={item.productId} className="mt-5 flex items-center gap-6">
-          <Image
-            className=" object-contain"
-            id="img"
-            src={item.productImages}
-            alt={item.productName}
-            width={100}
-            height={100}
-          />
-          <div className="flex-1">
-            <a href="#">
-              <p>{item.productName}</p>
-            </a>
-            
-            <p className="font-normal line-through">Rs {quantity.amount}</p>
-            <p className="mt-3">Quantity:  {'x' + ' ' +  item.quantity} : {variantValue}</p>
-          </div>
-          <div className="text-right">
-            <p>Rs {variantPrice}</p>
-          </div>
-        </div>
-      ))}
+                <div key={item.productId} className="mt-5 flex items-center gap-6">
+                  <Image
+                    className=" object-contain"
+                    id="img"
+                    src={item.productImages}
+                    alt={item.productName}
+                    width={100}
+                    height={100}
+                  />
+                  <div className="flex-1">
+                    <a href="#" className="font-medium text-blue-600 hover:underline">
+                      <p>{item.productName}</p>
+                    </a>
+
+                    <p className="font-normal line-through">Rs {quantity.amount}</p>
+                    <p className="text-gray-700 mt-2">Quantity:  {'x' + ' ' + item.quantity} : {variantValue}</p>
+                  </div>
+                  <div className="text-right">
+                    <p>Rs {variantPrice}</p>
+                  </div>
+                </div>
+              ))}
               <div
                 className="mt-3"
                 style={{
@@ -425,7 +424,7 @@ const ProductDetails = () => {
                   }}
                 >
                   <div>
-                    
+
                     <button onClick={() => decrementCount(productId)}>
                       <h1>-</h1>
                     </button>
@@ -468,7 +467,7 @@ const ProductDetails = () => {
               >
                 <div>
                   <button
-                    style={{ padding: "10px 100px" }}
+                    
                     className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                     onClick={() => handleCheckOut(cart)}
                   >

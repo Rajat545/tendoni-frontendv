@@ -14,3 +14,14 @@
    padding: 36px;
     }
   }
+  @media (max-width: 320px) {
+    #responsive-cart{
+        width: 83%;
+        margin-right: 65px;
+       
+    }
+    #btn{
+        
+    }
+    
+  }

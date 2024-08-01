@@ -179,49 +179,49 @@ const Shop = () => {
       <div>
         <section className="w-full bg-white">
           <div className="py-6 md:py-8 lg:py-10">
-          <div className="lg:flex justify-center md:mx-4 gap-4 flex-wrap">
-  {data?.map((item) => (
-    <div
-      key={item.productId}
-      className="w-full my-4 sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 flex-shrink-0 flex justify-center"
-    >
-      <div className="bg-white border border-gray-200 rounded-lg p-4 relative overflow-hidden shadow-md flex flex-col items-center h-96">
-        <div className="cursor-pointer" onClick={() => productById(item.productId)}>
-          <Image
-            src={item.productImages}
-            className="mb-4"
-            alt="Product Image"
-            width={200}
-            height={200}
-          />
-          <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded text-xs">
-            {Math.floor(item.discount)}% Off
-          </div>
-          <h4 className="text-center font-medium text-base mb-2">
-            {item.productName}
-          </h4>
-          <div className="flex flex-col items-center">
-            <h4 className="text-gray-500 line-through text-sm">
-              Rs. {item.price}
-            </h4>
-            <h4 className="text-gray-800 font-bold text-base">
-              Rs. {item.sale_price}
-            </h4>
-          </div>
-        </div>
-        <button
-          onClick={() => {
-            addToCartItem(item);
-            openPopup();
-          }}
-          className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded mt-auto transition-colors duration-300"
-        >
-          Add to Cart
-        </button>
-      </div>
-    </div>
-  ))}
-</div>
+            <div className="lg:flex justify-center md:mx-4 gap-4 flex-wrap">
+              {data?.map((item) => (
+                <div
+                  key={item.productId}
+                  className="w-full my-4 sm:w-1/2 md:w-1/3 lg:w-1/4 p-2 flex-shrink-0 flex justify-center"
+                >
+                  <div className="bg-white border border-gray-200 rounded-lg p-4 relative overflow-hidden shadow-md flex flex-col items-center h-96">
+                    <div className="cursor-pointer" onClick={() => productById(item.productId)}>
+                      <Image
+                        src={item.productImages}
+                        className="mb-4"
+                        alt="Product Image"
+                        width={200}
+                        height={200}
+                      />
+                      <div className="absolute top-2 right-2 bg-yellow-500 text-white px-2 py-1 rounded text-xs">
+                        {Math.floor(item.discount)}% Off
+                      </div>
+                      <h4 className="text-center font-medium text-base mb-2">
+                        {item.productName}
+                      </h4>
+                      <div className="flex flex-col items-center">
+                        <h4 className="text-gray-500 line-through text-sm">
+                          Rs. {item.price}
+                        </h4>
+                        <h4 className="text-gray-800 font-bold text-base">
+                          Rs. {item.sale_price}
+                        </h4>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => {
+                        addToCartItem(item);
+                        openPopup();
+                      }}
+                      className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded mt-auto transition-colors duration-300"
+                    >
+                      Add to Cart
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
 
           </div>
         </section>
@@ -229,7 +229,7 @@ const Shop = () => {
           <div
             className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
             onClick={closePopup}
-            
+
           >
             <div
               className="bg-white p-8 max-w-lg h-screen fixed right-0 overflow-y-scroll mt-20 pb-24"
