@@ -201,6 +201,7 @@ const ProductDetails = () => {
       }
     }
   };
+  console.log(productDetails,"productDetails")
   return (
     <>
       <Toaster />
@@ -208,7 +209,7 @@ const ProductDetails = () => {
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
       </div>
       <div>
-        <section className=" bg-white">
+      <section className=" bg-white">
           <div className="py-6 md:py-8 lg:py-10" id='section'>
             {productDetails?.map((item, index) => (
               <ScrollAnimation key={index}>
@@ -223,40 +224,36 @@ const ProductDetails = () => {
                       className={`relative max-w-md px-4 md:w-1/2 md:max-w-none lg:mb-0 ${index % 2 === 0 ? "order-first" : ""
                         }`}
                     >
-                      <ReactImageMagnify
-                        {...{
-                          smallImage: {
-                            alt: 'image',
-                            isFluidWidth: false,
-                            src: selectedImage || item.productImages,
-                            // width: 504,
-                            // height: 504
-                          },
-                          largeImage: {
-                            src: selectedImage || item.productImages,
-                            width: 0,
-                            height: 0
-                          },
-                          // lensStyle: { backgroundColor: 'rgba(0,0,0,.6)' },
-                          // isHintEnabled: true,
-                          // shouldHideHintAfterFirstActivation: false,
-                          // enlargedImageContainerStyle: { background: '#fff', zIndex: 9999 },
-                          // enlargedImageContainerDimensions: {
-                          //   width: '160%',
-                          //   height: '100%',
-                          // }
-                        }}
+                      <Image
+                        src={selectedImage || item.productImages}
+                        alt="Product Image"
+                        className="object-contain cursor-pointer"
+                        width={600}
+                        height={450}
+                      
                       />
                       <div className="flex mt-5 space-x-2 gap-4" id='slideImage'>
-                        {[...Array(4)].map((_, idx) => (
-                          <div key={idx} className="w-20 h-20 overflow-hidden">
+                        {productDetails.map((_, idx) => (
+                          <div key={idx} className="overflow-hidden cursor-pointer">
                             <Image
-                              src={item.productImages}
+                              src={item.productFrontimage}
                               alt="Image"
                               className="object-contain cursor-pointer"
-                              width={80}
-                              height={80}
-                              onClick={() => setSelectedImage(item.productImages)}
+                              width={120}
+                              height={120}
+                              onClick={() => setSelectedImage(item.productFrontimage)}
+                            />
+                          </div>
+                        ))}
+                            {productDetails.map((_, idx) => (
+                          <div key={idx} className=" overflow-hidden cursor-pointer">
+                            <Image
+                              src={item.productBackimage}
+                              alt="Image"
+                              className="object-contain cursor-pointer"
+                              width={120}
+                              height={120}
+                              onClick={() => setSelectedImage(item.productBackimage)}
                             />
                           </div>
                         ))}
@@ -326,9 +323,8 @@ const ProductDetails = () => {
                           </button>
                         </div>
                       )}
-                      <p className="py-3 md:pt-4 md:pb-8 text-gray-700 text-sm md:text-base lg:text-lg">
-                        {item.description}
-                      </p>
+                      <div dangerouslySetInnerHTML={{__html: item.description}} className="py-3 md:pt-4 md:pb-8 text-gray-700 text-sm md:text-base lg:text-lg"/>
+                      
                     </div>
                   </div>
                 </section>
