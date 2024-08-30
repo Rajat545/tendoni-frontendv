@@ -463,8 +463,7 @@ const Privacy = () => {
         <p>
           You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
         </p>
-        <p>After confirmation date of your order we will ship you product and it will reach within 7 working days.</p>
-
+       
         <h4 className="text-md font-semibold mt-4">Contact Us</h4>
         <p>If you have any questions about this Privacy Policy, You can contact us:</p>
         <ul className="list-disc list-inside">
