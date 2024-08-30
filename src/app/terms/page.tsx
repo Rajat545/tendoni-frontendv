@@ -466,6 +466,8 @@ const Terms = () => {
           <p>
             You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
           </p>
+          <h4 className="text-md font-semibold mt-4">Shipping Policy</h4>
+
           <p>After confirmation date of your order we will ship you product and it will reach within 7 working days.</p>
 
 
