@@ -174,7 +174,7 @@ const Footer = () => {
         </h1>
         <Link href="https://venturingdigitally.com">
           <h1 className="font-oswald text-sm lg:text-base">
-            Designed & Developed By: Venturing Digitally
+            Designed & Developed By: Venturing Digitally.
           </h1>
         </Link>
       </div>
