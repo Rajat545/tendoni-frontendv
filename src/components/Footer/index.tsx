@@ -168,7 +168,8 @@ const Footer = () => {
         <h1 className="font-oswald text-sm lg:text-base">
           © Tendoni Group 2016 |{" "}
           <Link href="/terms"> Terms and Conditions </Link> |{" "}
-          <Link href="/return"> Return and Refund Policy </Link>
+          <Link href="/return"> Return and Refund Policy </Link>|{" "}
+        
         </h1>
         <Link href="https://venturingdigitally.com">
           <h1 className="font-oswald text-sm lg:text-base">
