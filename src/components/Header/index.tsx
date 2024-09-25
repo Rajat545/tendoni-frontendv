@@ -147,7 +147,7 @@ const Header: React.FC = () => {
     >
       <Toaster />
       <div
-        className={`flex flex-row items-center justify-between container mx-auto lg:px-4 px-6 `}
+        className={`flex flex-row items-center justify-between containers mx-auto lg:px-2 px-2 `}
         id='header'
       >
         <Link href="/">
@@ -159,7 +159,7 @@ const Header: React.FC = () => {
             />
           </div>
         </Link>
-        <nav className="hidden lg:flex z-20 flex-row font-oswald items-center text-sm md:text-base lg:text-lg xl:text-xl space-x-2 md:space-x-2 lg:space-x-3 xl:space-x-6 nav-bar">
+        <nav className="hidden lg:flex z-20 flex-row font-oswald items-center text-sm md:text-base lg:text-lg xl:text-xl space-x-2 md:space-x-2 lg:space-x-3 xl:space-x-6 nav-bar font-size">
           {menuItems.map((menuItem) => (
             <Link
               href={menuItem.url}
@@ -186,8 +186,8 @@ const Header: React.FC = () => {
         <div >
           <div className='addToCart'>
             <h1 className="cart" style={{ marginBottom: '-13px', marginLeft: '5px', backgroundColor: '#a67a44' }}> {cart.length > 0 ? cart.length : null}</h1>
-            <svg xmlns="http://www.w3.org/2000/svg" onClick={handleCartIconClick} fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="cursor-pointer size-6 mt-2 text-[#A67A44]">
-              <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            <svg xmlns="http://www.w3.org/2000/svg" onClick={handleCartIconClick} fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="cursor-pointer size-6 mt-2 text-[#A67A44]">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 0 0-16.536-1.84M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12.75 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
             </svg>
           </div>
         </div>
