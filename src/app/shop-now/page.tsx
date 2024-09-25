@@ -232,7 +232,7 @@ const Shop = () => {
 
           >
             <div
-              className="bg-white p-8 max-w-lg h-screen fixed right-0 overflow-y-scroll mt-20 pb-24"
+              className="bg-white p-8 max-w-lg h-screen fixed right-0 overflow-y-scroll mt-40 pb-24"
               onClick={(e) => e.stopPropagation()}
               id='addToCart'
             >
@@ -269,7 +269,7 @@ const Shop = () => {
                         {item.variant?.amount ? `Rs. ${item.variant.amount}` : ''}
                       </p>
                       <p className="text-gray-700 mt-2">
-                        Quantity: {item.quantity}  {item.variant?.Value}
+                        Quantity ({item.quantity})  {item.variant?.Value}
                       </p>
                     </div>
                     <div>

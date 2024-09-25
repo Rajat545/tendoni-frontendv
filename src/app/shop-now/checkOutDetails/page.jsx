@@ -805,7 +805,24 @@ const Shop = () => {
                 ) : (
                   <p className="text-gray-500">No products in cart</p>
                 )}
+                <div className="flex items-center space-x-4">
+    <input
+      type="text"
+      id="coupon"
+      name="coupon"
+      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
+      placeholder="Enter your coupon code"
+    />
+    <button
+      className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 mb-5"
+    >
+      Apply
+    </button>
+  </div>
                 <hr className="my-4" />
+                <div className="container mx-auto max-w-xl p-6">
+  
+</div>
                 <div className="space-y-2">
                   <div className="flex justify-between items-center">
                     <p className="text-gray-700">Total MRP</p>

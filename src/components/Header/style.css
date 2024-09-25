@@ -1,12 +1,12 @@
 .dropDownProfile {
     position: absolute;
     top: 5.5rem;
-    right: 0.5rem;
-    width: 129px;
+    right: 7.5rem;
+    width: 150px;
     padding: 12px;
     border-radius: 15px;
     border: 1px solid grey;
-    height: 14vh;
+   
     margin-right: 100px;
     background-color: white;
 }
