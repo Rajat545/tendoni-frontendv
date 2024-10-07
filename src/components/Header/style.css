@@ -44,6 +44,28 @@
     margin-top: -12px;
 }
 
+.font-size
+{
+    padding-inline: 10px !important;
+  font-size: 18px !important;
+}
+.containers
+{
+    padding-inline: 60px !important;
+}
+@media (max-width: 1200px) {
+   
+    .font-size
+    {
+        padding-inline: 4px !important;
+        font-size: 17px !important;
+    }
+    .containers
+    {
+        padding-inline: 40px !important;
+    }
+  }
+
 @media (max-width: 320px) {
     #header{
         padding-right: 1.5rem;

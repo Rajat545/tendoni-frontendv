@@ -7,29 +7,19 @@ const Terms = () => {
       <Section id={"turms"} title={""}>
         <div className="mt-[25px]">
           <h1 className="font-bold">Privacy Policy</h1>
-          <p>Last updated: July 12, 2024</p>
+          <p>Last updated: September 18, 2024</p>
           <p>
-            This Privacy Policy describes Our policies and procedures on the
-            collection, use and disclosure of Your information when You use the
-            Service and tells You about Your privacy rights and how the law
-            protects You.
+          This Privacy Policy describes Our policies and procedures on the collection, use and disclosure of Your information when You use the Service and tells You about Your privacy rights and how the law protects You.
           </p>
           <p>
-            We use Your Personal data to provide and improve the Service. By
-            using the Service, You agree to the collection and use of
-            information in accordance with this Privacy Policy. This Privacy
-            Policy has been created with the help of the Privacy Policy
-            Generator.
+          We use Your Personal data to provide and improve the Service. By using the Service, You agree to the collection and use of information in accordance with this Privacy Policy. This Privacy Policy has been created with the help of the Privacy Policy Generator.
           </p>
 
           <h2 className="text-lg font-bold mt-6">Interpretation and Definitions</h2>
 
           <h3 className="text-md font-semibold mt-4">Interpretation</h3>
           <p>
-            The words of which the initial letter is capitalized have meanings
-            defined under the following conditions. The following definitions
-            shall have the same meaning regardless of whether they appear in
-            singular or in plural.
+          The words of which the initial letter is capitalized have meanings defined under the following conditions. The following definitions shall have the same meaning regardless of whether they appear in singular or in plural.
           </p>
 
           <h3 className="text-md font-semibold mt-4">Definitions</h3>
@@ -46,10 +36,7 @@ const Terms = () => {
               interest or other securities entitled to vote for election of
               directors or other managing authority.
             </li>
-            <li>
-              <strong>Application</strong> refers to Tendoni salesman, the
-              software program provided by the Company.
-            </li>
+          
             <li>
               <strong>Company</strong> (referred to as either "the Company",
               "We", "Us" or "Our" in this Agreement) refers to Tendoni Food Chem
@@ -62,9 +49,6 @@ const Terms = () => {
               among its many uses.
             </li>
             <li>
-              <strong>Country</strong> refers to: Madhya Pradesh, India
-            </li>
-            <li>
               <strong>Device</strong> means any device that can access the
               Service such as a computer, a cellphone or a digital tablet.
             </li>
@@ -73,8 +57,7 @@ const Terms = () => {
               an identified or identifiable individual.
             </li>
             <li>
-              <strong>Service</strong> refers to the Application or the Website
-              or both.
+              <strong>Service</strong>  refers to the Website.
             </li>
             <li>
               <strong>Service Provider</strong> means any natural or legal
@@ -145,28 +128,6 @@ const Terms = () => {
             We may also collect information that Your browser sends whenever You
             visit our Service or when You access the Service by or through a
             mobile device.
-          </p>
-
-          <h4 className="text-md font-semibold mt-4">
-            Information Collected while Using the Application
-          </h4>
-          <p>
-            While using Our Application, in order to provide features of Our
-            Application, We may collect, with Your prior permission:
-          </p>
-          <ul className="list-disc list-inside">
-            <li>Information regarding your location</li>
-            <li>Information from your Device's phone book (contacts list)</li>
-          </ul>
-          <p>
-            We use this information to provide features of Our Service, to
-            improve and customize Our Service. The information may be uploaded
-            to the Company's servers and/or a Service Provider's server or it
-            may be simply stored on Your device.
-          </p>
-          <p>
-            You can enable or disable access to this information at any time,
-            through Your Device settings.
           </p>
 
           <h4 className="text-md font-semibold mt-4">
@@ -466,7 +427,7 @@ const Terms = () => {
           <p>
             You are advised to review this Privacy Policy periodically for any changes. Changes to this Privacy Policy are effective when they are posted on this page.
           </p>
-
+          
           <h4 className="text-md font-semibold mt-4">Contact Us</h4>
           <p>If you have any questions about this Privacy Policy, You can contact us:</p>
           <ul className="list-disc list-inside">

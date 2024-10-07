@@ -1,7 +1,7 @@
 import Section from "@/components/Section/Section";
 import React from "react";
 
-const Privacy = () => {
+const PrivacyUpdate = () => {
   return (
     <>
       <Section id={"Privacy"} title={""}>
@@ -479,4 +479,4 @@ const Privacy = () => {
   );
 };
 
-export default Privacy;
+export default PrivacyUpdate;

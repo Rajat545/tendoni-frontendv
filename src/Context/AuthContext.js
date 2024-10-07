@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
   const [orderHistory, setOrderHistory] = useState([]);
   const [trackProduct, setTrackProduct] = useState("");
 
+
   const router = useRouter();
 
   const handleOrderDetails = (orderId) => {

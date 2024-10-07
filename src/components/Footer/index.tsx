@@ -167,12 +167,14 @@ const Footer = () => {
       <div className="flex justify-between text-accentColor container mx-auto px-4 lg:px-6 xl:px-6 gap-14">
         <h1 className="font-oswald text-sm lg:text-base">
           © Tendoni Group 2016 |{" "}
-          <Link href="/terms"> Terms and Conditions </Link> |{" "}
-          <Link href="/return"> Return and Refund Policy </Link>
+          <Link href="/privacy"> Terms and Conditions </Link> |{" "}
+          <Link href="/return"> Return and Refund Policy </Link>|{" "}
+          <Link href="/terms"> Privacy Policy </Link>
+        
         </h1>
         <Link href="https://venturingdigitally.com">
           <h1 className="font-oswald text-sm lg:text-base">
-            Designed & Developed By: Venturing Digitally
+            Designed & Developed By: Venturing Digitally.
           </h1>
         </Link>
       </div>
