@@ -15,6 +15,8 @@ const Shop = () => {
   const [popUp, setPopUp] = useState(false);
   const [customerId, setCustomerId] = useState("");
   const [cartData, setCartData] = useState("");
+  const [couponData,setCouponData] = useState();
+  const [couponCode,setCouponCode] = useState('')
   const [customerData, setCustomerData] = useState([]);
   const { addressData, setAddressData } = useState([]);
   const [radioOptions, setRadioOptions] = useState("Razorpay");
@@ -193,6 +195,35 @@ const Shop = () => {
       toast.error("Error fetching cart data:", error);
     }
   }, []);
+
+  const handleAddCoupon =async()=>{
+    try {
+      const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
+        if (!userData.data) {
+          throw new Error("User data not found");
+        }
+        const { access_token } = userData.data;
+      const couponResponse = await fetch(
+        "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/applyCoupon",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            Authorization: `${access_token}`,
+          },
+          body: JSON.stringify({ couponCode }),
+        }
+      );
+      const result = await couponResponse.json();
+      
+      setCouponData(result.data)
+      setCouponCode("");
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
+  }
   const handleRadioChange = (e) => {
     setRadioOptions(e.target.value);
   };
@@ -262,7 +293,7 @@ const Shop = () => {
       toast.error("Error saving address !", error);
     }
   }, [formData, router]);
-  const amount = Math.round(cartData?.finaltotalPrice * 100);
+  const amount = Math.round((couponData ? couponData?.finaltotalPrice : cartData.finaltotalPrice) * 100);
   const handleOrderSubmit = async (e) => {
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -810,10 +841,13 @@ const Shop = () => {
       type="text"
       id="coupon"
       name="coupon"
+      value={couponCode}
+      onChange={(e)=>setCouponCode(e.target.value)}
       className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
       placeholder="Enter your coupon code"
     />
     <button
+      onClick={handleAddCoupon}
       className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 mb-5"
     >
       Apply
@@ -823,28 +857,62 @@ const Shop = () => {
                 <div className="container mx-auto max-w-xl p-6">
   
 </div>
-                <div className="space-y-2">
-                  <div className="flex justify-between items-center">
-                    <p className="text-gray-700">Total MRP</p>
-                    <p className="text-gray-900">Rs. {cartData.totalPrice}</p>
+                {!couponData ? (
+                  <div className="space-y-2">
+                    <div className="flex justify-between items-center">
+                      <p className="text-gray-700">Total MRP</p>
+                      <p className="text-gray-900">Rs. {cartData.totalPrice}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p className="text-gray-700">Discount</p>
+                      <p className="text-green-500">{cartData.discount}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p className="text-gray-700">Sub Total</p>
+                      <p className="text-gray-900">Rs. {cartData.totalSalePrice}</p>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <p className="text-gray-700">Shipping charge</p>
+                      <p className="text-gray-900">+ {cartData.deliveryCharge}</p>
+                    </div>
+                    <div className="flex justify-between items-center font-semibold">
+                      <p className="text-gray-700">Grand Total</p>
+                      <p className="text-black">Rs. {cartData.finaltotalPrice}</p>
+                    </div>
                   </div>
-                  <div className="flex justify-between items-center">
-                    <p className="text-gray-700">Discount</p>
-                    <p className="text-green-500">{cartData.discount}</p>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <p className="text-gray-700">Sub Total</p>
-                    <p className="text-gray-900">Rs. {cartData.totalSalePrice}</p>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <p className="text-gray-700">Shipping charge</p>
-                    <p className="text-gray-900">+ {cartData.deliveryCharge}</p>
-                  </div>
-                  <div className="flex justify-between items-center font-semibold">
-                    <p className="text-gray-700">Grand Total</p>
-                    <p className="text-black">Rs. {cartData.finaltotalPrice}</p>
-                  </div>
-                </div>
+                  ) : (
+                    <div className="space-y-2">
+                      <div className="flex justify-between items-center">
+                        <p className="text-gray-700">Total MRP</p>
+                        <p className="text-gray-900">Rs. {couponData.totalPrice}</p>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <p className="text-gray-700">Discount</p>
+                        <p className="text-green-500">{couponData.discount}</p>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <p className="text-gray-700">Sub Total</p>
+                        <p className="text-gray-900">Rs. {couponData.totalSalePrice}</p>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <p className="text-gray-700">Coupon Price</p>
+                        <p className="text-gray-900">Rs. {couponData.couponPrice}</p>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <p className="text-gray-700">Sub Final Price</p>
+                        <p className="text-gray-900">Rs. {couponData.subfinalTotalPrice}</p>
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <p className="text-gray-700">Shipping charge</p>
+                        <p className="text-gray-900">+ {couponData.deliveryCharge}</p>
+                      </div>
+                      <div className="flex justify-between items-center font-semibold">
+                        <p className="text-gray-700">Grand Total</p>
+                        <p className="text-black">Rs. {couponData.finaltotalPrice}</p>
+                      </div>
+                    </div>
+                  )
+                }
               </div>
               <div className="container_checkOut mt-12 bg-white p-6 rounded-lg shadow-lg">
                 <h4 className="font-medium text-lg mb-4">Shipping Method</h4>

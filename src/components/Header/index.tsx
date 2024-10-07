@@ -146,10 +146,12 @@ const Header: React.FC = () => {
         } `}
     >
       <Toaster />
-      <div
+      {/* <div
         className={`flex flex-row items-center justify-between container mx-auto lg:px-4 px-6 `}
         id='header'
-      >
+      > */}
+      <div className="flex items-center gap-4 text-sm justify-around"
+        id="header">
         <Link href="/">
           <div className="flex z-20">
             <Image
@@ -159,7 +161,7 @@ const Header: React.FC = () => {
             />
           </div>
         </Link>
-        <nav className="hidden lg:flex z-20 flex-row font-oswald items-center text-sm md:text-base lg:text-lg xl:text-xl space-x-2 md:space-x-2 lg:space-x-3 xl:space-x-6 nav-bar">
+        <nav className="hidden lg:flex z-20 flex-row font-oswald items-center text-sm lg:text-md xl:text-xl space-x-2 md:space-x-2 lg:space-x-3 xl:space-x-6 nav-bar">
           {menuItems.map((menuItem) => (
             <Link
               href={menuItem.url}
@@ -177,7 +179,7 @@ const Header: React.FC = () => {
         </nav>
         <Link href={"/become-a-partner"}>
           <button
-            className={`hidden lg:flex px-4 py-1 items-center border-2 pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald border-[#A67A44] hover:bg-[#A67A44] hover:text-black ${showChildMenu ? "child-visible" : ""
+            className={`hidden lg:flex px-4 py-1 items-center border-2 pb-2 text-sm lg:text-md xl:text-xl font-oswald border-[#A67A44] hover:bg-[#A67A44] hover:text-black ${showChildMenu ? "child-visible" : ""
               } rounded-sm text-center `}
           >
             Become a partner
@@ -193,7 +195,7 @@ const Header: React.FC = () => {
         </div>
         <>
           <button
-            className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+            className={`hidden lg:flex items-center pb-2 text-sm lg:text-md xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
               } rounded-sm text-center `}
             style={{ marginTop: '5px' }}
             onMouseOver={() => setOpenProfile((prev) => !prev)}
@@ -201,7 +203,7 @@ const Header: React.FC = () => {
             {isAuthnticate ? "User" : ''}
           </button>
           <Link href={'/login'}
-            className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
+            className={`hidden lg:flex items-center pb-2 text-sm lg:text-md xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
               } rounded-sm text-center `}
             style={{ marginTop: '-2px' }}
           >
@@ -218,7 +220,7 @@ const Header: React.FC = () => {
                     My Profile
                   </button>
                   <Link
-                    href={'./login'}
+                    href={'/login'}
                     onClick={handleLogout}
                     className={`hidden lg:flex items-center pb-2 text-sm md:text-base lg:text-lg xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
                       } rounded-sm text-center `}>

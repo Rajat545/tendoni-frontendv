@@ -22,6 +22,10 @@ const Shop = () => {
     showCartPopup,
     setShowCartPopup,
   } = useContext(CartContext);
+
+  console.log(variant?.map(item=> item),"varients details")
+
+
   useEffect(() => {
     if (cart.length > 0) {
       const productVariants = cart.reduce((acc, product) => {
@@ -64,7 +68,9 @@ const Shop = () => {
     document.querySelector("header").style.display = "none";
   };
   const addToCartItem = (item) => {
+    console.log(item,"cart item")
     const existingItemIndex = cart.findIndex((cartItem) => cartItem.productId === item.productId);
+    console.log(existingItemIndex)
     if (existingItemIndex !== -1) {
       const updatedCart = [...cart];
       updatedCart[existingItemIndex].quantity += 1;
@@ -75,8 +81,9 @@ const Shop = () => {
         Value: item.value,
         amount: item.price,
         saleAmount: item.sale_price,
-        variantId: item.varientId
+        variantId: item.variantId
       };
+      
       setCart((prevCart) => [
         ...prevCart,
         { ...item, quantity: 1, variant: defaultVariant },
@@ -93,18 +100,34 @@ const Shop = () => {
     setCart(deleteData);
     toast.error("Removed from cart");
   };
+  let selectedVariant="";
+ 
   const handleVariantChange = (item, value,) => {
     const { productId } = item
-    const selectedVariant = variant.find(v => v.valueId === value);
+ 
+ 
+    for (const item of cart) {
+ 
+      for (const variant of item.Variant) {
+        if (variant.valueId === value && item.productId === productId) {
+          selectedVariant=variant;
+        }
+      }
+    }
+  
+ 
     const newCart = cart.map(item => {
       if (item.productId === productId) {
         item.variant = selectedVariant;
       }
       return item;
     });
+ 
     setCart(newCart);
+ 
     setSelectedVariants(prevSelected => ({ ...prevSelected, [item.productName]: value }));
   };
+ 
   const calculateTotalPrice = () => {
     return cart.reduce((total, item) => {
       if (item.variant && item.variant.saleAmount) {
@@ -114,12 +137,13 @@ const Shop = () => {
     }, 0);
   };
   const handleCheckOut = async () => {
+    
     if (Object.keys(selectedVariants).length == 0) {
       toast.error('Please Select quantity')
       return;
     }
-    const isAuthnticate = isAuth();
-    if (!isAuthnticate) {
+    const isAuthentic = isAuth();
+    if (!isAuthentic) {
       router.push("/login");
       return;
     }
@@ -139,6 +163,7 @@ const Shop = () => {
           price: item.variant.saleAmount,
           maxPrice: item.variant.amount,
         }));
+        console.log(items,"ye hai items")
         const payload = {
           customerId,
           items,
@@ -147,13 +172,15 @@ const Shop = () => {
           method: 'POST',
           headers: {
             "Content-Type": 'application/json',
-            'Accept': 'application/json',
-            'Authorization': `${access_token}`,
+            Accept: 'application/json',
+            Authorization: `${access_token}`,
           },
           body: JSON.stringify(payload),
         }
         const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart', requestOptions);
         const data = await response.json();
+        console.log(response,"ye hai response")
+        console.log(data,"ye hai data")
         if (response.status == 200 && data.message === 'Items added to cart successfully') {
           router.push("/shop-now/checkOutDetails")
         } else {
@@ -164,7 +191,6 @@ const Shop = () => {
       toast.error("please select item");
     }
   };
-
   return (
     <>
       <Toaster />
@@ -222,14 +248,12 @@ const Shop = () => {
                 </div>
               ))}
             </div>
-
           </div>
         </section>
         {showCartPopup && cart.length > 0 && (
           <div
             className="fixed inset-0 z-50 overflow-y-auto bg-black bg-opacity-50 flex justify-end items-center"
             onClick={closePopup}
-
           >
             <div
               className="bg-white p-8 max-w-lg h-screen fixed right-0 overflow-y-scroll mt-40 pb-24"
@@ -245,12 +269,10 @@ const Shop = () => {
                   X
                 </button>
               </div>
-
               <div className="flex justify-between border-b pb-2 mb-4">
                 <p className="font-medium">Product</p>
                 <p className="font-medium">Total</p>
               </div>
-
               {cart.map((item) => (
                 <div key={item.productId} className="flex flex-col mb-6">
                   <div className="flex items-center gap-6 mb-4">
@@ -280,10 +302,8 @@ const Shop = () => {
                       )}
                     </div>
                   </div>
-
                   <div className="flex justify-between items-center gap-4" id='btn'>
                     <div className="flex items-center gap-2">
-
                       <select
                         name="quantity"
                         id="quantity"
@@ -292,14 +312,13 @@ const Shop = () => {
                         onChange={(e) => handleVariantChange(item, e.target.value)}
                       >
                         <option value="">Select Quantity</option>
-                        {variant?.map((variant) => (
+                        {item.Variant?.map((variant) => (
                           <option key={variant.variantId} value={variant.valueId}>
                             {variant.Value}
                           </option>
                         ))}
                       </select>
                     </div>
-
                     <div className="flex items-center border border-gray-300 p-2 rounded">
                       <button onClick={() => decrementCount(item.productId)} className="px-2">
                         -
@@ -309,7 +328,6 @@ const Shop = () => {
                         +
                       </button>
                     </div>
-
                     <button
                       className="text-red-500 font-bold"
                       onClick={() => deleteById(item.productId)}
@@ -319,12 +337,10 @@ const Shop = () => {
                   </div>
                 </div>
               ))}
-
               <div className="flex justify-between items-center border-t pt-4 mt-6">
                 <p className="font-medium">Estimated Total</p>
                 <p className="font-medium">Rs: {calculateTotalPrice()}</p>
               </div>
-
               <div className="flex justify-center mt-6">
                 <button
                   className="bg-yellow-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -336,7 +352,6 @@ const Shop = () => {
             </div>
           </div>
         )}
-
       </div>
     </>
   );

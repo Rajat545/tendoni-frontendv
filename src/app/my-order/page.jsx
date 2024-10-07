@@ -134,7 +134,7 @@ const MyOrder = () => {
       <Toaster />
       <div className="padding">
         <div className="row container d-flex justify-content-center">
-          <div className="user-info w-[98%]">
+          <div className="user-info w-[100%]">
             <div className="card user-card-full">
               <div className="row m-l-0 m-r-0">
                 <div className="col-12">

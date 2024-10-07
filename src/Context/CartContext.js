@@ -43,8 +43,9 @@ export function CartProvider({ children }) {
 
   useEffect(() => {
     const productVariants = cart.map(product => product.Variant);
-    setVariant(...productVariants);
+    setVariant(productVariants);
   }, [cart]);
+
 
   // ---------------------- signup api ---------------//
 
@@ -97,6 +98,7 @@ export function CartProvider({ children }) {
     const productData =  data.filter((item) => item.productId === product.productId);
   };
 
+  console.log(cart,"jhgfjsdgdf")
 
   return (
     <CartContext.Provider
