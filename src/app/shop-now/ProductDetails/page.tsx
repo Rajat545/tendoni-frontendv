@@ -1,15 +1,13 @@
-"use client";
+"use client";;
 import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from "react-hot-toast";
 import { CartContext } from "../../../Context/CartContext";
 import { isAuth } from "../../../Context/AuthContext";
 import ScrollAnimation from "../../../utils/ScrollAnimation";
-import ReactImageMagnify from 'react-image-magnify';
 import '../ProductDetails/style.css'
-
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
@@ -19,6 +17,7 @@ const ProductDetails = () => {
     Value: "",
     amount: 0,
     saleAmount: 0,
+    variantId: ''
   });
   const {
     productId,
@@ -68,7 +67,6 @@ const ProductDetails = () => {
     setShowCartPopup(true);
     document.body.style.overflow = "hidden";
   };
-
   const closePopup = () => {
     setShowPopup(false);
     setShowCartPopup(false);
@@ -79,7 +77,6 @@ const ProductDetails = () => {
     setCart(deleteData);
     toast.error("Removed from cart");
   };
-
   const addToCart = async (item, name) => {
     console.log(item, "item");
     if (!quantity?.valueId || !quantity.Value) {
@@ -114,6 +111,7 @@ const ProductDetails = () => {
       }
     }
   };
+  
   const handleVariantChange = (e) => {
     const selectedVariantId = e.target.value;
     const selectedVariant = quantityData.find(
@@ -151,7 +149,6 @@ const ProductDetails = () => {
       return null;
     }
   };
-
   const handleCheckOut = async () => {
     console.log("Checkout function called");
     if (Object.keys(quantity).length === 0) {
@@ -169,7 +166,6 @@ const ProductDetails = () => {
         throw new Error("User data not found");
       }
       try {
-        
         const { customerId, access_token } = userData.data;
         const items = cart?.map((item) => ({
           productId: item.productId,
@@ -207,13 +203,11 @@ const ProductDetails = () => {
         } else {
           toast.error("Failed to add product to cart! Please try again.");
         }
-        
       } catch (error) {
         toast.error("Failed to complete checkout! Please try again.");
       }
     }
   };
-
   return (
     <>
     <header/>
@@ -243,7 +237,6 @@ const ProductDetails = () => {
                         className="object-contain cursor-pointer"
                         width={600}
                         height={450}
-                      
                       />
                       <div className="flex mt-5 space-x-2 gap-4" id='slideImage'>
                         {productDetails.map((_, idx) => (
@@ -288,7 +281,6 @@ const ProductDetails = () => {
                             {quantity?.saleAmount ? `Rs: ${quantity.saleAmount}` : "Select Item First"}
                           </h5>
                         </div>
-
                       </p>
                       <div className="">
                         <h3>Available Quantity</h3>
@@ -337,7 +329,6 @@ const ProductDetails = () => {
                         </div>
                       )}
                       <div dangerouslySetInnerHTML={{__html: item.description}} className="py-3 md:pt-4 md:pb-8 text-gray-700 text-sm md:text-base lg:text-lg"/>
-                      
                     </div>
                   </div>
                 </section>
@@ -399,7 +390,6 @@ const ProductDetails = () => {
                   </div>
                   <div className="flex justify-between items-center gap-4" id='btn'>
                     <div className="flex items-center gap-2">
-                    
                     </div>
                     <div className="flex items-center border border-gray-300 p-2 rounded">
                       <button onClick={() => decrementCount(item.productId)} className="px-2">
@@ -434,7 +424,6 @@ const ProductDetails = () => {
             </div>
           </div>
         )}
-
       </div>
     </>
   );
