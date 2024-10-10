@@ -27,6 +27,7 @@ const Header: React.FC = () => {
   const [expandedChildMenu, setExpandedChildMenu] = useState<string | null>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const { setShowCartPopup, cart } = useContext(CartContext)
+  
   const handleLogout = () => {
     localStorage.removeItem("user-info");
     localStorage.removeItem("access-token");
@@ -207,7 +208,7 @@ const Header: React.FC = () => {
           <Link href={'/login'}
             className={`hidden lg:flex items-center pb-2 text-sm lg:text-md xl:text-xl font-oswald ${showChildMenu ? "child-visible" : ""
               } rounded-sm text-center `}
-            style={{ marginTop: '-2px' }}
+            style={{ marginRight: '0px'}}
           >
             {!isAuthnticate ? "Login" : ''}
           </Link>

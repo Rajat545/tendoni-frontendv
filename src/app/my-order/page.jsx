@@ -206,7 +206,7 @@ const MyOrder = () => {
                           </h1>
                         </div>
                         <div className="col-span-2">
-                          <h1 className="text-lg">Rs. {order.finaltotalPrice}</h1>
+                          <h1 className="text-lg">₹ {order.finaltotalPrice}</h1>
                         </div>
                         <div className="col-span-2">
                           <span className="text-gray-700">{order.orderState}</span>

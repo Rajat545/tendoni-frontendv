@@ -91,7 +91,7 @@ body {
     padding: 45px;
     border-radius: 9px;
     margin-left: 64px;
-    height: 33vh;
+
 }
 
 .large-font-size-padding {
@@ -215,7 +215,7 @@ body {
     }
 
     #price {
-        height: 47vh;
+        height: 49vh;
     }
 
     .card {

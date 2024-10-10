@@ -2,7 +2,7 @@
 import { useContext } from 'react';
 import Image from 'next/image';
 import '@/app/my-profile/style.css';
-import garamMasala from '@Images/ProductImages/garammasala.png';
+
 import { AuthContext } from '@/Context/AuthContext';
 
 const MyProfile = () => {
@@ -27,7 +27,7 @@ const MyProfile = () => {
                 return 1;
         }
     };
-
+console.log(trackProduct,'track')
     return (
         <div className="container px-1 px-md-4 py-5 mx-auto">
             <div className="card_info">
@@ -90,69 +90,55 @@ const MyProfile = () => {
                                         />
                                         <h1 className="ml-4">{item.ProductName}</h1>
                                         <h1>{item.quantity} x {item.value}</h1>
-                                        <h1 className="price">Rs. {item.price}</h1>
+                                        <h1 className="price">₹ {item.price}</h1>
                                     </div>
                                 ))
                             ))}
                         </div>
-                        <div className='sub-total bg-eceff1 w-60 rounded-lg p-4 ml-64' id='price'>
-                            <div id='total-price' className="flex item-center justify-between">
-                                <div>
-                                    <p>Total Price</p>
-                                </div>
-                                <div>
-                                    <p>Rs.{trackProduct ? trackProduct[0]?.totalPrice : 'NA'}</p>
-                                </div>
+                        <div className="sub-total bg-gray-100 w-60 rounded-lg p-4 ml-64 shadow-lg" id="price">
+                        <div className="space-y-3">
+                            <div className="flex justify-between items-center">
+                            <p className="text-gray-700">Total MRP</p>
+                            <p className="text-gray-900">₹ {trackProduct ? trackProduct[0]?.totalPrice : 'NA'}</p>
                             </div>
-                            <div id='total-price' className="flex item-center justify-between">
-                                <div>
-                                    <p>Discount</p>
-                                </div>
-                                <div>
-                                    <p> {trackProduct ? trackProduct[0]?.discount : 'NA'}</p>
-                                </div>
+                            <div className="flex justify-between items-center">
+                            <p className="text-gray-700">Discount</p>
+                            <p className="text-green-500">₹ {trackProduct ? trackProduct[0]?.discount : 'NA'}</p>
                             </div>
-                            <div id='total-price' className="flex item-center justify-between">
-                                <div>
-                                    <p>Sub Total</p>
-                                </div>
-                                <div>
-                                    <p>Rs. {trackProduct ? trackProduct[0]?.totalSalePrice : 'NA'}</p>
-                                </div>
+                            <div className="flex justify-between items-center">
+                            <p className="text-gray-700">Sub Total</p>
+                            <p className="text-gray-900">₹ {trackProduct ? trackProduct[0]?.totalSalePrice : 'NA'}</p>
                             </div>
-                            <div id='total-price' className="flex item-center justify-between">
-                                <div>
-                                    <p>Shipping charge</p>
+                            {trackProduct && trackProduct[0]?.couponPrice ? (
+                                <div className="flex justify-between items-center">
+                                    <p className="text-gray-700">Coupon Price</p>
+                                    <p className="text-green-500">₹ {trackProduct[0]?.couponPrice}</p>
                                 </div>
-                                <div>
-                                    <p> + {trackProduct ? trackProduct[0]?.deliveryCharge : 'NA'}</p>
-                                </div>
+                            ) : null}  
+                            <div className="flex justify-between items-center">
+                            <p className="text-gray-700">Shipping Charge</p>
+                            <p className="text-gray-900">+ ₹ {trackProduct ? trackProduct[0]?.deliveryCharge : 'NA'}</p>
                             </div>
-                            <div id='total-price' className="flex item-center justify-between">
-                                <div>
-                                    <p>Payment Mode</p>
-                                </div>
-                                <div>
-                                    <p>  {trackProduct ? trackProduct[0]?.paymentDetails.paymentMethod : 'NA'}</p>
-                                </div>
+                            <div className="flex justify-between items-center">
+                            <p className="text-gray-700">Payment Mode</p>
+                            <p className="text-gray-900">{trackProduct ? trackProduct[0]?.paymentDetails.paymentMethod : 'NA'}</p>
                             </div>
-                            <div id='total-price' className="flex item-center justify-between">
-                                <div>
-                                    <p>Payment Status</p>
-                                </div>
-                                <div>
-                                    <p>  {trackProduct ? trackProduct[0]?.paymentDetails.paymentStatus : 'NA'}</p>
-                                </div>
+                            <div className="flex justify-between items-center">
+                            <p className="text-gray-700">Payment Status</p>
+                            <p className="text-gray-900">{trackProduct ? trackProduct[0]?.paymentDetails.paymentStatus : 'NA'}</p>
                             </div>
-                            <div id='total-price' className="flex item-center justify-between">
-                                <div>
-                                    <p className='font-medium'>Grand Total</p>
-                                </div>
-                                <div>
-                                    <p className='font-medium'> {trackProduct ? trackProduct[0]?.finaltotalPrice : 'NA'}</p>
-                                </div>
+                            
+                       
+                            
+                            <div className="flex justify-between items-center font-semibold border border-gray-300 rounded-lg p-3 shadow-sm">
+                            <p className="text-gray-700">Grand Total</p>
+                            <p className="text-black">₹ {trackProduct ? trackProduct[0]?.finaltotalPrice : 'NA'}</p>
                             </div>
                         </div>
+                        </div>
+
+
+
                     </>
                 )}
             </div>

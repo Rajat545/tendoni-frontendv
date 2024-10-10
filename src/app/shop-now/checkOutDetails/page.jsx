@@ -11,6 +11,7 @@ import Modal from "react-modal";
 import { useRouter } from "next/navigation";
 const Shop = () => {
   const router = useRouter();
+
   const [updateAddressId, setUpdateAddressId] = useState("");
   const [popUp, setPopUp] = useState(false);
   const [customerId, setCustomerId] = useState("");
@@ -23,6 +24,7 @@ const Shop = () => {
   const [newAddress, setNewAddress] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState([]);
   const [address, setAddress] = useState();
+  const [couponApplied, setCouponApplied] = useState(false);
   const [formData, setFormData] = useState({
     addressLine1: address ? address?.addressLine1 : "",
     pinCode: address ? address?.pinCode : "",
@@ -46,7 +48,6 @@ const Shop = () => {
   const handleAddressSelect = (item) => {
     var updateAddressId = item.addressId;
     setUpdateAddressId(updateAddressId);
-    
     setFormData({
       ...item,
     });
@@ -89,7 +90,6 @@ const Shop = () => {
       toast.error("Error fetching address data:");
     }
   }, []);
-  // ----------------getCustomerDataById----------------
   const fetchCustomerDataById = useCallback(async (customerId) => {
     try {
       if (typeof window !== "undefined") {
@@ -195,7 +195,23 @@ const Shop = () => {
       toast.error("Error fetching cart data:", error);
     }
   }, []);
+  useEffect(() => {
+    const savedCouponData = localStorage.getItem("couponData");
+    const savedCouponCode = localStorage.getItem("couponCode");
 
+    if (savedCouponData) {
+      try {
+        setCouponData(JSON.parse(savedCouponData));
+        setCouponApplied(true);
+      } catch (e) {
+        console.error("Error parsing couponData from localStorage:", e);
+      }
+    }
+
+    if (savedCouponCode) {
+      setCouponCode(savedCouponCode); // Pre-fill coupon code input if needed
+    }
+  }, []);
   const handleAddCoupon =async()=>{
     try {
       const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -203,6 +219,7 @@ const Shop = () => {
           throw new Error("User data not found");
         }
         const { access_token } = userData.data;
+      
       const couponResponse = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/applyCoupon",
         {
@@ -216,24 +233,48 @@ const Shop = () => {
         }
       );
       const result = await couponResponse.json();
-      
-      setCouponData(result.data)
+      if (result.data) {
+        localStorage.setItem("couponData", JSON.stringify(result.data));
+        localStorage.setItem("couponCode", couponCode);
+
+        setCouponData(result.data); 
+        setCouponApplied(true); 
+        toast.success("Coupon applied successfully!");
+      } else {
+        setCouponApplied(false);
+        setCouponData(null);
+        toast.error("Coupon not valid or not applied");
+      }
+    
+      localStorage.setItem("couponData", JSON.stringify(result.data));
+      localStorage.setItem("couponCode", couponCode);
       setCouponCode("");
+   
     } catch (error) {
       console.log(error)
-      toast.error(error.message)
+      toast.error(error.message || "Something went wrong");
     }
   }
   const handleRadioChange = (e) => {
     setRadioOptions(e.target.value);
   };
+  useEffect(()=>{
+    const saveData = localStorage.getItem('formData')
+    if(saveData){
+      setFormData(JSON.parse(saveData))
+    }
+  },[])
   const handleChange = (e) => {
     const { name, value } = e.target;
+    const updatedFormData  = {...formData, [name]: value}
     setFormData({ ...formData, [name]: value });
+    setFormData(updatedFormData)
+    localStorage.setItem('formData',JSON.stringify(updatedFormData))
   };
   // Handle Submit
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
+    console.log(formData,'form data ')
     try {
       if (typeof window !== "undefined") {
         const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -289,7 +330,6 @@ const Shop = () => {
         });
       }
     } catch (error) {
-      // setMessage("Error saving address.");
       toast.error("Error saving address !", error);
     }
   }, [formData, router]);
@@ -320,12 +360,10 @@ const Shop = () => {
         addressId: updateAddressId,
         paymentMethod: radioOptions,
       };
-      // Validate order data
       if (!validateOrderData(orderData)) {
         return;
       }
-      
-      // Send order request
+
       const response = await fetch(
         "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
         {
@@ -374,8 +412,7 @@ const Shop = () => {
     }
     return true;
   };
-  //
-  // -------------------createPaymentOrder  SPI ----------
+  
   const createPaymentOrder = async (amount, name) => {
     try {
       if (typeof window !== "undefined") {
@@ -408,7 +445,7 @@ const Shop = () => {
         }
         const { data } = await response.json();
         return {
-          id: data.id, // Assuming 'id' is the field name for order ID in your API response
+          id: data.id, 
           amount: data.amount,
         };
       }
@@ -569,7 +606,6 @@ const Shop = () => {
       number: address?.number || "",
     }));
   }, [address]);
-  //  -----------------RemoveItem API --------- //
   const removeItem = async (cartId, itemId) => {
     try {
       if (typeof window !== "undefined") {
@@ -750,15 +786,15 @@ const Shop = () => {
                     </button>
                   </div>
                 </form>
-                <div className="address-box " id='address-card'>
+                <div className="address-box pt-4 " id='address-card'>
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6">
                     {customerData.map((item, index) => (
                       <div className="address-list border rounded-lg p-6 shadow-lg relative bg-white" key={index}>
                         <DeleteForeverIcon
-                          className="delete-icon absolute top-4 right-4 text-red-500 cursor-pointer hover:text-red-700 transition duration-200"
+                          className="delete-icon absolute top-9 p- right-6 text-red-500 cursor-pointer hover:text-red-700 transition duration-400 h-2"
                           onClick={() => handleDelete(item)}
                         />
-                        <h3 className="address-head text-xl font-semibold mb-4">SHIPPING ADDRESS</h3>
+                        <h3 className="address-head text-xl font-semibold">Shipping Address</h3>
                         <div className="border-t mt-4 pt-4">
                           <label className="flex items-center mb-2">
                             <input
@@ -809,10 +845,10 @@ const Shop = () => {
                       </div>
                       <div className="text-right flex flex-col items-end">
                         <p className="price text-red-500 line-through text-sm mb-1">
-                          Rs. {item.maxPrice}
+                          ₹{item.maxPrice}
                         </p>
                         <p className="price text-gray-900 font-semibold text-lg">
-                          Rs. {item.price}
+                          ₹{item.price}
                         </p>
                       </div>
                       <div>
@@ -837,54 +873,57 @@ const Shop = () => {
                   <p className="text-gray-500">No products in cart</p>
                 )}
                 <div className="flex items-center space-x-4">
-    <input
-      type="text"
-      id="coupon"
-      name="coupon"
-      value={couponCode}
-      onChange={(e)=>setCouponCode(e.target.value)}
-      className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
-      placeholder="Enter your coupon code"
-    />
-    <button
-      onClick={handleAddCoupon}
-      className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 mb-5"
-    >
-      Apply
-    </button>
-  </div>
+                <input
+                  type="text"
+                  id="coupon"
+                  name="coupon"
+                  value={couponCode}
+                  onChange={(e)=>setCouponCode(e.target.value)}
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-200"
+                  placeholder="Enter your coupon code"
+                />
+                  <button
+                    onClick={handleAddCoupon}
+                    className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition duration-200 font-medium focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-opacity-50 mb-5"
+                  >
+                    Apply
+                  </button>
+                </div>
                 <hr className="my-4" />
-                <div className="container mx-auto max-w-xl p-6">
-  
+                <div className="container mx-auto max-w-xl">
 </div>
                 {!couponData ? (
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center">
-                      <p className="text-gray-700">Total MRP</p>
-                      <p className="text-gray-900">Rs. {cartData.totalPrice}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-gray-700">Discount</p>
-                      <p className="text-green-500">{cartData.discount}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-gray-700">Sub Total</p>
-                      <p className="text-gray-900">Rs. {cartData.totalSalePrice}</p>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-gray-700">Shipping charge</p>
-                      <p className="text-gray-900">+ {cartData.deliveryCharge}</p>
-                    </div>
-                    <div className="flex justify-between items-center font-semibold">
-                      <p className="text-gray-700">Grand Total</p>
-                      <p className="text-black">Rs. {cartData.finaltotalPrice}</p>
-                    </div>
-                  </div>
+                <div className="space-y-2">
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-700">Total MRP</p>
+                  <p className="text-gray-900">₹{cartData.totalPrice}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-700">Discount</p>
+                  <p className="text-green-500">{cartData.discount}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-700">Sub Total</p>
+                  <p className="text-gray-900">₹{cartData.totalSalePrice}</p>
+                </div>
+                <div className="flex justify-between items-center">
+                  <p className="text-gray-700">Shipping charge</p>
+                  <p className="text-gray-900">+ {cartData.deliveryCharge}</p>
+                </div> 
+                <div className="flex justify-between items-center font-semibold border border-gray-300 rounded-lg p-3 shadow-sm">
+                  <p className="text-gray-700">Grand Total</p>
+                  <p className="text-black">₹{cartData.finaltotalPrice}</p>
+                </div>
+              </div>
+              
                   ) : (
                     <div className="space-y-2">
+                      <div className="mt-4 text-green-600 text-lg font-semibold">
+                          You saved ₹ {couponData.couponPrice} successfully applied!
+                      </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Total MRP</p>
-                        <p className="text-gray-900">Rs. {couponData.totalPrice}</p>
+                        <p className="text-gray-900">₹{couponData.totalPrice}</p>
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Discount</p>
@@ -892,15 +931,15 @@ const Shop = () => {
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Sub Total</p>
-                        <p className="text-gray-900">Rs. {couponData.totalSalePrice}</p>
+                        <p className="text-gray-900">₹ {couponData.totalSalePrice}</p>
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Coupon Price</p>
-                        <p className="text-gray-900">Rs. {couponData.couponPrice}</p>
+                        <p className="text-green-500">₹{couponData.couponPrice} OFF</p>
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Sub Final Price</p>
-                        <p className="text-gray-900">Rs. {couponData.subfinalTotalPrice}</p>
+                        <p className="text-gray-900">₹{couponData.subfinalTotalPrice}</p>
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Shipping charge</p>
@@ -908,8 +947,9 @@ const Shop = () => {
                       </div>
                       <div className="flex justify-between items-center font-semibold">
                         <p className="text-gray-700">Grand Total</p>
-                        <p className="text-black">Rs. {couponData.finaltotalPrice}</p>
+                        <p className="text-black">₹{couponData.finaltotalPrice}</p>
                       </div>
+                      
                     </div>
                   )
                 }
