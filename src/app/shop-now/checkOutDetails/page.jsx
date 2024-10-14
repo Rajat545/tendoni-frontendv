@@ -10,9 +10,12 @@ import OrderSuccessFull from "../OrderSuccessFull/page";
 import Modal from "react-modal";
 import { useRouter } from "next/navigation";
 const Shop = () => {
-  const router = useRouter();
 
-  const [updateAddressId, setUpdateAddressId] = useState("");
+  
+ const saveData = JSON.parse(localStorage.getItem('formData'))
+  const router = useRouter();
+  console.log(saveData,'data')
+  const [updateAddressId, setUpdateAddressId] = useState(saveData?.addressId);
   const [popUp, setPopUp] = useState(false);
   const [customerId, setCustomerId] = useState("");
   const [cartData, setCartData] = useState("");
@@ -26,15 +29,15 @@ const Shop = () => {
   const [address, setAddress] = useState();
   const [couponApplied, setCouponApplied] = useState(false);
   const [formData, setFormData] = useState({
-    addressLine1: address ? address?.addressLine1 : "",
-    pinCode: address ? address?.pinCode : "",
-    city: address ? address?.city : "",
-    state: address ? address?.state : "",
-    country: address ? address?.country : "",
-    landmark: address ? address?.landmark : "",
-    name: address ? address?.name : "",
-    number: address ? address?.number : "",
-    addressId: address ? address?.addressId : "",
+    addressLine1: address ? address?.addressLine1 : saveData?.addressLine1,
+    pincode: address ? address?.pincode : saveData?.pincode,
+    city: address ? address?.city : saveData?.city,
+    state: address ? address?.state : saveData?.state,
+    country: address ? address?.country : saveData?.country,
+    landmark: address ? address?.landmark : saveData?.landmark,
+    name: address ? address?.name : saveData?.name,
+    number: address ? address?.number : saveData?.number,
+    addressId: address ? address?.addressId : saveData?.addressId,
   });
   const [message, setMessage] = useState("");
   useEffect(() => {
@@ -48,6 +51,7 @@ const Shop = () => {
   const handleAddressSelect = (item) => {
     var updateAddressId = item.addressId;
     setUpdateAddressId(updateAddressId);
+    localStorage.setItem('formData',JSON.stringify(item))
     setFormData({
       ...item,
     });
@@ -248,7 +252,7 @@ const Shop = () => {
     
       localStorage.setItem("couponData", JSON.stringify(result.data));
       localStorage.setItem("couponCode", couponCode);
-      setCouponCode("");
+      setCouponCode(couponCode);
    
     } catch (error) {
       console.log(error)
@@ -258,23 +262,18 @@ const Shop = () => {
   const handleRadioChange = (e) => {
     setRadioOptions(e.target.value);
   };
-  useEffect(()=>{
-    const saveData = localStorage.getItem('formData')
-    if(saveData){
-      setFormData(JSON.parse(saveData))
-    }
-  },[])
+ 
   const handleChange = (e) => {
     const { name, value } = e.target;
     const updatedFormData  = {...formData, [name]: value}
     setFormData({ ...formData, [name]: value });
     setFormData(updatedFormData)
-    localStorage.setItem('formData',JSON.stringify(updatedFormData))
+   
   };
   // Handle Submit
   const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
-    console.log(formData,'form data ')
+  
     try {
       if (typeof window !== "undefined") {
         const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
@@ -328,7 +327,9 @@ const Shop = () => {
           landmark: "",
           number: "",
         });
+        localStorage.removeItem('formData')
       }
+
     } catch (error) {
       toast.error("Error saving address !", error);
     }
@@ -376,9 +377,13 @@ const Shop = () => {
           body: JSON.stringify(orderData),
         }
       );
+      localStorage.removeItem('formData')
+  
       const data = await response.json();
       if (response.ok) {
         toast.success("Order placed successfully!");
+        localStorage.removeItem('couponCode')
+        localStorage.removeItem('couponData')
         setPopUp(true);
         setCartData([]);
         setCartData([]);
@@ -388,6 +393,7 @@ const Shop = () => {
             window.location.reload();
           }, 1000);
         }, 0);
+        
       } else {
         toast.error(
           "Error placing order: " + (data.message || "Unknown error")
@@ -565,6 +571,9 @@ const Shop = () => {
             } else {
               toast.error("Payment verification failed!");
             }
+            localStorage.removeItem('formData')
+            localStorage.removeItem('couponCode')
+            localStorage.removeItem('couponData')
           } catch (error) {
             toast.error("Error verifying payment!");
           }
@@ -592,20 +601,7 @@ const Shop = () => {
   useEffect(() => {
     fetchAddressById();
   }, [fetchAddressById]);
-  useEffect(() => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      name: address?.name || "",
-      addressLine1: address?.addressLine1 || "",
-      pincode: address?.pincode || "",
-      city: address?.city || "",
-      state: address?.state || "",
-      country: address?.country || "",
-      landmark: address?.landmark || "",
-      // zipcode: address?.zipcode || '',
-      number: address?.number || "",
-    }));
-  }, [address]);
+
   const removeItem = async (cartId, itemId) => {
     try {
       if (typeof window !== "undefined") {
@@ -640,6 +636,7 @@ const Shop = () => {
       toast.error("Error removing item");
     }
   };
+
   return (
     <>
       <Header />
@@ -800,6 +797,7 @@ const Shop = () => {
                             <input
                               type="radio"
                               name="address"
+                              checked={item.addressId === updateAddressId ? true : false}
                               className="address-selector mr-3 accent-indigo-600"
                               onChange={() => handleAddressSelect(item)}
                             />
@@ -908,7 +906,7 @@ const Shop = () => {
                 </div>
                 <div className="flex justify-between items-center">
                   <p className="text-gray-700">Shipping charge</p>
-                  <p className="text-gray-900">+ {cartData.deliveryCharge}</p>
+                  <p className="text-gray-900">+ ₹{cartData.deliveryCharge}</p>
                 </div> 
                 <div className="flex justify-between items-center font-semibold border border-gray-300 rounded-lg p-3 shadow-sm">
                   <p className="text-gray-700">Grand Total</p>
@@ -919,7 +917,7 @@ const Shop = () => {
                   ) : (
                     <div className="space-y-2">
                       <div className="mt-4 text-green-600 text-lg font-semibold">
-                          You saved ₹ {couponData.couponPrice} successfully applied!
+                          You saved ₹{couponData.couponPrice} successfully applied!
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Total MRP</p>
@@ -931,7 +929,7 @@ const Shop = () => {
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Sub Total</p>
-                        <p className="text-gray-900">₹ {couponData.totalSalePrice}</p>
+                        <p className="text-gray-900">₹{couponData.totalSalePrice}</p>
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Coupon Price</p>
@@ -943,9 +941,9 @@ const Shop = () => {
                       </div>
                       <div className="flex justify-between items-center">
                         <p className="text-gray-700">Shipping charge</p>
-                        <p className="text-gray-900">+ {couponData.deliveryCharge}</p>
+                        <p className="text-gray-900">+ ₹{couponData.deliveryCharge}</p>
                       </div>
-                      <div className="flex justify-between items-center font-semibold">
+                      <div className="flex justify-between items-center font-semibold border border-gray-300 rounded-lg p-3 shadow-sm">
                         <p className="text-gray-700">Grand Total</p>
                         <p className="text-black">₹{couponData.finaltotalPrice}</p>
                       </div>

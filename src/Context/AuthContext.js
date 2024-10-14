@@ -197,6 +197,7 @@ export function AuthProvider({ children }) {
         setOrderHistory,
         handleOrderDetails,
         trackProduct,
+        setTrackProduct
       }}
     >
       {children}

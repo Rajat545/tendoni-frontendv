@@ -456,3 +456,70 @@ body {
     background-color: white;
     margin-top: 7% !important;
 }
+@media only screen and (max-width: 1150px) {
+
+
+    #price {
+        background-color: #eceff1;
+        width: 100%;
+        padding: 45px;
+        border-radius: 9px;
+        margin-left: 0px;
+        height: 25vh;
+    }
+}
+
+.card_info {
+    border-radius: 5px;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+    margin-bottom: 30px;
+    margin-left: 0px;
+    width: 100%;
+    background-color: white;
+    margin-top: 7% !important;
+}
+@media only screen and (max-width: 1050p2) {
+
+
+    #price {
+        background-color: #eceff1;
+        width: 100%;
+        padding: 45px;
+        border-radius: 9px;
+        margin-left: 0px;
+        height: 25vh;
+    }
+}
+
+.card_info {
+    border-radius: 5px;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+    margin-bottom: 30px;
+    margin-left: 0px;
+    width: 100%;
+    background-color: white;
+    margin-top: 7% !important;
+}
+@media only screen and (max-width: 1350px) {
+    #price {
+        background-color: #eceff1;
+        width: 100%;
+        padding: 45px;
+        border-radius: 9px;
+        margin-left: 0px;
+        height: 25vh;
+    }
+}
+
+.card_info {
+    border-radius: 5px;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+    margin-bottom: 30px;
+    margin-left: 0px;
+    width: 100%;
+    background-color: white;
+    margin-top: 7% !important;
+}

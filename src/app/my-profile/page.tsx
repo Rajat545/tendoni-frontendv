@@ -99,20 +99,20 @@ console.log(trackProduct,'track')
                         <div className="space-y-3">
                             <div className="flex justify-between items-center">
                             <p className="text-gray-700">Total MRP</p>
-                            <p className="text-gray-900">₹ {trackProduct ? trackProduct[0]?.totalPrice : 'NA'}</p>
+                            <p className="text-gray-900">₹{trackProduct ? trackProduct[0]?.totalPrice : 'NA'}</p>
                             </div>
                             <div className="flex justify-between items-center">
                             <p className="text-gray-700">Discount</p>
-                            <p className="text-green-500">₹ {trackProduct ? trackProduct[0]?.discount : 'NA'}</p>
+                            <p className="text-green-500">₹{trackProduct ? trackProduct[0]?.discount : 'NA'}</p>
                             </div>
                             <div className="flex justify-between items-center">
                             <p className="text-gray-700">Sub Total</p>
-                            <p className="text-gray-900">₹ {trackProduct ? trackProduct[0]?.totalSalePrice : 'NA'}</p>
+                            <p className="text-gray-900">₹{trackProduct ? trackProduct[0]?.totalSalePrice : 'NA'}</p>
                             </div>
                             {trackProduct && trackProduct[0]?.couponPrice ? (
                                 <div className="flex justify-between items-center">
                                     <p className="text-gray-700">Coupon Price</p>
-                                    <p className="text-green-500">₹ {trackProduct[0]?.couponPrice}</p>
+                                    <p className="text-green-500">₹{trackProduct[0]?.couponPrice}</p>
                                 </div>
                             ) : null}  
                             <div className="flex justify-between items-center">
