@@ -3,16 +3,25 @@ import { useEffect, useState, useCallback } from "react";
 import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import "./style.css";
-import Header from "@/components/Header";
+import dynamic from "next/dynamic";
+
 import toast, { Toaster } from "react-hot-toast";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import OrderSuccessFull from "../OrderSuccessFull/page";
+// import OrderSuccessFull from "../OrderSuccessFull/page";
 import Modal from "react-modal";
 import { useRouter } from "next/navigation";
+const OrderSuccessFull = dynamic(() => import("../OrderSuccessFull/page"), {
+  ssr: false, // Optional: If you want to prevent server-side rendering
+});
 const Shop = () => {
 
   
- const saveData = JSON.parse(localStorage.getItem('formData'))
+//  let saveData = JSON.parse(localStorage.getItem('formData')) || []
+
+let saveData = [];
+if (typeof window !== "undefined") {
+  saveData = JSON.parse(localStorage.getItem("formData")) || [];
+}
   const router = useRouter();
   console.log(saveData,'data')
   const [updateAddressId, setUpdateAddressId] = useState(saveData?.addressId);
@@ -48,6 +57,7 @@ const Shop = () => {
       }
     }
   }, []);
+  
   const handleAddressSelect = (item) => {
     var updateAddressId = item.addressId;
     setUpdateAddressId(updateAddressId);
@@ -198,7 +208,7 @@ const Shop = () => {
     } catch (error) {
       toast.error("Error fetching cart data:", error);
     }
-  }, []);
+  },[]);
   useEffect(() => {
     const savedCouponData = localStorage.getItem("couponData");
     const savedCouponCode = localStorage.getItem("couponCode");
@@ -333,7 +343,7 @@ const Shop = () => {
     } catch (error) {
       toast.error("Error saving address !", error);
     }
-  }, [formData, router]);
+  }, [formData]);
   const amount = Math.round((couponData ? couponData?.finaltotalPrice : cartData.finaltotalPrice) * 100);
   const handleOrderSubmit = async (e) => {
     try {
@@ -639,7 +649,6 @@ const Shop = () => {
 
   return (
     <>
-      <Header />
       <div className="z-20">
         <Image
           src={Grand}

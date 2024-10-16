@@ -210,7 +210,6 @@ const ProductDetails = () => {
   };
   return (
     <>
-    <header/>
       <Toaster />
       <div className="z-20">
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
@@ -389,8 +388,8 @@ const ProductDetails = () => {
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-4" id='btn'>
-                    <div className="flex items-center gap-2">
-                    </div>
+                    {/* <div className="flex items-center gap-2">
+                    </div> */}
                     <div className="flex items-center border border-gray-300 p-2 rounded">
                       <button onClick={() => decrementCount(item.productId)} className="px-2">
                         -

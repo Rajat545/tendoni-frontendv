@@ -181,7 +181,7 @@ const MyOrder = () => {
           ) : (
             <div className="container border border-gray-300 rounded-lg">
               <div className="class">
-                <div id="responsive-list" className="flex p-4 gap-[174px]">
+                <div id="responsive-list" className="flex p-4 ">
                   <h1 className="text-lg font-semibold">OrderId</h1>
                   <h1 className="text-lg font-semibold">Product Details</h1>
                   <h1 className="text-lg font-semibold ml-[86px]">Order Date</h1>

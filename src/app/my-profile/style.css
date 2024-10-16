@@ -78,7 +78,7 @@ body {
 } */
 
 .order-total {
-    background-color: #eceff1;
+
     width: 30%;
     padding: 10px;
     border-radius: 9px;
@@ -116,10 +116,6 @@ body {
 }
 
 @media only screen and (max-width: 454px) {
-    .flex {
-        display: block;
-        /* Change to block for stacking elements */
-    }
 
     #justify-contant {
         display: flex;
@@ -145,9 +141,7 @@ body {
         display: flex;
     }
 
-    #price {
-        height: 20vh;
-    }
+ 
 
     .card {
         z-index: 0;
@@ -214,9 +208,7 @@ body {
         display: flex;
     }
 
-    #price {
-        height: 49vh;
-    }
+
 
     .card {
         z-index: 0;
@@ -229,17 +221,12 @@ body {
 
 @media only screen and (max-width: 400px) {
     #price {
-        background-color: #eceff1;
+      
         width: 100%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        height: 48vh;
-    }
-
-    .flex {
-        display: block;
-        /* Change to block for stacking elements */
+      
     }
 
     #justify-contant {
@@ -266,9 +253,7 @@ body {
         display: flex;
     }
 
-    #price {
-        height: 47vh;
-    }
+    
 
     .card {
         z-index: 0;
@@ -286,28 +271,21 @@ body {
     }
 
     #price {
-        background-color: #eceff1;
+     
         width: 100%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        height: 33vh;
     }
 }
 
 @media only screen and (max-width: 500px) {
     #price {
-        background-color: #eceff1;
+        
         width: 100%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        height: 48vh;
-    }
-
-    .flex {
-        display: block;
-        /* Change to block for stacking elements */
     }
 
     #justify-contant {
@@ -334,9 +312,7 @@ body {
         display: flex;
     }
 
-    #price {
-        height: 47vh;
-    }
+  
 
     #total-price {
         display: flex;
@@ -358,12 +334,12 @@ body {
     }
 
     #price {
-        background-color: #eceff1;
+      
         width: 100%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        height: 33vh;
+     
     }
 }
 
@@ -373,63 +349,60 @@ body {
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        background-color: #eceff1;
-        height: 33vh;
+        
+      
     }
 
     #price {
-        background-color: #eceff1;
+      
         width: 39%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 3px;
-        height: 54vh;
+      
     }
 }
 
 @media only screen and (max-width: 700px) {
     #price {
-        background-color: #eceff1;
+       
         width: 38%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 14px;
-        height: 54vh;
+       
     }
 }
 
 @media only screen and (max-width: 800px) {
     #price {
-        background-color: #eceff1;
+      
         width: 38%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 11px;
-        height: 46vh;
     }
 }
 
 @media only screen and (max-width: 900px) {
 
     #price {
-        background-color: #eceff1;
+    
         width: 41%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 17px;
-        height: 48vh;
     }
 }
 
 @media only screen and (max-width: 1000px) {
 
     #price {
-        background-color: #eceff1;
+        
         width: 41%;
         padding: 45px;
         border-radius: 9px;
-        margin-left: 17px;
-        height: 48vh;
+        margin-left: 17px;  
     }
 }
 
@@ -437,12 +410,12 @@ body {
 
 
     #price {
-        background-color: #eceff1;
+     
         width: 100%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        height: 25vh;
+       
     }
 }
 
@@ -460,12 +433,12 @@ body {
 
 
     #price {
-        background-color: #eceff1;
+       
         width: 100%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        height: 25vh;
+       
     }
 }
 
@@ -479,16 +452,16 @@ body {
     background-color: white;
     margin-top: 7% !important;
 }
-@media only screen and (max-width: 1050p2) {
+@media only screen and (max-width: 1050p) {
 
 
     #price {
-        background-color: #eceff1;
+       
         width: 100%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        height: 25vh;
+       
     }
 }
 
@@ -502,14 +475,14 @@ body {
     background-color: white;
     margin-top: 7% !important;
 }
-@media only screen and (max-width: 1350px) {
+@media only screen and (max-width: 1350px ) {
     #price {
-        background-color: #eceff1;
+   
         width: 100%;
         padding: 45px;
         border-radius: 9px;
         margin-left: 0px;
-        height: 25vh;
+       
     }
 }
 
@@ -523,3 +496,61 @@ body {
     background-color: white;
     margin-top: 7% !important;
 }
+@media only screen and (max-width: 1150px ) {
+    #price {
+   
+        width: 100%;
+        padding: 45px;
+        border-radius: 9px;
+        margin-left: 0px;
+    }
+}
+
+.card_info {
+    border-radius: 5px;
+    box-shadow: 0 1px 20px 0 rgba(69, 90, 100, 0.08);
+    border: none;
+    margin-bottom: 30px;
+    margin-left: 0px;
+    width: 100%;
+    background-color: white;
+    margin-top: 7% !important;
+}
+
+@media only screen and (max-width: 320px) {
+    #progressbar {
+        margin-left: -50px !important;
+        margin-left: -50px !important;
+        display: grid;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #totalpaymentContainer {
+        display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    justify-content: center;
+    }
+    #grandTotal{
+        display: flex;
+        margin-top: 21px;
+    }
+}
+
+@media only screen and(max-width: 320px) {
+    #price {
+        height: 70vh !important;
+    }
+}
+
+@media only screen and (max-width: 320px) {
+#card_elements {
+        display: grid;
+    grid-template-columns: auto;
+    justify-content: center;
+    align-items: center;
+    }
+}
+    

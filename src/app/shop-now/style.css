@@ -1,9 +1,12 @@
 @media (max-width: 320px) {
     #addToCart{
-        width: 22rem;
+        width: 20rem;
     }
     #btn{
-        gap: 0;
+        gap: 10px;
+        display: grid;
+        grid-template-columns: 2fr 1fr;
         
     }
   }
+  

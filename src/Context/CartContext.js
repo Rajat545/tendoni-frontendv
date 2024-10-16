@@ -98,7 +98,7 @@ export function CartProvider({ children }) {
     const productData =  data.filter((item) => item.productId === product.productId);
   };
 
-  console.log(cart,"jhgfjsdgdf")
+  
 
   return (
     <CartContext.Provider

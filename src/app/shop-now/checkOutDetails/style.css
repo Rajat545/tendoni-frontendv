@@ -107,10 +107,6 @@ input {
   padding: .5rem;
 }
 
-.header {
-  height: 8vh;
-}
-
 .headline {
   width: 96%;
   align-items: center;
@@ -218,6 +214,54 @@ input {
     width: 90%;
     margin: 0 auto;
   }
+  .address-list{
+    border: 1px solid #a9a9a9;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
+    font-weight: 400;
+    line-height: 1;
+    padding: 1rem;
+    width: 15rem;
+  }
+}
+@media (max-width: 1300px) {
+  .col-25, .col-50, .col-75, .col-6 {
+    width: 100%;
+    margin-left: 0;
+    padding: 0;
+  }
+
+  .card {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .address-list{
+    border: 1px solid #a9a9a9;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
+    font-weight: 400;
+    line-height: 1;
+    padding: 1rem;
+    width: 15rem;
+  }
+}
+@media (max-width: 1000px) {
+  .col-25, .col-50, .col-75, .col-6 {
+    width: 100%;
+    margin-left: 0;
+    padding: 0;
+  }
+
+  .card {
+    width: 90%;
+    margin: 0 auto;
+  }
+  .address-list{
+    border: 1px solid #a9a9a9;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, .2);
+    font-weight: 400;
+    line-height: 1;
+    padding: 1rem;
+    width: 15rem;
+  }
 }
 
 @media (max-width: 992px) {
@@ -293,6 +337,54 @@ input {
     margin: 0;
   }
   
+}
+@media (max-width: 900px) {
+  .container_checkOut {
+    display: contents;
+    width: 374px;
+    
+  }
+
+  #responsive-container, #responsive-dev, #responsive-price {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .address-list {
+    width: 100%;
+    margin: 1rem 0;
+  }
+  #responsive-dev{
+    display: flow;
+    margin-top: 17px;
+  }
+  #responsive-price{
+    width: 100%;
+  }
+}
+@media (max-width: 700px) {
+  .container_checkOut {
+    display: contents;
+    width: 374px;
+    
+  }
+
+  #responsive-container, #responsive-dev, #responsive-price {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .address-list {
+    width: 100%;
+    margin: 1rem 0;
+  }
+  #responsive-dev{
+    display: flow;
+    margin-top: 17px;
+  }
+  #responsive-price{
+    width: 100%;
+  }
 }
 @media (max-width: 600px) {
   .container_checkOut {
@@ -375,8 +467,6 @@ input {
 @media (max-width: 320px) {
   #responsive-section{
     padding: 16px;
-  }{
-    padding: 0px;
   }
 }
 

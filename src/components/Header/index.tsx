@@ -164,7 +164,7 @@ const Header: React.FC = () => {
             />
           </div>
         </Link>
-        <nav className="hidden lg:flex z-20 flex-row font-oswald items-center text-md lg:text-md xl:text-md space-x-2 md:space-x-2 lg:space-x-3 xl:space-x-6 nav-bar">
+        <nav className="hidden lg:flex z-20 flex-row font-oswald items-center text-md lg:text-md xl:text-xl space-x-2 md:space-x-2 lg:space-x-3 xl:space-x-6 nav-bar">
           {menuItems.map((menuItem) => (
             <Link
               href={menuItem.url}

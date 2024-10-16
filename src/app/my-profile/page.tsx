@@ -67,7 +67,7 @@ console.log(trackProduct,'track')
                     </div>
                 </div>
             </div>
-            <div className="flex">
+            <div className="flex" id='card_elements'>
                 {trackProduct.length === 0 ? (
                     <div className='bg-[#eceff1] rounded-lg p-2.5 w-full p-4'>
                         <h1 className='text-xl px-4 py-2'>Order Item</h1>
@@ -76,7 +76,7 @@ console.log(trackProduct,'track')
                     </div>
                 ) : (
                     <>
-                        <div className='bg-[#ffffff] rounded-lg p-2.5 w-full'>
+                        <div className=' rounded-lg p-2.5 w-full'>
                             <h1 className="text-xl">Order Item</h1>
                             <hr className="my-2" />
                             {trackProduct.map(order => (
@@ -96,7 +96,7 @@ console.log(trackProduct,'track')
                             ))}
                         </div>
                         <div className="sub-total bg-gray-100 w-60 rounded-lg p-4 ml-64 shadow-lg" id="price">
-                        <div className="space-y-3">
+                        <div className="space-y-3" id='totalpaymentContainer'>
                             <div className="flex justify-between items-center">
                             <p className="text-gray-700">Total MRP</p>
                             <p className="text-gray-900">₹{trackProduct ? trackProduct[0]?.totalPrice : 'NA'}</p>
@@ -130,11 +130,11 @@ console.log(trackProduct,'track')
                             
                        
                             
-                            <div className="flex justify-between items-center font-semibold border border-gray-300 rounded-lg p-3 shadow-sm">
+                        </div>
+                            <div className="flex justify-between items-center font-semibold border border-gray-300 rounded-lg p-3 shadow-sm" id="grandTotal">
                             <p className="text-gray-700">Grand Total</p>
                             <p className="text-black">₹ {trackProduct ? trackProduct[0]?.finaltotalPrice : 'NA'}</p>
                             </div>
-                        </div>
                         </div>
 
 
