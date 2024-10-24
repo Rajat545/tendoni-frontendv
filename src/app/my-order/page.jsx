@@ -72,7 +72,7 @@ const MyOrder = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/updateCustomerById",
+        "http://89.116.34.85:5555/web/api/v1/updateCustomerById",
         {
           method: "POST",
           headers: {

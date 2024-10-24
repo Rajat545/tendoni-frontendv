@@ -130,7 +130,7 @@ const ProductDetails = () => {
   };
   const fetchProductById = async (productId) => {
     try {
-      const url = `https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getProductById/${productId}`;
+      const url = `http://89.116.34.85:5555/web/api/v1/getProductById/${productId}`;
       const response = await fetch(url);
       if (!response.ok) {
         const errorText = await response.text();
@@ -191,7 +191,7 @@ const ProductDetails = () => {
           body: JSON.stringify(payload),
         };
         const response = await fetch(
-          "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/addToCart",
+          "http://89.116.34.85:5555/web/api/v1/addToCart",
           requestOptions
         );
         const data = await response.json();

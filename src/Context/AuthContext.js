@@ -33,7 +33,7 @@ export function AuthProvider({ children }) {
     const userData = { email, password }; // Combine email and password into an object
     try {
       const response = await fetch(
-        "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/login",
+        "http://89.116.34.85:5555/web/api/v1/login",
         {
           method: "POST",
           headers: {
@@ -105,7 +105,7 @@ export function AuthProvider({ children }) {
       };
 
       const response = await fetch(
-        "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderSubmit",
+        "http://89.116.34.85:5555/web/api/v1/orderSubmit",
         {
           method: "POST",
           headers: {
@@ -148,7 +148,7 @@ export function AuthProvider({ children }) {
         const { customerId, access_token } = userData.data;
         try {
           const response = await fetch(
-            "https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/orderHistoryData",
+            "http://89.116.34.85:5555/web/api/v1/orderHistoryData",
             {
               method: "POST",
               headers: {

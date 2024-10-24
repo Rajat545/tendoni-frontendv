@@ -25,7 +25,7 @@ export function CartProvider({ children }) {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getAllSpicesProduct');
+        const response = await fetch('http://89.116.34.85:5555/web/api/v1/getAllSpicesProduct');
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -54,7 +54,7 @@ export function CartProvider({ children }) {
     const item = { email, password, name, number };
 
     try {
-      const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/signup', {
+      const response = await fetch('http://89.116.34.85:5555/web/api/v1/signup', {
         method: 'POST',
         body: JSON.stringify(item),
         headers: {
@@ -82,7 +82,7 @@ export function CartProvider({ children }) {
 
   const getSingleProduct = async () => {
     try {
-      const response = await fetch('https://backend-tendoni-backend.ffbufe.easypanel.host/web/api/v1/getAllSpicesProduct');
+      const response = await fetch('http://89.116.34.85:5555/web/api/v1/getAllSpicesProduct');
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
