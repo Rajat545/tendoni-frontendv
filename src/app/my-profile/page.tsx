@@ -1,6 +1,6 @@
 "use client";
 import { useContext } from 'react';
-import img from 'next/img';
+import Image from 'next/image';
 import '@/app/my-profile/style.css';
 
 import { AuthContext } from '@/Context/AuthContext';
@@ -82,8 +82,8 @@ console.log(trackProduct,'track')
                             {trackProduct.map(order => (
                                 order.products.map(item => (
                                     <div key={item.productId} id='justify-contant' className="flex items-center justify-between p-4">
-                                        <img
-                                            src={item.Productimg}
+                                        <Image
+                                            src={item.ProductImage}
                                             alt="Product"
                                             width={100}
                                             height={500}
