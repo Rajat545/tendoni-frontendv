@@ -138,7 +138,7 @@ const Shop = () => {
   };
   const handleCheckOut = async () => {
     
-    if (Object.keys(selectedVariants).length == 0) {
+    if (Object.keys(selectedVariants).length === 0) {
       toast.error('Please Select quantity')
       return;
     }
@@ -160,8 +160,8 @@ const Shop = () => {
           variantId: item.variant.variantId,
           valueId: item.variant.valueId,
           quantity: item.quantity,
-          price: item.variant.saleAmount,
-          maxPrice: item.variant.amount,
+          price: parseInt(item.variant.saleAmount),
+          maxPrice: parseInt(item.variant.amount),
         }));
         console.log(items,"ye hai items")
         const payload = {
