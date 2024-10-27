@@ -130,7 +130,7 @@ const ProductDetails = () => {
   };
   const fetchProductById = async (productId) => {
     try {
-      const url = `http://89.116.34.85:5555/web/api/v1/getProductById/${productId}`;
+      const url = `https://api.tendonigroup.com/web/api/v1/getProductById/${productId}`;
       const response = await fetch(url);
       if (!response.ok) {
         const errorText = await response.text();
@@ -191,7 +191,7 @@ const ProductDetails = () => {
           body: JSON.stringify(payload),
         };
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/addToCart",
+          "https://api.tendonigroup.com/web/api/v1/addToCart",
           requestOptions
         );
         const data = await response.json();

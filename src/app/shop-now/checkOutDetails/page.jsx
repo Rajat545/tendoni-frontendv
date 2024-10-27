@@ -83,7 +83,7 @@ if (typeof window !== "undefined") {
         }
         const { access_token, addressId } = userData.data;
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/getAddressByAddressId",
+          "https://api.tendonigroup.com/web/api/v1/getAddressByAddressId",
           {
             method: "POST",
             headers: {
@@ -113,7 +113,7 @@ if (typeof window !== "undefined") {
         }
         const { access_token } = userData.data;
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/getCustomerDataById",
+          "https://api.tendonigroup.com/web/api/v1/getCustomerDataById",
           {
             method: "POST",
             headers: {
@@ -150,7 +150,7 @@ if (typeof window !== "undefined") {
         const userData = JSON.parse(localStorage.getItem("user-info") || "{}");
         const { access_token } = userData.data;
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/deleteAddressById",
+          "https://api.tendonigroup.com/web/api/v1/deleteAddressById",
           {
             method: "POST",
             headers: {
@@ -185,7 +185,7 @@ if (typeof window !== "undefined") {
         }
         const { customerId, access_token } = userData.data;
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/getCart",
+          "https://api.tendonigroup.com/web/api/v1/getCart",
           {
             method: "POST",
             headers: {
@@ -235,7 +235,7 @@ if (typeof window !== "undefined") {
         const { access_token } = userData.data;
       
       const couponResponse = await fetch(
-        "http://89.116.34.85:5555/web/api/v1/applyCoupon",
+        "https://api.tendonigroup.com/web/api/v1/applyCoupon",
         {
           method: "POST",
           headers: {
@@ -292,7 +292,7 @@ if (typeof window !== "undefined") {
         }
         const { customerId, access_token } = userData.data;
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/createAddress",
+          "https://api.tendonigroup.com/web/api/v1/createAddress",
           {
             method: "POST",
             headers: {
@@ -376,7 +376,7 @@ if (typeof window !== "undefined") {
       }
 
       const response = await fetch(
-        "http://89.116.34.85:5555/web/api/v1/orderSubmit",
+        "https://api.tendonigroup.com/web/api/v1/orderSubmit",
         {
           method: "POST",
           headers: {
@@ -438,7 +438,7 @@ if (typeof window !== "undefined") {
         }
         const { access_token } = userData.data;
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/CreatePaymentData",
+          "https://api.tendonigroup.com/web/api/v1/CreatePaymentData",
           {
             method: "POST",
             headers: {
@@ -479,7 +479,7 @@ if (typeof window !== "undefined") {
         }
         const { access_token } = userData.data;
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/verifyPayment",
+          "https://api.tendonigroup.com/web/api/v1/verifyPayment",
           {
             method: "POST",
             headers: {
@@ -621,7 +621,7 @@ if (typeof window !== "undefined") {
         }
         const { access_token } = userData.data;
         const response = await fetch(
-          "http://89.116.34.85:5555/web/api/v1/removeSingleCartItem",
+          "https://api.tendonigroup.com/web/api/v1/removeSingleCartItem",
           {
             method: "DELETE",
             headers: {

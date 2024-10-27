@@ -177,7 +177,7 @@ const Shop = () => {
           },
           body: JSON.stringify(payload),
         }
-        const response = await fetch('http://89.116.34.85:5555/web/api/v1/addToCart', requestOptions);
+        const response = await fetch('https://api.tendonigroup.com/web/api/v1/addToCart', requestOptions);
         const data = await response.json();
         console.log(response,"ye hai response")
         console.log(data,"ye hai data")

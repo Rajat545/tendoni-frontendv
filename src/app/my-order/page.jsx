@@ -72,7 +72,7 @@ const MyOrder = () => {
     e.preventDefault();
     try {
       const response = await fetch(
-        "http://89.116.34.85:5555/web/api/v1/updateCustomerById",
+        "https://api.tendonigroup.com/web/api/v1/updateCustomerById",
         {
           method: "POST",
           headers: {
