@@ -1,11 +1,13 @@
 import type { Metadata } from 'next'
 import { Oswald, Merriweather, Poppins } from 'next/font/google'
 import './globals.css'
-import Header from '@/components/Header';
-import Footer from '@/components/Footer';
+// import Header from '@/components/Header';
+// import Footer from '@/components/Footer';
 import { CartProvider } from '../Context/CartContext'
 import { AuthProvider } from '../Context/AuthContext'
 import { Toaster } from 'react-hot-toast';
+import Header from '../components/Header'
+import Footer from '../components/Footer'
 export const merriweather = Merriweather({
   weight: ["300", "400", "700", "900"],
   subsets: ['latin'],
