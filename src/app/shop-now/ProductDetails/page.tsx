@@ -11,6 +11,7 @@ import '../ProductDetails/style.css'
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedVariants, setSelectedVariants] = useState<any>();
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState({
     valueId: "",
@@ -149,6 +150,9 @@ const ProductDetails = () => {
       return null;
     }
   };
+
+  
+
   const handleCheckOut = async () => {
     console.log("Checkout function called");
     if (Object.keys(quantity).length === 0) {
@@ -208,6 +212,35 @@ const ProductDetails = () => {
       }
     }
   };
+
+  let selectedVariant="";
+
+  const handleVariantChanged = (item, value,) => {
+    const { productId } = item
+ 
+ 
+    for (const item of cart) {
+ 
+      for (const variant of item.Variant) {
+        if (variant.valueId === value && item.productId === productId) {
+          selectedVariant=variant;
+        }
+      }
+    }
+  
+ 
+    const newCart = cart.map(item => {
+      if (item.productId === productId) {
+        item.variant = selectedVariant;
+      }
+      return item;
+    });
+ 
+    setCart(newCart);
+ 
+    setSelectedVariants(prevSelected => ({ ...prevSelected, [item.productName]: value }));
+  };
+
   return (
     <>
       <Toaster />
@@ -388,8 +421,22 @@ const ProductDetails = () => {
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-4" id='btn'>
-                    {/* <div className="flex items-center gap-2">
-                    </div> */}
+                  <div className="flex items-center gap-2">
+                      <select
+                        name="quantity"
+                        id="quantity"
+                        className="border border-gray-300 p-2 rounded"
+                        value={selectedVariants?.[item.productName] || ""}
+                        onChange={(e) => handleVariantChanged(item, e.target.value)}
+                      >
+                        <option value="">Select Quantity</option>
+                        {item.Variant?.map((variant) => (
+                          <option key={variant.variantId} value={variant.valueId}>
+                            {variant.Value}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
                     <div className="flex items-center border border-gray-300 p-2 rounded">
                       <button onClick={() => decrementCount(item.productId)} className="px-2">
                         -
