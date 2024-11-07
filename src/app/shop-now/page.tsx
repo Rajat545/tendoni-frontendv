@@ -179,10 +179,9 @@ const Shop = () => {
         }
         const response = await fetch('https://api.tendonigroup.com/web/api/v1/addToCart', requestOptions);
         const data = await response.json();
-        console.log(response,"ye hai response")
-        console.log(data,"ye hai data")
         if (response.status == 200 && data.message === 'Items added to cart successfully') {
           router.push("/shop-now/checkOutDetails")
+      
         } else {
           toast.error('please select item');
         }

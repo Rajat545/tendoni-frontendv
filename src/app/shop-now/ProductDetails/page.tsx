@@ -8,9 +8,18 @@ import { CartContext } from "../../../Context/CartContext";
 import { isAuth } from "../../../Context/AuthContext";
 import ScrollAnimation from "../../../utils/ScrollAnimation";
 import '../ProductDetails/style.css'
+import Header from "../../../components/Header";
 const ProductDetails = () => {
   const router = useRouter();
   const [showPopup, setShowPopup] = useState(false);
+  const [selectedVariants, setSelectedVariants] = useState<any>();
+  const {
+
+    setProductId,
+
+
+  } = useContext(CartContext);
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState({
     valueId: "",
@@ -78,7 +87,6 @@ const ProductDetails = () => {
     toast.error("Removed from cart");
   };
   const addToCart = async (item, name) => {
-    console.log(item, "item");
     if (!quantity?.valueId || !quantity.Value) {
       toast.error("Please Select Quantity");
       return;
@@ -118,16 +126,15 @@ const ProductDetails = () => {
       (v) => v.valueId === selectedVariantId
     );
     setQuantity(selectedVariant);
-    console.log(selectedVariant)
+    console.log(selectedVariant  )
   };
   const calculateTotalPrice = () => {
     return cart.reduce((total, item) => {
-      if (item.variant && item.variant.saleAmount) {
-        return total + item.variant.saleAmount * item.quantity;
-      }
-      return total;
+      const price = quantity?.saleAmount ?? quantity?.amount ?? 0;
+      return total + price * item.quantity;
     }, 0);
   };
+  
   const fetchProductById = async (productId) => {
     try {
       const url = `https://api.tendonigroup.com/web/api/v1/getProductById/${productId}`;
@@ -170,13 +177,13 @@ const ProductDetails = () => {
         const items = cart?.map((item) => ({
           productId: item.productId,
           productName: item.productName,
-          variantId: item.variant.variantId,
-          valueId: item.variant.valueId,
+          variantId: quantity.variantId,
+          valueId: quantity.valueId,
           quantity: item.quantity,
-          price: item.variant.saleAmount,
-          maxPrice: item.variant.amount,
+          price: quantity.saleAmount,
+          maxPrice: quantity.amount,
         }));
-        console.log(items)
+        console.log(items,'i')
         const payload = {
           customerId,
           items,
@@ -210,6 +217,7 @@ const ProductDetails = () => {
   };
   return (
     <>
+    <Header/>
       <Toaster />
       <div className="z-20">
         <Image src={Grand} alt="" className="lg:h-[80vh] h-auto w-full" />
@@ -281,23 +289,25 @@ const ProductDetails = () => {
                           </h5>
                         </div>
                       </p>
-                      <div className="">
-                        <h3>Available Quantity</h3>
-                        <select
-                          name="quantity"
-                          id="quantity"
-                          className="border border-black p-2 w-40 mb-4 rounded-md"
-                          value={quantity?.valueId}
-                          onChange={handleVariantChange}
-                        >
-                          <option value="null">Select quantity</option>
-                          {quantityData?.map((variant) => (
-                            <option key={variant.valueId} value={variant.valueId}>
-                              {variant.Value}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
+                     {productInCart ? ('')
+                     :
+                     <div className="">
+                     <h3>Available Quantity</h3>
+                     <select
+                       name="quantity"
+                       id="quantity"
+                       className="border border-black p-2 w-40 mb-4 rounded-md"
+                       value={quantity?.valueId}
+                       onChange={handleVariantChange}
+                     >
+                       <option value="null">Select quantity</option>
+                       {quantityData?.map((variant) => (
+                         <option key={variant.valueId} value={variant.valueId}>
+                           {variant.Value}
+                         </option>
+                       ))}
+                     </select>
+                   </div>} 
                       {productInCart ? (
                         <div>
                           <button
@@ -380,16 +390,32 @@ const ProductDetails = () => {
                       </p>
                     </div>
                     <div>
-                      {item.variant?.saleAmount !== 0 && (
+                      {quantity?.saleAmount !== 0 && (
                         <p className="font-medium">
-                          {item.variant?.saleAmount ? `Rs. ${item.variant.saleAmount}` : 0}
+                          {quantity?.saleAmount ? `Rs. ${quantity.saleAmount}` : 0}
                         </p>
                       )}
                     </div>
                   </div>
                   <div className="flex justify-between items-center gap-4" id='btn'>
-                    {/* <div className="flex items-center gap-2">
-                    </div> */}
+                  <div className="flex items-center gap-2 mb-1">
+
+                  <select
+                    name="quantity"
+                    id="quantity"
+                    className="border border-black p-2 rounded-md w-40"
+                    value={quantity?.valueId || ""}
+                    onChange={handleVariantChange}
+                  >
+                    <option value="">Select Quantity</option>
+                    {quantityData?.map((variant) => (
+                      <option key={variant.valueId} value={variant.valueId}>
+                        {variant.Value}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
                     <div className="flex items-center border border-gray-300 p-2 rounded">
                       <button onClick={() => decrementCount(item.productId)} className="px-2">
                         -

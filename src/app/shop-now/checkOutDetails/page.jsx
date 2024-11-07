@@ -4,6 +4,7 @@ import Image from "next/image";
 import Grand from "@Images/slider/spices.jpeg";
 import "./style.css";
 import dynamic from "next/dynamic";
+import Header from '../../../components/Header'
 
 import toast, { Toaster } from "react-hot-toast";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
@@ -649,6 +650,8 @@ if (typeof window !== "undefined") {
 
   return (
     <>
+    <Header/>
+    
       <div className="z-20">
         <Image
           src={Grand}
