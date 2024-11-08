@@ -34,6 +34,20 @@ const ProductDetails = () => {
     setShowCartPopup,
     buyProduct,
   } = useContext(CartContext);
+
+  useEffect(() => {
+    if (cart.length > 0) {
+      const productVariants = cart.reduce((acc, product) => {
+        acc[product.productName] = product.variant?.valueId || "";
+        return acc;
+      }, {});
+    
+      setSelectedVariants(productVariants);
+    } else {
+      setSelectedVariants({});
+    }
+  }, [cart]);
+
   const productDetails = data.filter((item) => item.productId === productId);
   const productInCart = cart.find((item) => item.productId === productId);
   const quantityData =
@@ -58,6 +72,10 @@ const ProductDetails = () => {
       )
     );
   };
+
+
+
+
   useEffect(() => {
     const productInCart = cart.find((item) => item.productId === productId);
     if (productInCart) {
@@ -121,10 +139,14 @@ const ProductDetails = () => {
     setQuantity(selectedVariant);
     console.log(selectedVariant  )
   };
+
+
   const calculateTotalPrice = () => {
     return cart.reduce((total, item) => {
-      const price = quantity?.saleAmount ?? quantity?.amount ?? 0;
-      return total + price * item.quantity;
+      if (item.variant && item.variant.saleAmount) {
+        return total + item.variant.saleAmount * item.quantity;
+      }
+      return total;
     }, 0);
   };
   
@@ -173,11 +195,11 @@ const ProductDetails = () => {
         const items = cart?.map((item) => ({
           productId: item.productId,
           productName: item.productName,
-          variantId: quantity.variantId,
-          valueId: quantity.valueId,
+          variantId: item.variant.variantId,
+          valueId: item.variant.valueId,
           quantity: item.quantity,
-          price: quantity.saleAmount,
-          maxPrice: quantity.amount,
+          price: parseInt(item.variant.saleAmount),
+          maxPrice: parseInt(item.variant.amount),
         }));
         console.log(items,'i')
         const payload = {
@@ -217,7 +239,8 @@ const ProductDetails = () => {
   const handleVariantChanged = (item, value,) => {
     const { productId } = item
  
- 
+    console.log("itemdata",item)
+
     for (const item of cart) {
  
       for (const variant of item.Variant) {
@@ -239,6 +262,10 @@ const ProductDetails = () => {
  
     setSelectedVariants(prevSelected => ({ ...prevSelected, [item.productName]: value }));
   };
+
+  console.log("cart", cart)
+
+  console.log("selectedVariants", selectedVariants)
 
   return (
     <>
@@ -415,9 +442,9 @@ const ProductDetails = () => {
                       </p>
                     </div>
                     <div>
-                      {quantity?.saleAmount !== 0 && (
+                      {item.variant?.saleAmount !== 0 && (
                         <p className="font-medium">
-                          {quantity?.saleAmount ? `Rs. ${quantity.saleAmount}` : 0}
+                          {item.variant?.saleAmount ? `Rs. ${item.variant.saleAmount}` : 0}
                         </p>
                       )}
                     </div>

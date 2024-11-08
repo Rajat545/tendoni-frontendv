@@ -32,11 +32,13 @@ const Shop = () => {
         acc[product.productName] = product.variant?.valueId || "";
         return acc;
       }, {});
+
       setSelectedVariants(productVariants);
     } else {
       setSelectedVariants({});
     }
   }, [cart]);
+  
   const incrementCount = (productId) => {
     setCart(prevCart =>
       prevCart.map(item =>
@@ -105,6 +107,7 @@ const Shop = () => {
   const handleVariantChange = (item, value,) => {
     const { productId } = item
  
+
  
     for (const item of cart) {
  
@@ -136,9 +139,12 @@ const Shop = () => {
       return total;
     }, 0);
   };
+
+
+
   const handleCheckOut = async () => {
     
-    if (Object.keys(selectedVariants).length === 0) {
+    if ((Object.keys(selectedVariants).length === 0)|| Object.values(selectedVariants).some(val => val === "")) {
       toast.error('Please Select quantity')
       return;
     }
@@ -163,7 +169,7 @@ const Shop = () => {
           price: parseInt(item.variant.saleAmount),
           maxPrice: parseInt(item.variant.amount),
         }));
-        console.log(items,"ye hai items")
+       
         const payload = {
           customerId,
           items,
@@ -190,6 +196,8 @@ const Shop = () => {
       toast.error("please select item");
     }
   };
+
+
   return (
     <>
       <Toaster />

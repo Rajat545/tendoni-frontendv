@@ -967,7 +967,7 @@ if (typeof window !== "undefined") {
               <div className="container_checkOut mt-12 bg-white p-6 rounded-lg shadow-lg">
                 <h4 className="font-medium text-lg mb-4">Shipping Method</h4>
                 <div className="mainContainer">
-                  <div className="card">
+                  <div className="card p-4">
                     <div className="payments-container space-y-4">
                       <div className="payments-wrapper">
                         <label className="flex items-center space-x-3">
