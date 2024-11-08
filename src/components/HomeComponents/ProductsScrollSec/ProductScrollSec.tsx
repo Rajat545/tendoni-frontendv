@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { productSpices } from "../../../Data/home";
 import "swiper/css";
 import "swiper/swiper-bundle.css";
-import Image from "next/image";
+import Image from 'next/image';
 
 const ProductsScrollSec = () => {
   return (
@@ -107,7 +107,7 @@ const ProductsScrollSec = () => {
               <SwiperSlide key={spices.id}>
                 <div className="flex flex-col h-full items-center justify-center">
                   <div className="py-6 w-full h-full items-stretch bg-cover bg-center">
-                    <img
+                    <Image
                       src={spices.ProductImage}
                       alt="..."
                       className="w-full h-full pb-0 p-12 pt-0 py-4  object-cover"
