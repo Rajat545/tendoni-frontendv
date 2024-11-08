@@ -107,7 +107,7 @@ const ProductsScrollSec = () => {
               <SwiperSlide key={spices.id}>
                 <div className="flex flex-col h-full items-center justify-center">
                   <div className="py-6 w-full h-full items-stretch bg-cover bg-center">
-                    <Image
+                    <img
                       src={spices.ProductImage}
                       alt="..."
                       className="w-full h-full pb-0 p-12 pt-0 py-4  object-cover"

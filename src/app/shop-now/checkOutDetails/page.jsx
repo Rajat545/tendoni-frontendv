@@ -842,7 +842,7 @@ if (typeof window !== "undefined") {
                       key={index}
                       className="flex items-center justify-between mb-4 border-b pb-4"
                     >
-                      <Image
+                      <img
                         className="w-1/6 rounded-lg"
                         src={item.ProductImage}
                         alt={item.productName}

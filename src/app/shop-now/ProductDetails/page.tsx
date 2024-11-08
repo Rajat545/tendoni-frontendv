@@ -290,7 +290,7 @@ const ProductDetails = () => {
                       className={`relative max-w-md px-4 md:w-1/2 md:max-w-none lg:mb-0 ${index % 2 === 0 ? "order-first" : ""
                         }`}
                     >
-                      <Image
+                      <img
                         src={selectedImage || item.productImages}
                         alt="Product Image"
                         className="object-contain cursor-pointer"
@@ -300,7 +300,7 @@ const ProductDetails = () => {
                       <div className="flex mt-5 space-x-2 gap-4" id='slideImage'>
                         {productDetails.map((_, idx) => (
                           <div key={idx} className="overflow-hidden cursor-pointer">
-                            <Image
+                            <img
                               src={item.productFrontimage}
                               alt="Image"
                               className="object-contain cursor-pointer"
@@ -423,7 +423,7 @@ const ProductDetails = () => {
               {cart.map((item) => (
                 <div key={item.productId} className="flex flex-col mb-6">
                   <div className="flex items-center gap-6 mb-4">
-                    <Image
+                    <img
                       className=" object-contain"
                       src={item.productImages}
                       alt="Product Image"

@@ -220,7 +220,7 @@ const Shop = () => {
                 >
                   <div className="bg-white border border-gray-200 rounded-lg p-4 relative overflow-hidden shadow-md flex flex-col items-center h-96">
                     <div className="cursor-pointer" onClick={() => productById(item.productId)}>
-                      <Image
+                      <img
                         src={item.productImages}
                         className="mb-4"
                         alt="Product Image"
@@ -283,7 +283,7 @@ const Shop = () => {
               {cart.map((item) => (
                 <div key={item.productId} className="flex flex-col mb-6">
                   <div className="flex items-center gap-6 mb-4">
-                    <Image
+                    <img
                       className=" object-contain"
                       src={item.productImages}
                       alt="Product Image"
