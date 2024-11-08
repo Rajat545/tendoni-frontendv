@@ -312,7 +312,7 @@ const ProductDetails = () => {
                         ))}
                             {productDetails.map((_, idx) => (
                           <div key={idx} className=" overflow-hidden cursor-pointer">
-                            <Image
+                            <img
                               src={item.productBackimage}
                               alt="Image"
                               className="object-contain cursor-pointer"
